@@ -11,10 +11,14 @@ import { ProductAllListApiHandler } from "@/Service/Product/Product.service";
 export default function Product() {
   const [categoryList, setCategoryList] = useState([]);
   const [produtListData, setProductListData] = useState([]);
+  const [searchText,setSearchText] = useState("");
+  const [category, setCategory] = useState("");
+  const [sponsor, setSponsor] = useState(0);
+  const [pageSize, setPageSize] = useState("10");
 
   useEffect(() => {
     getAllCategoryList();
-    getAllProductListHandler();
+    getAllProductListHandler(searchText,pageSize,category,sponsor);
   }, []);
 
   const getAllCategoryList = async () => {
@@ -37,11 +41,9 @@ export default function Product() {
     }
   };
 
-  const getAllProductListHandler = async () => {
+  const getAllProductListHandler = async (searchText,pageSize,category,sponsor) => {
     const { count, data, message, success } = await ProductAllListApiHandler(
-      "",
-      "",
-      ""
+      searchText,pageSize,category,sponsor
     );
     try {
       if (success) {
@@ -168,16 +170,17 @@ export default function Product() {
               <div className="bg-[#F2F4F5] flex justify-between px-4 py-3 rounded-lg">
                 <div></div>
                 <div className="text-xs">
-                  <span className="font-semibold">27</span> Results found.
+                  <span className="font-semibold">{produtListData ? produtListData.length : 0}</span> Results found.
                 </div>
               </div>
             </div>
             <div className="grid grid-cols-3 gap-3 ">
               {produtListData && produtListData.length > 0 ? (
                 produtListData.map((item, index) => {
+                  console.log(item,"item");
                   return (
                     <div key={index} className="col-span-1">
-                      <ProductCard />
+                      <ProductCard productDetails={item}/>
                     </div>
                   );
                 })

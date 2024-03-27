@@ -13,6 +13,7 @@ import { userRegisterValidation } from "@/helper/Validation";
 import { userRegisterApiHandler } from "@/Service/Users/Users.Service";
 import { getDetailsByPincode } from "@/helper";
 import { errorNotification, successNotification } from "@/helper/Notification";
+import { Eye, EyeOff } from "lucide-react";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -20,29 +21,44 @@ export default function SignupPage() {
   const [stateCityFlag1, setstateCityFlag1] = useState(false);
   // for billing Address if city and State is available then disable
   const [stateCityFlag2, setstateCityFlag2] = useState(false);
-  const [loading,setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [termsConditionFlag, setTermsConditionFlag] = useState(false);
+  const [termsConditionFlagError, setTermsConditionFlagError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
 
   const userDataHandler = async () => {
-    try{
+    try {
       setLoading(true);
       const formValues = {
         ...formik.values,
         // Stringify the addresses array Backend Requements
         addresses: JSON.stringify(formik.values.addresses),
       };
-      const { data, message, success } = await userRegisterApiHandler(formValues);
+      const { data, message, success } = await userRegisterApiHandler(
+        formValues
+      );
       if (success) {
         successNotification(message);
         router.push("/login");
       } else {
         errorNotification(message);
       }
-    }catch(err){
+    } catch (err) {
       console.log(err);
-    }finally{
+    } finally {
       setLoading(false);
     }
-    
+  };
+
+  const termsConditionHandler = (event) => {
+    setTermsConditionFlag(event);
+    if(event){
+      setTermsConditionFlagError("");
+    }
   };
 
   const formik = useFormik({
@@ -156,13 +172,15 @@ export default function SignupPage() {
       <div className="w-2/5 overflow-auto">
         <div className="flex flex-col items-center h-auto max-w-[400px] m-auto !my-20">
           <div className="flex flex-col gap-5 w-full">
-            <Image
-              src={"/logoBlack.png"}
-              alt=""
-              width={156}
-              height={48}
-              className="lg:w-[170px] md:w-[150px] sm:w-[110px] w-[100px] md:h-huto cursor-pointer"
-            />
+            <Link href="/">
+              <Image
+                src={"/logoBlack.png"}
+                alt=""
+                width={156}
+                height={48}
+                className="lg:w-[170px] md:w-[150px] sm:w-[110px] w-[100px] md:h-huto cursor-pointer"
+              />
+            </Link>
             <div className="mb-2">
               <div className="text-2xl font-bold mt-2 mb-1">
                 Hello, My Friend!!!
@@ -176,7 +194,7 @@ export default function SignupPage() {
                   className="w-full"
                   name="firstName"
                   formik={formik}
-                  inputProps={{ maxLength: 30 }}
+                  max={30}
                 />
               </div>
               <div>
@@ -185,7 +203,7 @@ export default function SignupPage() {
                   placeholder="Enter Last Name"
                   name="lastName"
                   formik={formik}
-                  inputProps={{ maxLength: 30 }}
+                  max={30}
                   className="w-full"
                 />
               </div>
@@ -196,7 +214,7 @@ export default function SignupPage() {
                   className="w-full"
                   name="email"
                   formik={formik}
-                  inputProps={{ maxLength: 100 }}
+                  max={100}
                 />
               </div>
               <div className="col-span-2">
@@ -205,19 +223,32 @@ export default function SignupPage() {
                   placeholder="Enter Mobile Number"
                   name="mobileNo"
                   formik={formik}
-                  inputProps={{ maxLength: 10 }}
+                  max={10}
                   className="w-full"
                 />
               </div>
               <div className="col-span-2">
                 <Label htmlFor="">Password</Label>
-                <Input
-                  placeholder="Enter a secure password (6-16 characters)"
-                  name="password"
-                  formik={formik}
-                  inputProps={{ maxLength: 50 }}
-                  className="w-full"
-                />
+                <div className="relative">
+                  <Input
+                    placeholder="Enter a secure password (6-16 characters)"
+                    name="password"
+                    formik={formik}
+                    max={50}
+                    className="w-full"
+                    type={showPassword ? "text" : "password"}
+                  />
+                  <div
+                    className="absolute right-3 top-[10px] cursor-pointer"
+                    onClick={handleShowPassword}
+                  >
+                    {!showPassword ? (
+                      <Eye className="w-5 h-5" />
+                    ) : (
+                      <EyeOff className="w-5 h-5" />
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
             <div className="grid grid-cols-2 gap-3">
@@ -231,7 +262,7 @@ export default function SignupPage() {
                   className="w-full"
                   name="addresses[0].address1"
                   formik={formik}
-                  inputProps={{ maxLength: 100 }}
+                  max={100}
                 />
                 {formik.touched.addresses &&
                 formik.errors.addresses &&
@@ -249,7 +280,7 @@ export default function SignupPage() {
                   className="w-full"
                   name="addresses[0].address2"
                   formik={formik}
-                  inputProps={{ maxLength: 100 }}
+                  max={100}
                 />
                 {formik.touched.addresses &&
                 formik.errors.addresses &&
@@ -267,7 +298,7 @@ export default function SignupPage() {
                   className="w-full"
                   name="addresses[0].landmark"
                   formik={formik}
-                  inputProps={{ maxLength: 50 }}
+                  max={50}
                 />
                 {formik.touched.addresses &&
                 formik.errors.addresses &&
@@ -285,7 +316,7 @@ export default function SignupPage() {
                   className="w-full"
                   name="addresses[0].pincode"
                   formik={formik}
-                  inputProps={{ maxLength: 30 }}
+                  max={30}
                 />
                 {formik.touched.addresses &&
                 formik.errors.addresses &&
@@ -304,7 +335,7 @@ export default function SignupPage() {
                   name="addresses[0].city"
                   formik={formik}
                   disabled={stateCityFlag1}
-                  inputProps={{ maxLength: 50 }}
+                  max={50}
                 />
                 {formik.touched.addresses &&
                 formik.errors.addresses &&
@@ -323,7 +354,7 @@ export default function SignupPage() {
                   name="addresses[0].state"
                   formik={formik}
                   disabled={stateCityFlag1}
-                  inputProps={{ maxLength: 50 }}
+                  max={50}
                 />
                 {formik.touched.addresses &&
                 formik.errors.addresses &&
@@ -346,7 +377,7 @@ export default function SignupPage() {
                   className="w-full"
                   name="addresses[1].address1"
                   formik={formik}
-                  inputProps={{ maxLength: 100 }}
+                  max={100}
                 />
                 {formik.touched.addresses &&
                 formik.errors.addresses &&
@@ -364,7 +395,7 @@ export default function SignupPage() {
                   className="w-full"
                   name="addresses[1].address2"
                   formik={formik}
-                  inputProps={{ maxLength: 100 }}
+                  max={100}
                 />
                 {formik.touched.addresses &&
                 formik.errors.addresses &&
@@ -382,7 +413,7 @@ export default function SignupPage() {
                   className="w-full"
                   name="addresses[1].landmark"
                   formik={formik}
-                  inputProps={{ maxLength: 50 }}
+                  max={50}
                 />
                 {formik.touched.addresses &&
                 formik.errors.addresses &&
@@ -400,7 +431,7 @@ export default function SignupPage() {
                   className="w-full"
                   name="addresses[1].pincode"
                   formik={formik}
-                  inputProps={{ maxLength: 30 }}
+                  max={30}
                 />
                 {formik.touched.addresses &&
                 formik.errors.addresses &&
@@ -419,7 +450,7 @@ export default function SignupPage() {
                   name="addresses[1].city"
                   formik={formik}
                   disabled={stateCityFlag2}
-                  inputProps={{ maxLength: 50 }}
+                  max={50}
                 />
                 {formik.touched.addresses &&
                 formik.errors.addresses &&
@@ -438,7 +469,7 @@ export default function SignupPage() {
                   disabled={stateCityFlag2}
                   name="addresses[1].state"
                   formik={formik}
-                  inputProps={{ maxLength: 50 }}
+                  max={50}
                 />
                 {formik.touched.addresses &&
                 formik.errors.addresses &&
@@ -451,7 +482,11 @@ export default function SignupPage() {
               </div>
 
               <div className="flex items-start space-x-2 col-span-2 mt-2">
-                <Checkbox id="address" />
+                <Checkbox
+                  id="address"
+                  onCheckedChange={(event) => termsConditionHandler(event)}
+                />
+                
                 <label
                   htmlFor="address"
                   className="text-sm font-medium leading-none text-[#475156] peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -461,6 +496,11 @@ export default function SignupPage() {
                   <Link href={"/signup"}>Privacy Policy.</Link>
                 </label>
               </div>
+              {termsConditionFlagError && (
+                  <span className="text-red-500 text-xs">
+                    {termsConditionFlagError}
+                  </span>
+                )}
             </div>
             <div className="mt-2">
               <Button
@@ -468,7 +508,15 @@ export default function SignupPage() {
                 className="w-full shadow-none"
                 loading={loading}
                 disabled={loading}
-                onClick={() => formik.handleSubmit()}
+                onClick={() =>
+                  termsConditionFlag
+                    ? 
+                    formik.handleSubmit()
+                    : 
+                    setTermsConditionFlagError(
+                      "You must agree to the Terms & Conditions and Privacy Policy."
+                    )
+                }
               >
                 <div className="flex gap-2 items-center">
                   <div>Sign in</div>

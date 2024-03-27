@@ -3,16 +3,23 @@ import { Input } from '@/components/ui/input';
 import Image from 'next/image';
 import React, { useState } from 'react'
 
-const QtyCard = ({ className }) => {
+const QtyCard = ({ className, setQuantity}) => {
   const [counter, setCounter] = useState(1);
 
-  const incrementCounter = () => setCounter(counter + 1);
-  const decrementCounter = () => setCounter(counter > 1 ? counter - 1 : 1);
+  const incrementCounter = () => {
+    setCounter(counter + 1);
+    setQuantity(counter + 1);
+    };
+  const decrementCounter = () => {
+    setCounter(counter > 1 ? counter - 1 : 1)
+    setQuantity(counter > 1 ? counter - 1 : 1);
+  };
 
   const handleInputChange = (e) => {
     const newValue = e.target.value;
     // Allow only numbers
     if (/^\d*$/.test(newValue)) {
+      setQuantity(newValue === '' ? '' : Number(newValue))
       setCounter(newValue === '' ? '' : Number(newValue));
     }
   };

@@ -29,13 +29,16 @@ function LoginWithOtp() {
   const loginWithOtpHandler = async () => {
     try {
       setLoading(true);
+      const payload = {
+        email : formik.values.email,
+        otp : formik.values.otp
+      }
       const { data, message, success } = await loginWithOtpApiHandler(
-        formik.values
+        payload
       );
       if (success) {
         successNotification(message);
         router.push("/");
-        console.log(data,"data");
         cookies.set("token", data.token);
         cookies.set("userEmail", data.email);
         cookies.set("userPassword", data.password);
@@ -52,7 +55,10 @@ function LoginWithOtp() {
   const sendOtpHandler = async () => {
     try {
       setLoading(true);
-      const { data, message, success } = await sendOtpApiHandler(formik.values);
+      const payload = {
+        email : formik.values.email
+      }
+      const { data, message, success } = await sendOtpApiHandler(payload);
       if (success) {
         successNotification(message);
         setOtpFlag(true);
@@ -80,8 +86,9 @@ function LoginWithOtp() {
           placeholder="ex: juqwlie@gmail.com"
           className="w-full"
           name="email"
+          disabled={otpFlag}
           formik={formik}
-          inputProps={{ maxLength: 100 }}
+          max={100}
         />
       </div>
       {otpFlag && (

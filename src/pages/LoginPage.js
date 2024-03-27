@@ -22,7 +22,8 @@ export default function LoginPage() {
       </div>
       <div className="w-2/5">
         <div className="flex flex-col items-center h-full max-w-[400px] m-auto justify-center">
-          <div className="flex flex-col gap-5 w-full">
+
+          <Link href="/" className="flex flex-col gap-5 w-full">
             <Image
               src={"/logoBlack.png"}
               alt=""
@@ -33,7 +34,7 @@ export default function LoginPage() {
             <div className="mb-2">
               <div className="text-2xl font-bold mt-2">Welcome Back</div>
             </div>
-          </div>
+          </Link>
           <Tabs defaultValue="tab1" className="w-full mt-3">
             <TabsList className="w-full bg-transparent border-b rounded-none">
               <TabsTrigger value="tab1" className="w-full normal-case">

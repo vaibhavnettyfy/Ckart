@@ -30,7 +30,7 @@ export const post = async (url, data) => {
     return {
       success: false,
       data: [],
-      message: response.data.message ||error.message || "something_went_wrong",
+      message: error?.response?.data?.message || 'Something went wrong',
     };
   }
 };
@@ -68,7 +68,7 @@ export const get = async (url) => {
       success: false,
       count: 0,
       data: [],
-      message: response.data.message || error.message,
+      message: error?.response?.data?.message || 'Something went wrong',
     };
   }
 };
@@ -76,7 +76,6 @@ export const get = async (url) => {
 export const POST = async (url, data) => {
   try {
     const response = await axios.post(url, data);
-    console.log("response",response);
     if (response.data.status) {
       return {
         success: true,
@@ -91,10 +90,11 @@ export const POST = async (url, data) => {
       };
     }
   } catch (error) {
+    console.log(error,"Error");
     return {
       success: false,
       data: [],
-      message: error?.response?.data?.message || error.message || "something_went_wrong",
+      message: error?.response?.data?.message || 'Something went wrong',
     };
   }
 };
@@ -126,7 +126,7 @@ export const DELETE = async (id) => {
     return {
       success: false,
       data: null,
-      message: response.data.message || error.message || "something_went_wrong",
+      message: error?.response?.data?.message || 'Something went wrong',
     };
   }
 };
@@ -158,7 +158,7 @@ export const put = async (url, data) => {
     return {
       success: false,
       data: null,
-      message: response.data.message || error.message || "something_went_wrong",
+      message: error?.response?.data?.message || 'Something went wrong',
     };
   }
 };
@@ -190,7 +190,7 @@ export const patch = async (url, data) => {
     return {
       success: false,
       data: null,
-      message: response.data.message || error.message || "something_went_wrong",
+      message: error?.response?.data?.message || 'Something went wrong',
     };
   }
 };
@@ -208,7 +208,6 @@ export const GET = async (url) => {
     const response = await axios.get(url, {
       headers,
     });
-    console.log("response",response);
     if (response.data.status) {
       return {
         success: true,
@@ -223,10 +222,11 @@ export const GET = async (url) => {
       };
     }
   } catch (error) {
+    
     return {
       success: false,
       data: [],
-      message: response.data.message || error.message || "something_went_wrong",
+      message: error?.response?.data?.message || 'Something went wrong',
     };
   }
 };
