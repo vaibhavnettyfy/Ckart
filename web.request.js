@@ -76,6 +76,7 @@ export const get = async (url) => {
 export const POST = async (url, data) => {
   try {
     const response = await axios.post(url, data);
+    console.log("response",response);
     if (response.data.status) {
       return {
         success: true,
@@ -207,6 +208,7 @@ export const GET = async (url) => {
     const response = await axios.get(url, {
       headers,
     });
+    console.log("response",response);
     if (response.data.status) {
       return {
         success: true,
