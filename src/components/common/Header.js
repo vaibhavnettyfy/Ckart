@@ -436,7 +436,7 @@ export default function Header() {
                     ) : (
                       <DropdownMenuItem
                         className="p-2"
-                        onClick={()=>router.push(`/`)}
+                        onClick={()=>router.push(`/login`)}
                       >
                         <div className="flex gap-2">
                           <Image
