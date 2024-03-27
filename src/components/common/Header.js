@@ -417,7 +417,7 @@ export default function Header() {
                         </DropdownMenuItem>
                       );
                     })}
-                    {userLogin && (
+                    {userLogin ? (
                       <DropdownMenuItem
                         className="p-2"
                         onClick={()=>logout()}
@@ -431,6 +431,22 @@ export default function Header() {
                             className="w-5 h-auto cursor-pointer"
                           />
                           <div className="text-[#5F6C72]">Log-out</div>
+                        </div>
+                      </DropdownMenuItem>
+                    ) : (
+                      <DropdownMenuItem
+                        className="p-2"
+                        onClick={()=>router.push(`/`)}
+                      >
+                        <div className="flex gap-2">
+                          <Image
+                            src={"/login.svg"}
+                            alt=""
+                            width={20}
+                            height={20}
+                            className="w-5 h-auto cursor-pointer"
+                          />
+                          <div className="text-[#5F6C72]">Log-in</div>
                         </div>
                       </DropdownMenuItem>
                     )}
