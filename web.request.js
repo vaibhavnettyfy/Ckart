@@ -30,7 +30,7 @@ export const post = async (url, data) => {
     return {
       success: false,
       data: [],
-      message: error.message || "something_went_wrong",
+      message: response.data.message ||error.message || "something_went_wrong",
     };
   }
 };
@@ -68,7 +68,7 @@ export const get = async (url) => {
       success: false,
       count: 0,
       data: [],
-      message: error.message,
+      message: response.data.message || error.message,
     };
   }
 };
@@ -93,7 +93,7 @@ export const POST = async (url, data) => {
     return {
       success: false,
       data: [],
-      message: error.message || "something_went_wrong",
+      message: response.data.message || error.message || "something_went_wrong",
     };
   }
 };
@@ -125,7 +125,7 @@ export const DELETE = async (id) => {
     return {
       success: false,
       data: null,
-      message: error.response.data.message || "something_went_wrong",
+      message: response.data.message || error.message || "something_went_wrong",
     };
   }
 };
@@ -157,7 +157,7 @@ export const put = async (url, data) => {
     return {
       success: false,
       data: null,
-      message: error.response.data.message || "something_went_wrong",
+      message: response.data.message || error.message || "something_went_wrong",
     };
   }
 };
@@ -189,7 +189,7 @@ export const patch = async (url, data) => {
     return {
       success: false,
       data: null,
-      message: error.response.data.message || "something_went_wrong",
+      message: response.data.message || error.message || "something_went_wrong",
     };
   }
 };
@@ -224,7 +224,7 @@ export const GET = async (url) => {
     return {
       success: false,
       data: [],
-      message: error.message,
+      message: response.data.message || error.message || "something_went_wrong",
     };
   }
 };
