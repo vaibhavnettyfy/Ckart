@@ -34,6 +34,7 @@ function LoginWithOtp() {
       );
       if (success) {
         successNotification(message);
+        router.push("/");
         console.log(data,"data");
         cookies.set("token", data.token);
         cookies.set("userEmail", data.email);

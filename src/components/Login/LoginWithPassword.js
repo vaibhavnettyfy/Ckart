@@ -1,6 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Image from "next/image";
@@ -13,6 +14,7 @@ import Cookies from "universal-cookie";
 import { useState } from "react";
 
 function LoginWithPassword() {
+  const router = useRouter();
   const cookies = new Cookies();
   const [loading, setLoading] = useState(false);
 
@@ -24,6 +26,7 @@ function LoginWithPassword() {
       );
       if (success) {
         successNotification(message);
+        router.push("/");
         cookies.set("token", data.token);
         cookies.set("userEmail", data.email);
         cookies.set("userPassword", data.password);
