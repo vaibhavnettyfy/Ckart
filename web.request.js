@@ -94,7 +94,7 @@ export const POST = async (url, data) => {
     return {
       success: false,
       data: [],
-      message: response.data.message || error.message || "something_went_wrong",
+      message: error?.response?.data?.message || error.message || "something_went_wrong",
     };
   }
 };
