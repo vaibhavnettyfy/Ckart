@@ -21,6 +21,27 @@ export const userRegisterValidation = Yup.object({
       /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z])(?=.*[!@#$%^&*()\-_=+{};:,<.>]).{6,16}$/,
       "Password must be 6-16 characters long and contain at least one number, one uppercase letter, one lowercase letter, and one special character (!@#$%^&*()-_=+{};:,<.>)."
     ),
+    gstNo: Yup.string()
+    .test('required', 'GST number is required', (value, context) => {
+      if (!context.hasOwnProperty('required')) {
+        return true; 
+      }
+      return value.trim().length === 0 ? false : true; // Check for empty strings
+    })
+    .matches(/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/, {
+      message: 'Invalid GST number format',
+    }),
+    pancard: Yup.string()
+    .test('required', 'PAN Number is required.', (value, context) => {
+      if (!context.hasOwnProperty('required')) {
+        return true; 
+      }
+      return value.trim().length === 0 ? false : true; // Check for empty strings
+    })
+    .matches(
+      /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/,
+      'PAN Number is not valid.'
+    ),
   addresses: Yup.array().of(
     Yup.object().shape({
       address1: Yup.string()

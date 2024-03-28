@@ -4,6 +4,8 @@ export const userRegisterIv={
     email:"",
     password:"",
     mobileNo:"",
+    pancard:"",
+    gstNo:"",
     addresses:[
         {
             address1:"",

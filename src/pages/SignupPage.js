@@ -228,6 +228,26 @@ export default function SignupPage() {
                 />
               </div>
               <div className="col-span-2">
+                <Label htmlFor="">Pan Number</Label>
+                <Input
+                  placeholder="Enter Pan Number"
+                  name="pancard"
+                  formik={formik}
+                  max={30}
+                  className="w-full"
+                />
+              </div>
+              <div className="col-span-2">
+                <Label htmlFor="">Gst Number</Label>
+                <Input
+                  placeholder="Enter Gst Number"
+                  name="gstNo"
+                  formik={formik}
+                  max={30}
+                  className="w-full"
+                />
+              </div>
+              <div className="col-span-2">
                 <Label htmlFor="">Password</Label>
                 <div className="relative">
                   <Input

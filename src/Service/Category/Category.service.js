@@ -1,6 +1,6 @@
-import { get } from "../../../web.request";
-export const getAllCategoryApiList = (search, name, status, page, pageSize) => {
-  return get(
-    `${process.env.NEXT_PUBLIC_APIURL}/api/v1/categoryList?search=${search}&name=${name}&status=${status}&page=${page}&perPageSize=${pageSize}`
+import { GET, get } from "../../../web.request";
+export const getAllCategoryApiList = () => {
+  return GET(
+    `${process.env.NEXT_PUBLIC_APIURL}/api/userV1/categoryDropdown`
   );
 };

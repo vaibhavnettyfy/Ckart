@@ -19,6 +19,7 @@ const buttonVariants = cva(
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
         card: "bg-primary-foreground  text-white hover:bg-primary",
+        paginationButton: 'border border-primary text-white bg-primary-foreground shadow-none hover:bg-primary hover:text-white !rounded-full'
       },
       size: {
         default: "xl:px-12 md:px-9 px-6 xl:py-4 md:py-3 py-[10px]",

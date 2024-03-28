@@ -42,16 +42,18 @@ const ProductCard = ({ productDetails }) => {
   const [quantity, setQuantity] = useState(1);
   const [totalAmount, setTotalAmount] = useState();
 
-  useEffect(() => {}, []);
+
+  // to update the total amount when quantity changes or price changes
+  useEffect(() => {
+    setTotalAmount(price * quantity);
+  }, [quantity,price]);
 
   const quantityHandler = (value) => {
     console.log("quantity", value);
   };
 
   const setQuantityHandler = (value) => {
-    console.log("setQuantity", value);
     setQuantity(value);
-    setTotalAmount(price * value);
   };
 
   const handleWishList = () => {
@@ -159,7 +161,7 @@ const ProductCard = ({ productDetails }) => {
           <div className="py-2 lg:text-base md:text-sm text-xs">
             Total Amount{" "}
             <span className="font-semibold text-green lg:text-lg md:text-base text-sm">
-              {`₹ ${price ? price : 0 * quantity}`}
+              {`₹ ${totalAmount ? totalAmount : 0}`}
             </span>
           </div>
           <HoverCard>

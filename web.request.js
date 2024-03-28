@@ -80,12 +80,14 @@ export const POST = async (url, data) => {
       return {
         success: true,
         data: response.data.data,
+        count: response.data.total,
         message: response.data.message,
       };
     } else {
       return {
         success: false,
         data: response.data.data,
+        count: response.data.total,
         message: response.data.message,
       };
     }
@@ -94,6 +96,7 @@ export const POST = async (url, data) => {
     return {
       success: false,
       data: [],
+      count: 0,
       message: error?.response?.data?.message || 'Something went wrong',
     };
   }
@@ -197,17 +200,12 @@ export const patch = async (url, data) => {
 
 // FOR GET ALL LIST
 
+// With out token get api call
 export const GET = async (url) => {
   try {
-    const TOKEN = localStorage.getItem("TOKEN");
-
-    const headers = {
-      Authorization: `Bearer ${TOKEN}`,
-    };
-
-    const response = await axios.get(url, {
-      headers,
-    });
+    
+    const response = await axios.get(url);
+    console.log("response: " + response);
     if (response.data.status) {
       return {
         success: true,
