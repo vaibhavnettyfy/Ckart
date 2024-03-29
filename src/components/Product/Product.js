@@ -25,7 +25,7 @@ export default function Product() {
   const [searchText, setSearchText] = useState("");
   const [category, setCategory] = useState("");
   const [sponsor, setSponsor] = useState(0);
-  const [pageSize, setPageSize] = useState("1");
+  const [pageSize, setPageSize] = useState("10");
   const [totalPage, setTotalPage] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
 
