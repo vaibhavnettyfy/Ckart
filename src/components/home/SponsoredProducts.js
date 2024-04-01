@@ -14,6 +14,7 @@ import {
 } from "../ui/pagination";
 import ProductCard from "../common/product/ProductCard";
 import { ProductAllListApiHandler } from "@/Service/Product/Product.service";
+import Cookies from "universal-cookie";
 
 const SponsoredProducts = () => {
   const [productLoader, setProductLoader] = useState(false);
@@ -24,6 +25,10 @@ const SponsoredProducts = () => {
   const [searchText, setSearchText] = useState("");
   const [category, setCategory] = useState("");
   const [sponsor, setSponsor] = useState(1);
+  const cookies = new Cookies();
+  const userId = cookies.get("token");
+  const userDetails = cookies.get("USERDETAILS");
+  
   useEffect(() => {
     getAllSponserdProducts(
       searchText,
@@ -42,18 +47,23 @@ const SponsoredProducts = () => {
     page
   ) => {
     setProductLoader(true);
+    const payload = {
+      userId: userDetails.id ? userDetails.id : "",
+    };
     try {
       const { count, data, message, success } = await ProductAllListApiHandler(
         searchText,
         pageSize,
         category,
         sponsor,
-        page
+        page,
+        payload
       );
       if (success) {
         setProductListData(data);
         setTotalPage(Math.ceil(count / pageSize));
       } else {
+        setTotalPage(0);
         setProductListData([]);
       }
     } catch (err) {
@@ -63,14 +73,18 @@ const SponsoredProducts = () => {
     }
   };
 
-  const handlePageChange = (value) =>{
+  const handlePageChange = (value) => {
     setCurrentPage(value);
+    getAllSponserdProducts(searchText, pageSize, category, sponsor, value);
+  };
+
+  const callBackHandler = () =>{
     getAllSponserdProducts(
       searchText,
       pageSize,
       category,
       sponsor,
-      value
+      currentPage
     );
   }
 
@@ -85,7 +99,7 @@ const SponsoredProducts = () => {
             produtListData.map((item, index) => {
               return (
                 <div key={index} className="col-span-1">
-                  <ProductCard productDetails={item} />
+                  <ProductCard productDetails={item} callBackHandler={callBackHandler}/>
                 </div>
               );
             })
@@ -96,31 +110,35 @@ const SponsoredProducts = () => {
       </div>
       <div>
         <Pagination>
-                <PaginationContent className="md:gap-2 gap-1">
-                  <PaginationItem>
-                    <PaginationPrevious
-                      disabled={currentPage === 1}
-                      onClick={() => currentPage !==1 &&  handlePageChange(currentPage - 1)}
-                    />
-                  </PaginationItem>
-                  {[...Array(totalPage).keys()].map((page) => (
-                    <PaginationItem key={page}>
-                      <PaginationLink
-                        isActive={currentPage == page + 1}
-                        onClick={() => handlePageChange(page + 1)}
-                      >
-                        {page + 1}
-                      </PaginationLink>
-                    </PaginationItem>
-                  ))}
-                  <PaginationItem>
-                    <PaginationNext
-                      disabled={currentPage === totalPage}
-                      onClick={() => currentPage !== totalPage  && handlePageChange(currentPage + 1)}
-                    />
-                  </PaginationItem>
-                </PaginationContent>
-              </Pagination>
+          <PaginationContent className="md:gap-2 gap-1">
+            <PaginationItem>
+              <PaginationPrevious
+                disabled={currentPage === 1}
+                onClick={() =>
+                  currentPage !== 1 && handlePageChange(currentPage - 1)
+                }
+              />
+            </PaginationItem>
+            {[...Array(totalPage).keys()].map((page) => (
+              <PaginationItem key={page}>
+                <PaginationLink
+                  isActive={currentPage == page + 1}
+                  onClick={() => handlePageChange(page + 1)}
+                >
+                  {page + 1}
+                </PaginationLink>
+              </PaginationItem>
+            ))}
+            <PaginationItem>
+              <PaginationNext
+                disabled={currentPage === totalPage}
+                onClick={() =>
+                  currentPage !== totalPage && handlePageChange(currentPage + 1)
+                }
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
       </div>
     </div>
   );

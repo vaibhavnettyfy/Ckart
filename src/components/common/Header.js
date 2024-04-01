@@ -50,9 +50,6 @@ export default function Header() {
   const router = useRouter();
   const [userLogin,setUserLogin] = useState(false);
   const cookies = new Cookies();
-
-  console.log(userLogin,"userLogin");
-  const [pincode, setPincode] = useState("362011");
   const userLoginFlag = cookies.get("token");
 
   useEffect(()=>{

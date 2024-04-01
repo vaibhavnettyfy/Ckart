@@ -17,12 +17,14 @@ export const post = async (url, data) => {
       return {
         success: true,
         data: response.data.data,
+        count: response.data.total,
         message: response.data.message,
       };
     } else {
       return {
         success: false,
         data: response.data.data,
+        count: response.data.total || 0,
         message: response.data.message,
       };
     }
@@ -30,6 +32,7 @@ export const post = async (url, data) => {
     return {
       success: false,
       data: [],
+      count: 0,
       message: error?.response?.data?.message || 'Something went wrong',
     };
   }
@@ -104,10 +107,11 @@ export const POST = async (url, data) => {
 
 export const DELETE = async (id) => {
   try {
-    const TOKEN = localStorage.getItem("TOKEN");
+    const cookies = new Cookies();
+    const TOKEN = cookies.get("token");
 
     const headers = {
-      Authorization: `Bearer ${TOKEN}`,
+      "x-auth-token": TOKEN,
     };
     const response = await axios.delete(id, {
       headers,
@@ -205,7 +209,6 @@ export const GET = async (url) => {
   try {
     
     const response = await axios.get(url);
-    console.log("response: " + response);
     if (response.data.status) {
       return {
         success: true,

@@ -42,6 +42,7 @@ function LoginWithOtp() {
         cookies.set("token", data.token);
         cookies.set("userEmail", data.email);
         cookies.set("userPassword", data.password);
+        cookies.set("USERDETAILS", data);
       } else {
         errorNotification(message);
       }

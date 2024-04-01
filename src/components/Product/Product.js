@@ -15,9 +15,11 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "../ui/pagination";
+import Cookies from "universal-cookie";
 import { getAllCategoryApiList } from "@/Service/Category/Category.service";
 import { ProductAllListApiHandler } from "@/Service/Product/Product.service";
 export default function Product() {
+  const cookies = new Cookies();
   const [categoryList, setCategoryList] = useState([]);
   const [categoryLoader, setCategoryLoader] = useState(false);
   const [productLoader, setProductLoader] = useState(false);
@@ -28,7 +30,7 @@ export default function Product() {
   const [pageSize, setPageSize] = useState("10");
   const [totalPage, setTotalPage] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-
+  const userDetails = cookies.get("USERDETAILS");
   useEffect(() => {
     getAllCategoryList();
     getAllProductListHandler(
@@ -72,22 +74,23 @@ export default function Product() {
     sponsor,
     page
   ) => {
-    
     setProductLoader(true);
+    const payload = {
+      userId : userDetails.id ? userDetails.id : ""
+    }
     try {
       const { count, data, message, success } = await ProductAllListApiHandler(
         searchText,
         pageSize,
         category,
         sponsor,
-        page
+        page,payload
       );
       if (success) {
         setProductListData(data);
-        console.log("count", count);
         setTotalPage(Math.ceil(count / pageSize));
-        console.log("Math.ceil(count / pageSize)", Math.ceil(count / pageSize));
       } else {
+        setTotalPage(0);
         setProductListData([]);
       }
     } catch (err) {
@@ -100,6 +103,16 @@ export default function Product() {
   const handlePageChange = (value) => {
     setCurrentPage(value);
     getAllProductListHandler(searchText, pageSize, category, sponsor, value);
+  };
+
+  const callBackHandler = () =>{
+    getAllProductListHandler(
+      searchText,
+      pageSize,
+      category,
+      sponsor,
+      currentPage
+    );
   };
 
   return (
@@ -231,10 +244,9 @@ export default function Product() {
             <div className="grid grid-cols-3 gap-3 ">
               {produtListData && produtListData.length > 0 ? (
                 produtListData.map((item, index) => {
-                  console.log(item, "item");
                   return (
                     <div key={index} className="col-span-1">
-                      <ProductCard productDetails={item} />
+                      <ProductCard productDetails={item} callBackHandler={callBackHandler}/>
                     </div>
                   );
                 })

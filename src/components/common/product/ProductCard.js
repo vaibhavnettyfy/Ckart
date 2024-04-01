@@ -16,15 +16,12 @@ import {
 } from "@/components/ui/hover-card";
 import { useRouter } from "next/navigation";
 import QtyCard from "./QtyCard";
+import Cookies from "universal-cookie";
+import { addproductApiWishlist, removeproductApiWishlist } from "@/Service/WishList/WishList.service";
+import { errorNotification, successNotification } from "@/helper/Notification";
 
-// const productSpecification = [
-//   "Diameter : 8mm",
-//   "Pieces per Bundle : 25",
-//   "Dimension : 178 mm x 229mm",
-// ];
 
-const ProductCard = ({ productDetails }) => {
-  console.log("productDetails-productDetails", productDetails);
+const ProductCard = ({ productDetails,callBackHandler }) => {
   const {
     imageData,
     categoryname,
@@ -34,30 +31,54 @@ const ProductCard = ({ productDetails }) => {
     subcategoryname,
     flag,
     pieces,
+    id,
     specificationData,
   } = productDetails ?? {};
   const router = useRouter();
-
+  const cookies = new Cookies();
   const [wishList, setWishList] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [totalAmount, setTotalAmount] = useState();
-
+  const userLoginFlag = cookies.get("token");
+  const userDetails = cookies.get("USERDETAILS");
 
   // to update the total amount when quantity changes or price changes
   useEffect(() => {
     setTotalAmount(price * quantity);
   }, [quantity,price]);
 
-  const quantityHandler = (value) => {
-    console.log("quantity", value);
-  };
-
+  
   const setQuantityHandler = (value) => {
     setQuantity(value);
   };
 
-  const handleWishList = () => {
-    setWishList(!wishList);
+  const handleWishList = async (productId,flag) => {
+    console.log(flag);
+    // first check user is logging or not logged in
+    if(userLoginFlag){
+      if(flag){
+        const {data,message,success} = await removeproductApiWishlist(productId);
+        if(success){
+          callBackHandler();
+          successNotification(message);
+        }else{
+          errorNotification(message);
+        }
+      }else{
+        const payload ={
+          productId:productId,
+        }
+        const {count,data,message,success} = await addproductApiWishlist(payload);
+        if(success){
+          callBackHandler();
+          successNotification(message);
+        }else{  
+          errorNotification(message);
+        }
+      }
+    }else{
+      router.push("/login");
+    }
   };
 
   return (
@@ -90,7 +111,7 @@ const ProductCard = ({ productDetails }) => {
             src={!flag ? "/heart.svg" : "/wishlist.svg"}
             onClick={(e) => {
               e.stopPropagation();
-              handleWishList();
+              handleWishList(id,flag);
             }}
           />
         </div>
@@ -150,7 +171,6 @@ const ProductCard = ({ productDetails }) => {
         </div>
         <div onClick={(e) => e.stopPropagation()}>
           <QtyCard
-            quantity={quantityHandler}
             setQuantity={setQuantityHandler}
           />
         </div>

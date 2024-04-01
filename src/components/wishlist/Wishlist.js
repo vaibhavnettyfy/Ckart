@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import Image from "next/image";
 import Heading from "../common/Heading";
 import ProductCard from "../common/product/ProductCard";
@@ -7,6 +7,15 @@ import { Input } from "../ui/input";
 import { Separator } from "../ui/separator";
 import QtyCard from "../common/product/QtyCard";
 import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "../ui/pagination";
+import {
   Table,
   TableBody,
   TableCaption,
@@ -14,13 +23,58 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { MoveLeft, X } from "lucide-react";
+} from "@/components/ui/table";
+import { Flag, MoveLeft, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import ProductSuggestion from "../common/product/ProductSuggestion";
+import Cookies from "universal-cookie";
+import { useEffect, useState } from "react";
+import { wishListByApiUser } from "@/Service/WishList/WishList.service";
+import WishListCard from "./WishListCard";
 
 export default function Wishlist() {
-  const router = useRouter()
+  const router = useRouter();
+  const cookies = new Cookies();
+  const userId = cookies.get("token");
+  const [wishListData, setWishListData] = useState([]);
+  const [totalPage, setTotalPage] = useState(0);
+  const [pageSize, setPageSize] = useState("5");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [wishListLoaderFlag, setWishListLoaderFlag] = useState(false);
+
+  useEffect(() => {
+    wishListByApiUserHandler(pageSize, currentPage);
+  }, []);
+
+  const handlePageChange = (value) => {
+    setCurrentPage(value);
+    wishListByApiUserHandler(pageSize, value);
+  };
+
+  const wishListByApiUserHandler = async (pageSize, currentPage) => {
+    try {
+      setWishListLoaderFlag(true);
+      const { count, data, message, success } = await wishListByApiUser(
+        pageSize,
+        currentPage
+      );
+      if (success) {
+        setTotalPage(Math.ceil(count / pageSize));
+        setWishListData(data);
+      } else {
+        setTotalPage(0);
+        setWishListData([]);
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setWishListLoaderFlag(false);
+    }
+  };
+
+  const callbackHandler = () =>{
+    wishListByApiUserHandler(pageSize, currentPage);
+  };
 
   return (
     <div className="my-20">
@@ -32,49 +86,68 @@ export default function Wishlist() {
             </div>
             <div className="grid grid-cols-1 gap-5">
               <div className="col-span-1">
-                <Table className='border'>
+                <Table className="border">
                   <TableHeader>
                     <TableRow>
                       <TableHead>Products</TableHead>
-                      <TableHead className='text-center'>Total</TableHead>
-                      <TableHead className='text-center'>Availabel</TableHead>
-                      <TableHead className='text-center'>Quantity</TableHead>
+                      <TableHead className="text-center">Total</TableHead>
+                      <TableHead className="text-center">Availabel</TableHead>
+                      <TableHead className="text-center">Quantity</TableHead>
                       <TableHead className="text-end"></TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {[1, 1].map((data, i) => {
-                      return (
-                        <TableRow key={i}>
-                          <TableCell>
-                            <div className="flex gap-3 items-center">
-                              <Image alt={''} width={100} height={80} className='w-[80px] object-contain' src={'/ProductImage.svg'} />
-                              <div>
-                                <div className="font-semibold">Tiscon Superlinks - 8mm</div>
-                                <div className="text-[13px] text-[#5D5F5F] my-[2px]">Diameter: 8mm</div>
-                                <div className="text-[13px] text-[#5D5F5F]">Pieces per Bundle: 25</div>
-                              </div>
-                            </div>
-                          </TableCell>
-                          <TableCell className="font-semibold text-center">₹750.00</TableCell>
-                          <TableCell className='text-center text-[#DA3E31]'>In Stock</TableCell>
-                          <TableCell className='text-center'>
-                            <div className="flex justify-center">
-                              <QtyCard className='w-[170px]' />
-                            </div>
-                          </TableCell>
-                          <TableCell className='text-end'>
-                            <div className="flex justify-end gap-3">
-                              <Button size={'sm'} variant='outline' className='!text-sm !capitalize px-5'>View Product</Button>
-                              <Button size={'sm'} className='!text-sm !capitalize px-5'>Add to Cart</Button>
-                            </div>
-                          </TableCell>
-                        </TableRow>
-                      )
-                    })}
+                    {wishListData && wishListData.length > 0 ? (
+                      wishListData.map((item, index) => {
+                        return (
+                          <WishListCard wishlistDetails={item} index={index} callbackHandler={()=>callbackHandler()}/>
+                        );
+                      })
+                    ) : (
+                      <div className="text-[#5D5F5F] text-center">
+                        No Product Found
+                      </div>
+                    )}
                   </TableBody>
                 </Table>
-                <div className="flex gap-2 items-center mt-2 cursor-pointer" onClick={() => router.push('/')}>
+                <div>
+                  <Pagination>
+                    <PaginationContent className="md:gap-2 gap-1">
+                      <PaginationItem>
+                        <PaginationPrevious
+                          disabled={currentPage === 1}
+                          onClick={() =>
+                            currentPage !== 1 &&
+                            handlePageChange(currentPage - 1)
+                          }
+                        />
+                      </PaginationItem>
+                      {[...Array(totalPage).keys()].map((page) => (
+                        <PaginationItem key={page}>
+                          <PaginationLink
+                            isActive={currentPage == page + 1}
+                            onClick={() => handlePageChange(page + 1)}
+                          >
+                            {page + 1}
+                          </PaginationLink>
+                        </PaginationItem>
+                      ))}
+                      <PaginationItem>
+                        <PaginationNext
+                          disabled={currentPage === totalPage}
+                          onClick={() =>
+                            currentPage !== totalPage &&
+                            handlePageChange(currentPage + 1)
+                          }
+                        />
+                      </PaginationItem>
+                    </PaginationContent>
+                  </Pagination>
+                </div>
+                <div
+                  className="flex gap-2 items-center mt-2 cursor-pointer"
+                  onClick={() => router.push("/")}
+                >
                   <MoveLeft className="w-4" />
                   <div className="text-sm">Back to Home</div>
                 </div>
@@ -85,7 +158,7 @@ export default function Wishlist() {
             <Separator />
           </div>
           <div>
-            <ProductSuggestion head='Products' para='Continue shopping for' />
+            <ProductSuggestion head="Products" para="Continue shopping for" />
           </div>
         </div>
       </div>
