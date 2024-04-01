@@ -29,7 +29,7 @@ export default function ProductSuggestion({ head, para }) {
   ) => {
     try{
       const payload = {
-        userId: userDetails.id ? userDetails.id : "",
+        userId: userDetails?.id ? userDetails?.id : "",
       };
       const {count,data,message,success} = await ProductAllListApiHandler(searchText,
         pageSize,

@@ -138,6 +138,38 @@ export const DELETE = async (id) => {
   }
 };
 
+export const REMOVE = async () =>{
+  try {
+    // const cookies = new Cookies();
+    // const TOKEN = cookies.get("token");
+
+    // const headers = {
+    //   "x-auth-token": TOKEN,
+    // };
+    const response = await axios.delete(id);
+    
+    if (response.data.status) {
+      return {
+        success: true,
+        data: response.data.data,
+        message: response.data.message,
+      };
+    } else {
+      return {
+        success: false,
+        data: response.data.data,
+        message: response.data.message,
+      };
+    }
+  } catch (error) {
+    return {
+      success: false,
+      data: null,
+      message: error?.response?.data?.message || 'Something went wrong',
+    };
+  }
+}
+
 export const put = async (url, data) => {
   try {
     const TOKEN = localStorage.getItem("TOKEN");

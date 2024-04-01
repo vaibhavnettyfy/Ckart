@@ -1,9 +1,9 @@
 'use client'
 import { Input } from '@/components/ui/input';
 import Image from 'next/image';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
-const QtyCard = ({ className, setQuantity}) => {
+const QtyCard = ({ className, setQuantity,quantity}) => {
   const [counter, setCounter] = useState(1);
 
   const incrementCounter = () => {
@@ -14,6 +14,10 @@ const QtyCard = ({ className, setQuantity}) => {
     setCounter(counter > 1 ? counter - 1 : 1)
     setQuantity(counter > 1 ? counter - 1 : 1);
   };
+
+  useEffect(()=>{
+    setCounter(quantity);
+  },[quantity])
 
   const handleInputChange = (e) => {
     const newValue = e.target.value;

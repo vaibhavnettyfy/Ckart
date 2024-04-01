@@ -48,7 +48,7 @@ const SponsoredProducts = () => {
   ) => {
     setProductLoader(true);
     const payload = {
-      userId: userDetails.id ? userDetails.id : "",
+      userId: userDetails?.id ? userDetails?.id : "",
     };
     try {
       const { count, data, message, success } = await ProductAllListApiHandler(

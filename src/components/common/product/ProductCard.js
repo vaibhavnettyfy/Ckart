@@ -19,6 +19,7 @@ import QtyCard from "./QtyCard";
 import Cookies from "universal-cookie";
 import { addproductApiWishlist, removeproductApiWishlist } from "@/Service/WishList/WishList.service";
 import { errorNotification, successNotification } from "@/helper/Notification";
+import { addProductApiToCart } from "@/Service/AddTocart/AddToCart.service";
 
 
 const ProductCard = ({ productDetails,callBackHandler }) => {
@@ -46,11 +47,50 @@ const ProductCard = ({ productDetails,callBackHandler }) => {
   useEffect(() => {
     setTotalAmount(price * quantity);
   }, [quantity,price]);
+  
+  
+  useEffect(()=>{
+    setQuantity(productDetails?.minQuantity)
+  },[]);
 
   
   const setQuantityHandler = (value) => {
     setQuantity(value);
   };
+
+
+  const cartHandler = async (details,id)=>{
+    console.log(details,"details");
+    console.log(id,"id"); 
+    const cartId = cookies.get("CARTID");
+    console.log(cartId,"cartId");
+
+    const payload ={
+      productId: id,
+      quantity:quantity,
+      userId: ""
+      // id: cartId ? cartId : ''
+    };
+    const cartIdPayload ={
+      productId: id,
+      quantity:quantity,
+      id: cartId ? cartId : '',
+      userId: ""
+    }
+    const {count,data,message,success} = await addProductApiToCart(cartId ? cartIdPayload : payload);
+    console.log("data",data);
+    console.log("success",success);
+    console.log("message",message);
+
+    if(success){
+      console.log("---2",data.cartId);
+      cookies.set("CARTID",data.cartId)
+      successNotification(message);
+    }else{
+      errorNotification(message);
+    }
+  };
+
 
   const handleWishList = async (productId,flag) => {
     console.log(flag);
@@ -171,7 +211,8 @@ const ProductCard = ({ productDetails,callBackHandler }) => {
         </div>
         <div onClick={(e) => e.stopPropagation()}>
           <QtyCard
-            setQuantity={setQuantityHandler}
+            setQuantity={setQuantityHandler} 
+            quantity={quantity}
           />
         </div>
         <div
@@ -223,7 +264,7 @@ const ProductCard = ({ productDetails,callBackHandler }) => {
             size={"card"}
             variant="card"
             className="w-full z-20"
-            onClick={() => router.push("/cart")}
+            onClick={() => cartHandler(productDetails,id)}
           >
             Add to Cart
           </Button>
