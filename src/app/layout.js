@@ -5,8 +5,8 @@ import Footer from "@/components/common/Footer";
 import { siteMetadata } from "@/helper/siteMetaData";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Provider } from "react-redux";
-import { Providers } from "../../Providers";
+import { Providers } from "./globalRedux/Providers";
+
 const urbanist = Urbanist({ subsets: ["latin"] });
 
 export const metadata = {

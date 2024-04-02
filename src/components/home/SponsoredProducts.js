@@ -17,7 +17,8 @@ import ProductCard from "../common/product/ProductCard";
 import { ProductAllListApiHandler } from "@/Service/Product/Product.service";
 import Cookies from "universal-cookie";
 import { productListByCart } from "@/Service/AddTocart/AddToCart.service";
-import { ADDTOCART } from "@/Redux/CartReducer";
+import { ADDTOCART } from "@/app/globalRedux/CartReducer";
+// import { ADDTOCART } from "@/Redux/CartReducer";
 
 const SponsoredProducts = () => {
   const [productLoader, setProductLoader] = useState(false);

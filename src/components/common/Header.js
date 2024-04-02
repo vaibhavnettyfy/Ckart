@@ -33,7 +33,7 @@ import BookAppointment from "./modal/BookAppointment";
 import MultiSelectDropdown from "./MultiSelectDropdown";
 import { Search } from "lucide-react";
 import { productListByCart } from "@/Service/AddTocart/AddToCart.service";
-import { ADDTOCART } from "@/Redux/CartReducer";
+// import { ADDTOCART } from "@/Redux/CartReducer";
 
 export const categoryOption = [
   { value: "Category 1" },

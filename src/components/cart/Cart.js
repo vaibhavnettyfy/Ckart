@@ -23,7 +23,8 @@ import Cookies from "universal-cookie";
 import { useEffect, useState } from "react";
 import {useDispatch} from "react-redux";
 import CartCard from "../common/Cart/CartCard";
-import { ADDTOCART } from "@/Redux/CartReducer";
+import { ADDTOCART } from "@/app/globalRedux/CartReducer";
+// import { ADDTOCART } from "@/Redux/CartReducer";
 
 export default function Cart() {
   const router = useRouter();

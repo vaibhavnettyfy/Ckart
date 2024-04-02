@@ -20,7 +20,8 @@ import Cookies from "universal-cookie";
 import { getAllCategoryApiList } from "@/Service/Category/Category.service";
 import { ProductAllListApiHandler } from "@/Service/Product/Product.service";
 import { productListByCart } from "@/Service/AddTocart/AddToCart.service";
-import { ADDTOCART } from "@/Redux/CartReducer";
+import { ADDTOCART } from "@/app/globalRedux/CartReducer";
+// import { ADDTOCART } from "";
 export default function Product() {
   const cookies = new Cookies();
   const [categoryList, setCategoryList] = useState([]);

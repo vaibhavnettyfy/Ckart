@@ -21,7 +21,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addproductApiWishlist, removeproductApiWishlist } from "@/Service/WishList/WishList.service";
 import { errorNotification, successNotification } from "@/helper/Notification";
 import { addProductApiToCart } from "@/Service/AddTocart/AddToCart.service";
-import { ADDTOCART } from "@/Redux/CartReducer";
+// import { ADDTOCART } from "@/Redux/CartReducer";
 
 
 const ProductCard = ({ productDetails,callBackHandler }) => {
