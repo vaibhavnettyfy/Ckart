@@ -6,6 +6,8 @@ import { siteMetadata } from "@/helper/siteMetaData";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Providers } from "./globalRedux/Providers";
+import { Provider } from "react-redux";
+import store from "./globalRedux/store";
 
 const urbanist = Urbanist({ subsets: ["latin"] });
 
@@ -32,17 +34,15 @@ export const metadata = {
   },
 };
 
-
 export default function RootLayout({ children }) {
-
   return (
-    <html lang="en" suppressHydrationWarning={true}>
-      <body className={urbanist.className}>
-        <Providers>
-        {children}
-        <ToastContainer suppressHydrationWarning={true} />
-        </Providers>
-      </body>
-    </html>
+    <Providers>
+      <html lang="en" suppressHydrationWarning={true}>
+        <body className={urbanist.className}>
+          {children}
+          <ToastContainer suppressHydrationWarning={true} />
+        </body>
+      </html>
+    </Providers>
   );
 }

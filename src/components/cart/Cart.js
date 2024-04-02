@@ -1,11 +1,8 @@
 "use client";
 import Image from "next/image";
-import Heading from "../common/Heading";
-import ProductCard from "../common/product/ProductCard";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Separator } from "../ui/separator";
-import QtyCard from "../common/product/QtyCard";
 import {
   Table,
   TableBody,
@@ -24,17 +21,16 @@ import { useEffect, useState } from "react";
 import {useDispatch} from "react-redux";
 import CartCard from "../common/Cart/CartCard";
 import { ADDTOCART } from "@/app/globalRedux/CartReducer";
-// import { ADDTOCART } from "@/Redux/CartReducer";
 
 export default function Cart() {
   const router = useRouter();
-  const [cartList, setCartList] = useState([]);
   const cookies = new Cookies();
   const dispatch = useDispatch();
   const cartId = cookies.get("CARTID");
   const userId = cookies.get("token");
   const BindFlag = cookies.get("bindFlag");
   const userDetails = cookies.get("USERDETAILS");
+  const [cartList, setCartList] = useState([]);
 
   useEffect(() => {
     if (cartId) {

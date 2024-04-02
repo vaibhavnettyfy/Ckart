@@ -17,7 +17,7 @@ import {
 import { useRouter } from "next/navigation";
 import QtyCard from "./QtyCard";
 import Cookies from "universal-cookie";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { addproductApiWishlist, removeproductApiWishlist } from "@/Service/WishList/WishList.service";
 import { errorNotification, successNotification } from "@/helper/Notification";
 import { addProductApiToCart } from "@/Service/AddTocart/AddToCart.service";

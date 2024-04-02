@@ -8,13 +8,13 @@ export const CartSlice = createSlice({
   },
   reducers: {
     ADDTOCART: (state, action) => {
-      state.cart = action.payload;
+      state.cart = action.payload || [];
     },
     REMOVECART: (state, action) =>{
         const removeItem = state.cart.filter(
             (item) => item.id !== action.payload.id
           );
-          state.cart = removeItem;
+          state.cart = removeItem || [];
     }
   },
 });

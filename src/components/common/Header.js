@@ -59,7 +59,7 @@ export default function Header() {
   const [cartLength,setCartLength] = useState(0);
 
 
-  const cart = useSelector((state) => state.cart.cart);
+  const cart = useSelector((state) => state.cart.cart || {});
 
   useEffect(()=>{
     if(userLoginFlag){
