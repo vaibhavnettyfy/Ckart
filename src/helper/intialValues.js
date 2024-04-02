@@ -60,3 +60,26 @@ export const resetPasswordIv = {
     password:"",
     confirmPassword:""
 }
+
+export const bookAppointmentIv = {
+    date:"",
+    time:"",
+    userId:"",
+    type:"",
+    fullName:"",
+    email:"",
+    phoneNo:"",
+    companyName:"",
+    position:"",
+    productCategory:"",
+    estimatedQuantity:"",
+    skus:"",
+    projectType:"",
+    deliveryPinCode:"",
+    expeditedShipping:"",
+    brandPreference:"",
+    deliveryTimeline:"",
+    questionsComments:"",
+    indicativeBudget:"",
+    
+};

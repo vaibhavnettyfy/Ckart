@@ -17,9 +17,11 @@ import {
 import { useRouter } from "next/navigation";
 import QtyCard from "./QtyCard";
 import Cookies from "universal-cookie";
+import { useDispatch, useSelector } from "react-redux";
 import { addproductApiWishlist, removeproductApiWishlist } from "@/Service/WishList/WishList.service";
 import { errorNotification, successNotification } from "@/helper/Notification";
 import { addProductApiToCart } from "@/Service/AddTocart/AddToCart.service";
+import { ADDTOCART } from "@/Redux/CartReducer";
 
 
 const ProductCard = ({ productDetails,callBackHandler }) => {
@@ -35,6 +37,7 @@ const ProductCard = ({ productDetails,callBackHandler }) => {
     id,
     specificationData,
   } = productDetails ?? {};
+  const dispatch = useDispatch();
   const router = useRouter();
   const cookies = new Cookies();
   const [wishList, setWishList] = useState(false);
@@ -60,40 +63,34 @@ const ProductCard = ({ productDetails,callBackHandler }) => {
 
 
   const cartHandler = async (details,id)=>{
-    console.log(details,"details");
-    console.log(id,"id"); 
     const cartId = cookies.get("CARTID");
-    console.log(cartId,"cartId");
 
     const payload ={
       productId: id,
       quantity:quantity,
-      userId: ""
-      // id: cartId ? cartId : ''
+      userId: userDetails?.id ? userDetails?.id : ""
     };
     const cartIdPayload ={
       productId: id,
       quantity:quantity,
       id: cartId ? cartId : '',
-      userId: ""
+      userId: userDetails?.id ? userDetails?.id : ""
     }
     const {count,data,message,success} = await addProductApiToCart(cartId ? cartIdPayload : payload);
-    console.log("data",data);
-    console.log("success",success);
-    console.log("message",message);
-
     if(success){
-      console.log("---2",data.cartId);
-      cookies.set("CARTID",data.cartId)
+      if(!cartId){
+        cookies.set("CARTID",data.cartId)
+      }
       successNotification(message);
+      callBackHandler();
     }else{
+      callBackHandler();
       errorNotification(message);
     }
   };
 
 
   const handleWishList = async (productId,flag) => {
-    console.log(flag);
     // first check user is logging or not logged in
     if(userLoginFlag){
       if(flag){

@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Heading from "../common/Heading";
+import {useDispatch} from "react-redux";
 import Image from "next/image";
 import { Button } from "../ui/button";
 import {
@@ -15,6 +16,8 @@ import {
 import ProductCard from "../common/product/ProductCard";
 import { ProductAllListApiHandler } from "@/Service/Product/Product.service";
 import Cookies from "universal-cookie";
+import { productListByCart } from "@/Service/AddTocart/AddToCart.service";
+import { ADDTOCART } from "@/Redux/CartReducer";
 
 const SponsoredProducts = () => {
   const [productLoader, setProductLoader] = useState(false);
@@ -25,7 +28,9 @@ const SponsoredProducts = () => {
   const [searchText, setSearchText] = useState("");
   const [category, setCategory] = useState("");
   const [sponsor, setSponsor] = useState(1);
+  const dispatch = useDispatch();
   const cookies = new Cookies();
+  const cartId = cookies.get("CARTID");
   const userId = cookies.get("token");
   const userDetails = cookies.get("USERDETAILS");
   
@@ -38,6 +43,12 @@ const SponsoredProducts = () => {
       currentPage
     );
   }, []);
+
+  useEffect(()=>{
+    if(cartId){
+      getProductListByCartId(cartId);
+    }
+  },[]);
 
   const getAllSponserdProducts = async (
     searchText,
@@ -70,6 +81,15 @@ const SponsoredProducts = () => {
       console.error(err);
     } finally {
       setProductLoader(false);
+    }
+  };
+
+  const getProductListByCartId = async (cartId) =>{
+    const {data,message,success} = await productListByCart(cartId);
+    if(success){
+      dispatch(ADDTOCART(data));
+    }else{
+      dispatch(ADDTOCART([]));
     }
   };
 

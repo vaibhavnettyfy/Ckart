@@ -138,14 +138,8 @@ export const DELETE = async (id) => {
   }
 };
 
-export const REMOVE = async () =>{
+export const REMOVE = async (id) =>{
   try {
-    // const cookies = new Cookies();
-    // const TOKEN = cookies.get("token");
-
-    // const headers = {
-    //   "x-auth-token": TOKEN,
-    // };
     const response = await axios.delete(id);
     
     if (response.data.status) {
@@ -172,14 +166,7 @@ export const REMOVE = async () =>{
 
 export const put = async (url, data) => {
   try {
-    const TOKEN = localStorage.getItem("TOKEN");
-
-    const headers = {
-      Authorization: `Bearer ${TOKEN}`,
-    };
-    const response = await axios.put(url, data, {
-      headers,
-    });
+    const response = await axios.put(url, data);
     if (response.data.status) {
       return {
         success: true,
@@ -194,6 +181,7 @@ export const put = async (url, data) => {
       };
     }
   } catch (error) {
+    console.log(error);
     return {
       success: false,
       data: null,

@@ -19,6 +19,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Dialog,
   DialogContent,
@@ -31,6 +32,8 @@ import { Button } from "../ui/button";
 import BookAppointment from "./modal/BookAppointment";
 import MultiSelectDropdown from "./MultiSelectDropdown";
 import { Search } from "lucide-react";
+import { productListByCart } from "@/Service/AddTocart/AddToCart.service";
+import { ADDTOCART } from "@/Redux/CartReducer";
 
 export const categoryOption = [
   { value: "Category 1" },
@@ -50,7 +53,13 @@ export default function Header() {
   const router = useRouter();
   const [userLogin,setUserLogin] = useState(false);
   const cookies = new Cookies();
+  const dispatch = useDispatch();
   const userLoginFlag = cookies.get("token");
+  const cartId = cookies.get("CARTID");
+  const [cartLength,setCartLength] = useState(0);
+
+
+  const cart = useSelector((state) => state.cart.cart);
 
   useEffect(()=>{
     if(userLoginFlag){
@@ -366,6 +375,7 @@ export default function Header() {
                 </Dialog>
               </div>
               <div className="flex md:gap-3 gap-[6px] items-center">
+                <h3>{cart.length}</h3>
                 <Image
                   onClick={() => router.push("/cart")}
                   src={"/header/cart.svg"}

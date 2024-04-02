@@ -15,9 +15,12 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "../ui/pagination";
+import {useDispatch} from "react-redux";
 import Cookies from "universal-cookie";
 import { getAllCategoryApiList } from "@/Service/Category/Category.service";
 import { ProductAllListApiHandler } from "@/Service/Product/Product.service";
+import { productListByCart } from "@/Service/AddTocart/AddToCart.service";
+import { ADDTOCART } from "@/Redux/CartReducer";
 export default function Product() {
   const cookies = new Cookies();
   const [categoryList, setCategoryList] = useState([]);
@@ -31,6 +34,15 @@ export default function Product() {
   const [totalPage, setTotalPage] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const userDetails = cookies.get("USERDETAILS");
+  const cartId = cookies.get("CARTID");
+  const dispatch = useDispatch();
+
+  useEffect(()=>{
+    if(cartId){
+      getProductListByCartId(cartId);
+    }
+  },[]);
+
   useEffect(() => {
     getAllCategoryList();
     getAllProductListHandler(
@@ -41,6 +53,16 @@ export default function Product() {
       currentPage
     );
   }, []);
+
+
+  const getProductListByCartId = async (cartId) =>{
+    const { data, message, success } = await productListByCart(cartId);
+    if(success){
+      dispatch(ADDTOCART(data));
+    }else{
+      dispatch(ADDTOCART([]));
+    }
+  } 
 
   const getAllCategoryList = async () => {
     const { data, message, success, count } = await getAllCategoryApiList();
@@ -113,6 +135,7 @@ export default function Product() {
       sponsor,
       currentPage
     );
+    getProductListByCartId(cartId)
   };
 
   return (
