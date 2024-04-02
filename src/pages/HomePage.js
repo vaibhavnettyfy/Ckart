@@ -1,3 +1,4 @@
+"use client";
 import { Banner, ProductCollection, SponsoredProducts, Appointment, Selling, OurProcess } from '@/components/home'
 
 const HomePage = () => {

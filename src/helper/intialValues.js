@@ -81,5 +81,7 @@ export const bookAppointmentIv = {
     deliveryTimeline:"",
     questionsComments:"",
     indicativeBudget:"",
+    termsOfServiceAgreed:"",
+    notificationPreference:"",
     
 };
