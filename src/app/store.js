@@ -1,6 +1,6 @@
 "use client";
 import {configureStore} from "@reduxjs/toolkit";
-import CartReducer from "./src/Redux/CartReducer";
+import CartReducer from "../Redux/CartReducer";
 
 
 export default configureStore({
