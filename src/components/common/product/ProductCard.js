@@ -17,111 +17,122 @@ import {
 import { useRouter } from "next/navigation";
 import QtyCard from "./QtyCard";
 import Cookies from "universal-cookie";
-import { useDispatch } from "react-redux";
-import { addproductApiWishlist, removeproductApiWishlist } from "@/Service/WishList/WishList.service";
+import {
+  addproductApiWishlist,
+  removeproductApiWishlist,
+} from "@/Service/WishList/WishList.service";
+import { usePathname } from 'next/navigation';
 import { errorNotification, successNotification } from "@/helper/Notification";
 import { addProductApiToCart } from "@/Service/AddTocart/AddToCart.service";
-// import { ADDTOCART } from "@/Redux/CartReducer";
 
 
-const ProductCard = ({ productDetails,callBackHandler }) => {
+
+const ProductCard = ({ productDetails, callBackHandler }) => {
   const {
     imageData,
     categoryname,
     description,
     price,
     productName,
+    productKey,
     subcategoryname,
     flag,
     pieces,
     id,
     specificationData,
   } = productDetails ?? {};
-  const dispatch = useDispatch();
   const router = useRouter();
   const cookies = new Cookies();
   const [wishList, setWishList] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [totalAmount, setTotalAmount] = useState();
   const userLoginFlag = cookies.get("token");
+  const pathname = usePathname();
   const userDetails = cookies.get("USERDETAILS");
-
   // to update the total amount when quantity changes or price changes
   useEffect(() => {
     setTotalAmount(price * quantity);
-  }, [quantity,price]);
-  
-  
-  useEffect(()=>{
-    setQuantity(productDetails?.minQuantity)
-  },[]);
+  }, [quantity, price]);
 
-  
+  useEffect(() => {
+    setQuantity(productDetails?.minQuantity);
+  }, []);
+
   const setQuantityHandler = (value) => {
     setQuantity(value);
   };
 
-
-  const cartHandler = async (details,id)=>{
+  const cartHandler = async (details, id) => {
     const cartId = cookies.get("CARTID");
 
-    const payload ={
+    const payload = {
       productId: id,
-      quantity:quantity,
-      userId: userDetails?.id ? userDetails?.id : ""
+      quantity: quantity,
+      userId: userDetails?.id ? userDetails?.id : "",
+      pincode: "380060",
     };
-    const cartIdPayload ={
+    const cartIdPayload = {
       productId: id,
-      quantity:quantity,
-      id: cartId ? cartId : '',
-      userId: userDetails?.id ? userDetails?.id : ""
-    }
-    const {count,data,message,success} = await addProductApiToCart(cartId ? cartIdPayload : payload);
-    if(success){
-      if(!cartId){
-        cookies.set("CARTID",data.cartId)
+      quantity: quantity,
+      id: cartId ? cartId : "",
+      userId: userDetails?.id ? userDetails?.id : "",
+      pincode: "380060",
+    };
+    const { count, data, message, success } = await addProductApiToCart(
+      cartId ? cartIdPayload : payload
+    );
+    if (success) {
+      if (!cartId) {
+        cookies.set("CARTID", data.cartId);
       }
       successNotification(message);
       callBackHandler();
-    }else{
+    } else {
       callBackHandler();
       errorNotification(message);
     }
   };
 
-
-  const handleWishList = async (productId,flag) => {
+  const handleWishList = async (productId, flag) => {
     // first check user is logging or not logged in
-    if(userLoginFlag){
-      if(flag){
-        const {data,message,success} = await removeproductApiWishlist(productId);
-        if(success){
+    if (userLoginFlag) {
+      if (flag) {
+        const { data, message, success } = await removeproductApiWishlist(
+          productId
+        );
+        if (success) {
           callBackHandler();
           successNotification(message);
-        }else{
+        } else {
           errorNotification(message);
         }
-      }else{
-        const payload ={
-          productId:productId,
-        }
-        const {count,data,message,success} = await addproductApiWishlist(payload);
-        if(success){
+      } else {
+        const payload = {
+          productId: productId,
+        };
+        const { count, data, message, success } = await addproductApiWishlist(
+          payload
+        );
+        if (success) {
           callBackHandler();
           successNotification(message);
-        }else{  
+        } else {
           errorNotification(message);
         }
       }
-    }else{
+    } else {
       router.push("/login");
     }
+  };
+
+  const productDetailsHandler = async (id, productKey) => {
+    router.push(`product/${productKey}`);
   };
 
   return (
     <div
       className="border bg-white md:rounded-2xl sm:rounded-xl rounded-lg lg:p-4 md:p-3 p-2 overflow-hidden cursor-pointer"
-      onClick={() => router.push("/product-details")}
+      onClick={() => productDetailsHandler(id, productKey)}
     >
       <div>
         <div className="bg-bgsecondary w-full lg:h-[220px] md:h-48 sm:h-40 h-32 sm:rounded-xl rounded-lg flex justify-center items-center relative">
@@ -148,7 +159,7 @@ const ProductCard = ({ productDetails,callBackHandler }) => {
             src={!flag ? "/heart.svg" : "/wishlist.svg"}
             onClick={(e) => {
               e.stopPropagation();
-              handleWishList(id,flag);
+              handleWishList(id, flag);
             }}
           />
         </div>
@@ -173,7 +184,8 @@ const ProductCard = ({ productDetails,callBackHandler }) => {
                   specificationData.map((res) => {
                     return (
                       <div className="border border-[#975BEC4D] bg-[#975BEC1A] md:py-[6px] py-1 md:px-3 px-2 md:rounded-xl rounded-md w-fit lg:text-sm md:text-sm text-[10px]">
-                        <span className="font-semibold"> {res?.key} </span> : {res?.value}
+                        <span className="font-semibold"> {res?.key} </span> :{" "}
+                        {res?.value}
                       </div>
                     );
                   })
@@ -182,35 +194,26 @@ const ProductCard = ({ productDetails,callBackHandler }) => {
                     No Product Details Found
                   </div>
                 )}
-                {/* need to keep this comment */}
-                {/* {specificationData.map((data, i) => {
-                  return (
-                    <div
-                      key={i}
-                      className="border border-[#975BEC4D] bg-[#975BEC1A] md:py-[6px] py-1 md:px-3 px-2 md:rounded-xl rounded-md w-fit lg:text-base md:text-sm text-[10px]"
-                    >
-                      {data}
-                    </div>
-                  );
-                })} */}
               </div>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
         <div
           onClick={(e) => e.stopPropagation()}
-          className="text-[#42545E] lg:text-base md:text-sm text-xs py-2"
+          className="flex items-center gap-1"
         >
-          Per Bundle{" "}
-          <span className="font-semibold text-black">{`₹ ${
-            price ? price : 0
-          }`}</span>
+          <div className="text-[#42545E] lg:text-base md:text-sm text-xs py-2">
+            Per Bundle{" "}
+            <span className="font-semibold text-black">{`₹ ${
+              price ? price : 0
+            }`}</span>
+          </div>
+          <div className="text-[#77878F] text-[13px] font-normal line-through">
+            ₹999.00
+          </div>
         </div>
         <div onClick={(e) => e.stopPropagation()}>
-          <QtyCard
-            setQuantity={setQuantityHandler} 
-            quantity={quantity}
-          />
+          <QtyCard setQuantity={setQuantityHandler} quantity={quantity} />
         </div>
         <div
           className="flex items-center gap-1"
@@ -261,7 +264,7 @@ const ProductCard = ({ productDetails,callBackHandler }) => {
             size={"card"}
             variant="card"
             className="w-full z-20"
-            onClick={() => cartHandler(productDetails,id)}
+            onClick={() => cartHandler(productDetails, id)}
           >
             Add to Cart
           </Button>

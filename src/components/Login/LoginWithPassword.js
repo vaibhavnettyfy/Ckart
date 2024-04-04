@@ -5,7 +5,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Image from "next/image";
 import { useFormik } from "formik";
-import { useRouter } from "next/navigation";
 import { loginWithPasswordIv } from "@/helper/intialValues";
 import { LoginPasswordValidation } from "@/helper/Validation";
 import { userLoginApiHandler } from "@/Service/Users/Users.Service";
@@ -16,7 +15,6 @@ import { Eye, EyeOff } from "lucide-react";
 
 function LoginWithPassword() {
   const cookies = new Cookies();
-  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
@@ -32,7 +30,6 @@ function LoginWithPassword() {
       );
       if (success) {
         successNotification(message);
-        router.push("/");
         cookies.set("token", data.token);
         cookies.set("userEmail", data.email);
         cookies.set("userPassword", data.password);

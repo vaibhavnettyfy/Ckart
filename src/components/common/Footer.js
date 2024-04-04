@@ -1,6 +1,7 @@
 'use client'
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import BookAppointment from "./modal/BookAppointment";
 
 export default function Footer() {
   const router = useRouter()
@@ -14,7 +15,7 @@ export default function Footer() {
               <Image onClick={() => router.push('/')} src={'/logo.png'} alt="" width={156} height={48} className="lg:w-[150px] md:w-[130px] sm:w-[110px] w-[100px] h-auto cursor-pointer" />
             </div>
             <div className="md:text-lg text-[15px] flex items-center gap-4 mg:gap-7">
-              <div className="cursor-pointer" onClick={() => router.push('/')} >Book an appointment</div>
+              <BookAppointment button={<div className="cursor-pointer" onClick={() => router.push('/')} >Book an appointment</div>} />
               <div className="cursor-pointer" onClick={() => router.push('/about-us')} >About us</div>
               <div className="cursor-pointer" onClick={() => router.push('/contact-us')} >Contact us</div>
             </div>

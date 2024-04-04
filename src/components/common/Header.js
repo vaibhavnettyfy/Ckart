@@ -19,7 +19,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useDispatch, useSelector } from "react-redux";
 import {
   Dialog,
   DialogContent,
@@ -31,9 +30,9 @@ import { Label } from "../ui/label";
 import { Button } from "../ui/button";
 import BookAppointment from "./modal/BookAppointment";
 import MultiSelectDropdown from "./MultiSelectDropdown";
-import { Search } from "lucide-react";
+import { MapPin, Search } from 'lucide-react';
 import { productListByCart } from "@/Service/AddTocart/AddToCart.service";
-// import { ADDTOCART } from "@/Redux/CartReducer";
+import { useAppContext } from "@/context";
 
 export const categoryOption = [
   { value: "Category 1" },
@@ -51,23 +50,40 @@ const category = [
 
 export default function Header() {
   const router = useRouter();
-  const [userLogin,setUserLogin] = useState(false);
+  const [userLogin, setUserLogin] = useState(false);
   const cookies = new Cookies();
-  const dispatch = useDispatch();
   const userLoginFlag = cookies.get("token");
   const cartId = cookies.get("CARTID");
-  const [cartLength,setCartLength] = useState(0);
+  const [cartList, setCartList] = useState([]);
+  
+
+  const {cartLength,setCartLength} = useAppContext();
+  
+  useEffect(() => {
+    if (cartId) {
+      getProductListByCartId(cartId);
+    }
+  }, [cartId]);
 
 
-  const cart = useSelector((state) => state.cart.cart || {});
+  const getProductListByCartId = async (cartId) => {
+    const { data, message, success } = await productListByCart(cartId);
+    if (success) {
+      setCartList(data);
+      setCartLength(data.length);
+    } else {
+      setCartLength(0);
+      setCartList([]);
+    }
+  };
 
-  useEffect(()=>{
-    if(userLoginFlag){
+  useEffect(() => {
+    if (userLoginFlag) {
       setUserLogin(true);
     }
-  },[]);
+  }, []);
 
-  const logout = () =>{
+  const logout = () => {
     router.push(`/`);
     setUserLogin(false);
     cookies.remove('token')
@@ -198,9 +214,11 @@ export default function Header() {
                     </div>
 
                     <div className="lg:text-lg text-base text-[#6B6B6B] flex flex-col items-center gap-4">
-                      <div>Book an appointment</div>
-                      <div>About us</div>
-                      <div>Contact us</div>
+                      <BookAppointment button={<div>Book an appointment</div>} />
+                      <div className="hover:text-primary cursor-pointer" onClick={() => router.push('/about-us')} >About us</div>
+                      <div className="hover:text-primary cursor-pointer" onClick={() => router.push('/contact-us')} >Contact us</div>
+                      {/* <div>About us</div>
+                      <div>Contact us</div> */}
                     </div>
 
                     <Separator />
@@ -221,12 +239,12 @@ export default function Header() {
                         </DialogTrigger>
                         <DialogContent>
                           <DialogHeader>
-                            <DialogTitle>Change Pincode</DialogTitle>
+                            <DialogTitle>
+                              Choose your location
+                            </DialogTitle>
                             <div className="flex flex-col gap-7 !mt-5">
                               <div>
-                                <Label htmlFor="" className="h-4 inline">
-                                  Enter New Pincode
-                                </Label>
+                                <Label htmlFor="" className='h-4 inline'>Enter an Indian pincode</Label>
                                 <div className="relative">
                                   <Input placeholder="" className="w-full" />
                                   <Search className="absolute top-[10px] right-3 w-5 h-5" />
@@ -336,13 +354,19 @@ export default function Header() {
               <Searchbar />
             </div>
             <div className="flex items-center gap-10">
-              <div className="text-xl lg:flex hidden items-center">
+              <div className="lg:flex hidden items-center">
                 <Dialog>
                   <DialogTrigger>
                     <TooltipProvider>
                       <Tooltip>
                         <TooltipTrigger>
-                          Delivery Pincode :- 362011
+                          <div className="text-black bg-[#ffed32] px-[6px] py-[2px] rounded flex items-center gap-[6px] border-2 border-[#ffed32] hover:border-black">
+                            <div><MapPin /></div>
+                            <div className="text-[13px] text-start">
+                              <div>Delivering to Ahmedabad 380001</div>
+                              <div className="font-semibold">Update location</div>
+                            </div>
+                          </div>
                         </TooltipTrigger>
                         <TooltipContent>
                           <p>Click to change Pincode</p>
@@ -352,12 +376,12 @@ export default function Header() {
                   </DialogTrigger>
                   <DialogContent>
                     <DialogHeader>
-                      <DialogTitle>Change Pincode</DialogTitle>
+                      <DialogTitle>
+                        Choose your location
+                      </DialogTitle>
                       <div className="flex flex-col gap-7 !mt-5">
                         <div>
-                          <Label htmlFor="" className="h-4 inline">
-                            Enter New Pincode
-                          </Label>
+                          <Label htmlFor="" className='h-4 inline'>Enter an Indian pincode</Label>
                           <div className="relative">
                             <Input placeholder="" className="w-full" />
                             <Search className="absolute top-[10px] right-3 w-5 h-5" />
@@ -375,7 +399,7 @@ export default function Header() {
                 </Dialog>
               </div>
               <div className="flex md:gap-3 gap-[6px] items-center">
-                <h3>{cart.length}</h3>
+                {cartLength}
                 <Image
                   onClick={() => router.push("/cart")}
                   src={"/header/cart.svg"}
@@ -427,7 +451,7 @@ export default function Header() {
                     {userLogin ? (
                       <DropdownMenuItem
                         className="p-2"
-                        onClick={()=>logout()}
+                        onClick={() => logout()}
                       >
                         <div className="flex gap-2">
                           <Image
@@ -443,7 +467,7 @@ export default function Header() {
                     ) : (
                       <DropdownMenuItem
                         className="p-2"
-                        onClick={()=>router.push(`/login`)}
+                        onClick={() => router.push(`/login`)}
                       >
                         <div className="flex gap-2">
                           <Image

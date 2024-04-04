@@ -10,6 +10,13 @@ import ImageGallery from "react-image-gallery";
 import "react-image-gallery/styles/css/image-gallery.css";
 import BookAppointment from "../common/modal/BookAppointment";
 import { useRouter } from "next/navigation";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, } from "@/components/ui/dialog"
+import { Label } from "../ui/label";
+import { Input } from "../ui/input";
+import { Search } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
+
+
 const feature = [
   { img: '/details/Medal.svg', text: 'Free 1 Year Warranty' },
   { img: '/details/Truck.svg', text: 'Free Shipping & Fasted Delivery' },
@@ -112,7 +119,39 @@ export default function ProductDetails() {
                   <Button size='lg' className='w-full shadow-none' variant='outline' onClick={() => router.push('/cart')}>Buy now</Button>
                 </div>
                 <div className="border rounded-lg py-2 px-3 w-fit">
-                  <div className="text-lg font-normal">Delivery Pincode:- <span className="font-semibold">362011</span></div>
+                  <Dialog>
+                    <DialogTrigger>
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger> <div className="text-lg font-normal">Delivery Pincode:- <span className="font-semibold">362011</span></div></TooltipTrigger>
+                          <TooltipContent>
+                            <p>Click to change Pincode</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>
+                          Choose your location
+                        </DialogTitle>
+                        <div className="flex flex-col gap-7 !mt-5">
+                          <div>
+                            <Label htmlFor="" className='h-4 inline'>Enter an Indian pincode</Label>
+                            <div className="relative">
+                              <Input placeholder='' className='w-full' />
+                              <Search className="absolute top-[10px] right-3 w-5 h-5" />
+                            </div>
+                          </div>
+                          <div className="flex justify-end gap-2">
+                            <Button size='sm'>Update</Button>
+                            <Button size='sm' variant="outline">Cancel</Button>
+                          </div>
+                        </div>
+                      </DialogHeader>
+                    </DialogContent>
+                  </Dialog>
+
                 </div>
                 <div className="mt-5 mb-7">
                   <div className="flex justify-between items-center">

@@ -13,3 +13,9 @@ export const ProductAllListApiHandler = (
     payload
   );
 };
+
+
+
+export const productDetailsByIdApiHandler = (payload) =>{
+  return POST(`${process.env.NEXT_PUBLIC_APIURL}/api/userV1/userProductDetail`,payload);
+}

@@ -6,8 +6,6 @@ import { Separator } from "../ui/separator";
 import {
   Table,
   TableBody,
-  TableCaption,
-  TableCell,
   TableHead,
   TableHeader,
   TableRow,
@@ -18,19 +16,17 @@ import ProductSuggestion from "../common/product/ProductSuggestion";
 import { BindCartIdToUserId, productListByCart } from "@/Service/AddTocart/AddToCart.service";
 import Cookies from "universal-cookie";
 import { useEffect, useState } from "react";
-import {useDispatch} from "react-redux";
 import CartCard from "../common/Cart/CartCard";
-import { ADDTOCART } from "@/app/globalRedux/CartReducer";
+import { useAppContext } from "@/context";
 
 export default function Cart() {
   const router = useRouter();
   const cookies = new Cookies();
-  const dispatch = useDispatch();
   const cartId = cookies.get("CARTID");
-  const userId = cookies.get("token");
   const BindFlag = cookies.get("bindFlag");
   const userDetails = cookies.get("USERDETAILS");
   const [cartList, setCartList] = useState([]);
+  const {setCartLength} = useAppContext();
 
   useEffect(() => {
     if (cartId) {
@@ -58,10 +54,10 @@ export default function Cart() {
     const { data, message, success } = await productListByCart(cartId);
     if (success) {
       setCartList(data);
-      dispatch(ADDTOCART(data));
+      setCartLength(data.length);
     } else {
       setCartList([]);
-      dispatch(ADDTOCART([]));
+      setCartLength(0);
     }
   };
 

@@ -1,7 +1,5 @@
 "use client";
 import ProductCard from "../common/product/ProductCard";
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "../ui/separator";
 import Search from "../common/Search";
 import Image from "next/image";
@@ -15,13 +13,20 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "../ui/pagination";
-import {useDispatch} from "react-redux";
+import { Checkbox } from "../ui/checkbox";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import Cookies from "universal-cookie";
-import { getAllCategoryApiList } from "@/Service/Category/Category.service";
+import {
+  categorySubCategoryList,
+} from "@/Service/Category/Category.service";
 import { ProductAllListApiHandler } from "@/Service/Product/Product.service";
 import { productListByCart } from "@/Service/AddTocart/AddToCart.service";
-import { ADDTOCART } from "@/app/globalRedux/CartReducer";
-// import { ADDTOCART } from "";
+import { useAppContext } from "@/context";
 export default function Product() {
   const cookies = new Cookies();
   const [categoryList, setCategoryList] = useState([]);
@@ -36,39 +41,22 @@ export default function Product() {
   const [currentPage, setCurrentPage] = useState(1);
   const userDetails = cookies.get("USERDETAILS");
   const cartId = cookies.get("CARTID");
-  const dispatch = useDispatch();
-
-  useEffect(()=>{
-    if(cartId){
-      getProductListByCartId(cartId);
-    }
-  },[]);
+  const [catSubId, setCatSubId] = useState("");
+  const { setCartLength } = useAppContext();
+  const [checkId, setCheckId] = useState("");
+  const [subCheckId, setSubCheckId] = useState("");
 
   useEffect(() => {
-    getAllCategoryList();
-    getAllProductListHandler(
-      searchText,
-      pageSize,
-      category,
-      sponsor,
-      currentPage
-    );
+    if (cartId) {
+      getProductListByCartId(cartId);
+    }
   }, []);
 
-
-  const getProductListByCartId = async (cartId) =>{
-    const { data, message, success } = await productListByCart(cartId);
-    if(success){
-      dispatch(ADDTOCART(data));
-    }else{
-      dispatch(ADDTOCART([]));
-    }
-  } 
-
-  const getAllCategoryList = async () => {
-    const { data, message, success, count } = await getAllCategoryApiList();
-    setCategoryLoader(true);
+  // get all Data of categories and Sub-Categories
+  const getAlllist = async () => {
     try {
+      setCategoryLoader(true);
+      const { data, message, success } = await categorySubCategoryList();
       if (success) {
         setCategoryList(data);
       } else {
@@ -78,6 +66,25 @@ export default function Product() {
       console.log(err);
     } finally {
       setCategoryLoader(false);
+    }
+  };
+  useEffect(() => {
+    getAlllist();
+    getAllProductListHandler(
+      searchText,
+      pageSize,
+      category,
+      sponsor,
+      currentPage
+    );
+  }, []);
+
+  const getProductListByCartId = async (cartId) => {
+    const { data, message, success } = await productListByCart(cartId);
+    if (success) {
+      setCartLength(data.length);
+    } else {
+      setCartLength(0);
     }
   };
 
@@ -99,15 +106,16 @@ export default function Product() {
   ) => {
     setProductLoader(true);
     const payload = {
-      userId : userDetails?.id ? userDetails?.id : ""
-    }
+      userId: userDetails?.id ? userDetails?.id : "",
+    };
     try {
       const { count, data, message, success } = await ProductAllListApiHandler(
         searchText,
         pageSize,
         category,
         sponsor,
-        page,payload
+        page,
+        payload
       );
       if (success) {
         setProductListData(data);
@@ -128,7 +136,7 @@ export default function Product() {
     getAllProductListHandler(searchText, pageSize, category, sponsor, value);
   };
 
-  const callBackHandler = () =>{
+  const callBackHandler = () => {
     getAllProductListHandler(
       searchText,
       pageSize,
@@ -136,7 +144,7 @@ export default function Product() {
       sponsor,
       currentPage
     );
-    getProductListByCartId(cartId)
+    getProductListByCartId(cartId);
   };
 
   return (
@@ -149,19 +157,66 @@ export default function Product() {
                 Category
               </div>
               <div>
-                <RadioGroup
-                  defaultValue="comfortable"
-                  onValueChange={(event) => categoryHandler(event)}
-                >
+                <Accordion type="single" collapsible className="w-full">
                   {categoryList && categoryList.length > 0 ? (
-                    categoryList.map((item, index) => {
+                    categoryList.map((response, index) => {
                       return (
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem id={item.id} value={item.id} />
-                          <Label className="text-[#475156]" htmlFor="r1">
-                            {item.name}
-                          </Label>
-                        </div>
+                        <AccordionItem value={response.id}>
+                          <AccordionTrigger>
+                            <div className="flex items-center space-x-2 col-span-2 mt-2">
+                              <input
+                                type="checkbox"
+                                id={response.id}
+                                value={response.id}
+                                checked={response.id == checkId}
+                                onChange={(event) => [
+                                  categoryHandler(event.target.value),
+                                  setCheckId(event.target.value),
+                                ]}
+                              />
+                              <label
+                                htmlFor=""
+                                className="text-sm font-medium leading-none text-[#475156] peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                              >
+                                {response?.name ? response.name : "-"}
+                              </label>
+                            </div>
+                          </AccordionTrigger>
+                          <AccordionContent>
+                            <div className="px-4">
+                              {response?.subCategorys &&
+                              response?.subCategorys.length > 0 ? (
+                                response?.subCategorys.map((item, index) => {
+                                  return (
+                                    <div className="flex items-center space-x-2 col-span-2 mt-2">
+                                      <input
+                                        type="checkbox"
+                                        id={item.id}
+                                        value={item.id}
+                                        checked={item.id == subCheckId}
+                                        onChange={(event) => [
+                                          categoryHandler(event.target.value),
+                                          setSubCheckId(event.target.value),
+                                        ]}
+                                      />
+                                      <label
+                                        htmlFor=""
+                                        value={item.id}
+                                        className="text-sm font-medium leading-none text-[#475156] peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                      >
+                                        {item.name ? item.name : "-"}
+                                      </label>
+                                    </div>
+                                  );
+                                })
+                              ) : (
+                                <div className="text-[#5D5F5F] text-center">
+                                  No SubCategory Found
+                                </div>
+                              )}
+                            </div>
+                          </AccordionContent>
+                        </AccordionItem>
                       );
                     })
                   ) : (
@@ -169,68 +224,12 @@ export default function Product() {
                       No Category Found
                     </div>
                   )}
-                </RadioGroup>
-                {/* need to keep this commented as of now */}
-                {/* <RadioGroup defaultValue="comfortable">
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="Bathroom_Fixtures" id="r2" />
-                    <Label className="text-[#475156]" htmlFor="r2">
-                      Bathroom Fixtures
-                    </Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="Electricals_Lighting" id="r3" />
-                    <Label className="text-[#475156]" htmlFor="r3">
-                      Electricals & Lighting
-                    </Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="Tiles_Floorings" id="r4" />
-                    <Label className="text-[#475156]" htmlFor="r4">
-                      Tiles & Floorings
-                    </Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="Paints_Coatings" id="r5" />
-                    <Label className="text-[#475156]" htmlFor="r5">
-                      Paints & Coatings
-                    </Label>
-                  </div>
-                </RadioGroup> */}
+                </Accordion>
               </div>
             </div>
             <div className="mt-5 mb-3">
               <Separator />
             </div>
-            {/* need to keep this commented  */}
-            {/* <div>
-              <div className="text-lg font-medium uppercase text-[#191C1F] mb-3">
-                Location
-              </div>
-              <div>
-                <div className="relative mx-auto text-gray-600 border">
-                  <input
-                    className="bg-white w-full md:px-4 px-3 md:py-[10px] py-2 pr-10 text-[#77878F] text-sm focus:outline-none"
-                    type="search"
-                    name="search"
-                    onChange={(event)=>locationSearchHandler(event.target.value)}
-                    placeholder="Search for anything..."
-                  />
-                  <button
-                    type="submit"
-                    className="absolute right-0 top-0 mt-[10px] mr-3"
-                  >
-                    <Image
-                      src={"/header/Search.svg"}
-                      alt=""
-                      width={20}
-                      height={20}
-                      className="md:w-5 w-4 md:h-5"
-                    />
-                  </button>
-                </div>
-              </div>
-            </div> */}
           </div>
           <div className="col-span-3">
             <div className="relative text-gray-600 border w-[300px]">
@@ -270,7 +269,10 @@ export default function Product() {
                 produtListData.map((item, index) => {
                   return (
                     <div key={index} className="col-span-1">
-                      <ProductCard productDetails={item} callBackHandler={callBackHandler}/>
+                      <ProductCard
+                        productDetails={item}
+                        callBackHandler={callBackHandler}
+                      />
                     </div>
                   );
                 })
@@ -286,7 +288,9 @@ export default function Product() {
                   <PaginationItem>
                     <PaginationPrevious
                       disabled={currentPage === 1}
-                      onClick={() => currentPage !==1 && handlePageChange(currentPage - 1)}
+                      onClick={() =>
+                        currentPage !== 1 && handlePageChange(currentPage - 1)
+                      }
                     />
                   </PaginationItem>
                   {[...Array(totalPage).keys()].map((page) => (
@@ -302,7 +306,10 @@ export default function Product() {
                   <PaginationItem>
                     <PaginationNext
                       disabled={currentPage === totalPage}
-                      onClick={() => currentPage !== totalPage  && handlePageChange(currentPage + 1)}
+                      onClick={() =>
+                        currentPage !== totalPage &&
+                        handlePageChange(currentPage + 1)
+                      }
                     />
                   </PaginationItem>
                 </PaginationContent>

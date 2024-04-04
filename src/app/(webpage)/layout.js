@@ -2,7 +2,6 @@ import { Urbanist } from "next/font/google";
 import Header from "@/components/common/Header";
 import Footer from "@/components/common/Footer";
 import { siteMetadata } from "@/helper/siteMetaData";
-import { Providers } from "../globalRedux/Providers";
 
 
 // export const metadata = {
@@ -32,13 +31,11 @@ import { Providers } from "../globalRedux/Providers";
 export default function Layout({ children }) {
 
   return (
-    <div>
-      <Providers>
+    <>
       <Header />
       {children}
       <Footer />
-      </Providers>
-    </div>
+    </>
 
   );
 }

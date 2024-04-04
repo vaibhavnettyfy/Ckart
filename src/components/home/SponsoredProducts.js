@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Heading from "../common/Heading";
-import {useDispatch} from "react-redux";
 import Image from "next/image";
 import { Button } from "../ui/button";
 import {
@@ -17,8 +16,7 @@ import ProductCard from "../common/product/ProductCard";
 import { ProductAllListApiHandler } from "@/Service/Product/Product.service";
 import Cookies from "universal-cookie";
 import { productListByCart } from "@/Service/AddTocart/AddToCart.service";
-import { ADDTOCART } from "@/app/globalRedux/CartReducer";
-// import { ADDTOCART } from "@/Redux/CartReducer";
+import { useAppContext } from "@/context";
 
 const SponsoredProducts = () => {
   const [productLoader, setProductLoader] = useState(false);
@@ -29,11 +27,11 @@ const SponsoredProducts = () => {
   const [searchText, setSearchText] = useState("");
   const [category, setCategory] = useState("");
   const [sponsor, setSponsor] = useState(1);
-  const dispatch = useDispatch();
   const cookies = new Cookies();
   const cartId = cookies.get("CARTID");
   const userId = cookies.get("token");
   const userDetails = cookies.get("USERDETAILS");
+  const {setCartLength} = useAppContext();
   
   useEffect(() => {
     getAllSponserdProducts(
@@ -88,9 +86,9 @@ const SponsoredProducts = () => {
   const getProductListByCartId = async (cartId) =>{
     const {data,message,success} = await productListByCart(cartId);
     if(success){
-      dispatch(ADDTOCART(data));
+      setCartLength(data.length);
     }else{
-      dispatch(ADDTOCART([]));
+      setCartLength(0);
     }
   };
 
@@ -107,6 +105,7 @@ const SponsoredProducts = () => {
       sponsor,
       currentPage
     );
+    getProductListByCartId(cartId);
   }
 
   return (

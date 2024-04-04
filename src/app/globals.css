@@ -78,6 +78,31 @@
   }
 }
 
+/*--------------------- 
+        Scrollbar css 
+----------------------------------*/
+*::-webkit-scrollbar {
+  width: 5px;
+  height: 4px;
+  position: absolute;
+  /* display: none; */
+  scrollbar-gutter: stable both-edges;
+}
+
+*::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: rgb(182, 182, 182);
+  border-radius: 10px;
+  border: 1px solid #fff;
+}
+
+/*--------------------- 
+        Scrollbar css 
+----------------------------------*/
+
 
 .slide_arrow_box {
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;

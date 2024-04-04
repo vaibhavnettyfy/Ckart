@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import React from 'react'
 import { Button } from '../ui/button'
+import BookAppointment from '../common/modal/BookAppointment'
 
 const Appointment = () => {
   return (
@@ -14,7 +15,7 @@ const Appointment = () => {
           <div className='xl:text-5xl lg:text-4xl md:text-3xl text-2xl font-bold text-center'>Book a online appointment </div>
           <div className='md:text-lg sm:text-base text-sm max-w-[700px] text-center mt-3 sm:mb-7 mb-4'>Explore our vast selection at ‘The Creative Store’- your one-stop destination for all construction and building needs.</div>
           <div>
-            <Button variant='secondary' size='lg'>Book a appointment</Button>
+            <BookAppointment button={<Button variant='secondary' size='lg'>Book a appointment</Button>} />
           </div>
         </div>
       </div>

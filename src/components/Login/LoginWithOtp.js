@@ -30,8 +30,8 @@ function LoginWithOtp() {
     try {
       setLoading(true);
       const payload = {
-        email : formik.values.email,
-        otp : formik.values.otp
+        email: formik.values.email,
+        otp: formik.values.otp
       }
       const { data, message, success } = await loginWithOtpApiHandler(
         payload
@@ -57,7 +57,7 @@ function LoginWithOtp() {
     try {
       setLoading(true);
       const payload = {
-        email : formik.values.email
+        email: formik.values.email
       }
       const { data, message, success } = await sendOtpApiHandler(payload);
       if (success) {
@@ -109,9 +109,9 @@ function LoginWithOtp() {
               </InputOTPGroup>
             )}
           />
-          <span className="text-red-500 text-xs">{otpFlag && formik.errors.otp}</span>
+          <h4>{otpFlag && formik.errors.otp}</h4>
         </div>
-        
+
       )}
       {otpFlag && (
         <div

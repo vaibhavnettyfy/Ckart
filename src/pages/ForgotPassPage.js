@@ -91,7 +91,6 @@ export default function ForgotPassPage() {
       <div className="w-2/5">
         <div className="flex flex-col items-center h-full max-w-[400px] m-auto justify-center">
           <div className="flex flex-col gap-5 w-full">
-            <Link href="/">
             <Image
               src={"/logoBlack.png"}
               alt=""
@@ -99,7 +98,6 @@ export default function ForgotPassPage() {
               height={48}
               className="lg:w-[170px] md:w-[150px] sm:w-[110px] w-[100px] md:h-huto cursor-pointer"
             />
-            </Link>
             <div className="mb-2">
               <div className="text-2xl font-bold mt-2 mb-1">
                 Forgot Password
@@ -113,8 +111,8 @@ export default function ForgotPassPage() {
               <Input
                 placeholder="ex: julie@gmail.com"
                 className="w-full"
+                inputProps={{ maxLength: 100 }}
                 name="email"
-                max={100}
                 formik={formik}
               />
             </div>
