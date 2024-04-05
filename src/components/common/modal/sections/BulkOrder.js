@@ -138,8 +138,7 @@ const BulkOrder = () => {
     }
   };
 
-  console.log("[skuValue,...skuValueData]", formik.values);
-
+ 
   const dateHandler = (value) => {
     const data = new Date(value);
     const formateData = data.toISOString();
@@ -369,6 +368,11 @@ const BulkOrder = () => {
               name="date"
               onChange={(event) => dateHandler(event.target.value)}
             />
+            {formik.touched.date && formik.errors.date ? (
+              <span className="text-red-500 text-xs">
+                {formik.errors.date}
+              </span>
+            ) : null}
           </div>
         </div>
         <div className="col-span-3">
@@ -391,6 +395,11 @@ const BulkOrder = () => {
               <div className="text-[#5D5F5F] text-center">No slots Found</div>
             )}
           </div>
+          {formik.touched.time && formik.errors.time ? (
+              <span className="text-red-500 text-xs">
+                {formik.errors.time}
+              </span>
+            ) : null}
         </div>
         <div className="col-span-3">
           <Label htmlFor="">Questions/Comments</Label>

@@ -1,75 +1,156 @@
-'use client'
-import { useState } from "react";
+"use client";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import ProductSuggestion from "../common/product/ProductSuggestion";
 import QtyCard from "../common/product/QtyCard";
 import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ImageGallery from "react-image-gallery";
 import "react-image-gallery/styles/css/image-gallery.css";
 import BookAppointment from "../common/modal/BookAppointment";
 import { useRouter } from "next/navigation";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, } from "@/components/ui/dialog"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import Cookies from "universal-cookie";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
-import { Search } from "lucide-react";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
+import { Flag, Search } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../ui/tooltip";
+import {
+  addproductApiWishlist,
+  removeproductApiWishlist,
+} from "@/Service/WishList/WishList.service";
+import { errorNotification, successNotification } from "@/helper/Notification";
+import { useAppContext } from "@/context";
+import { addProductApiToCart } from "@/Service/AddTocart/AddToCart.service";
+import ProductDescription from "../ProductDescription";
 
-
-const feature = [
-  { img: '/details/Medal.svg', text: 'Free 1 Year Warranty' },
-  { img: '/details/Truck.svg', text: 'Free Shipping & Fasted Delivery' },
-  { img: '/details/Handshake.svg', text: '100% Money-back guarantee' },
-  { img: '/details/Headphones.svg', text: '24/7 Customer support' },
-  { img: '/details/CreditCard.svg', text: 'Secure payment method' },
-]
-const shippingInformation = [
-  { head: 'Courier :', para: '2-4 days, free shipping' },
-  { head: 'Local Shipping :', para: 'up to one week, ₹19.00' },
-  { head: 'UPS Ground Shipping :', para: '4-6 days, ₹29.00' },
-  { head: 'Unishop Global Export :', para: '3-4 days, ₹39.00' },
-]
-
-const images = [
-  {
-    original: "/dummyimage.png",
-    thumbnail: "/dummyimage.png",
-  },
-  {
-    original: "/dummyimage.png",
-    thumbnail: "/dummyimage.png",
-  },
-  {
-    original: "/dummyimage.png",
-    thumbnail: "/dummyimage.png",
-  },
-  {
-    original: "/dummyimage.png",
-    thumbnail: "/dummyimage.png",
-  },
-  {
-    original: "/dummyimage.png",
-    thumbnail: "/dummyimage.png",
-  },
-  {
-    original: "/dummyimage.png",
-    thumbnail: "/dummyimage.png",
-  },
-  {
-    original: "/dummyimage.png",
-    thumbnail: "/dummyimage.png",
-  },
-];
-
-export default function ProductDetails() {
+export default function ProductDetails({ detailsData, callBackHandler }) {
+  const {
+    brand,
+    category,
+    description,
+    id,
+    isWishlist,
+    location,
+    maxQuantity,
+    minQuantity,
+    pieces,
+    price,
+    productImage,
+    productKey,
+    productName,
+    quantity,
+    specification,
+    sponsor,
+    subCategory,
+  } = detailsData || {};
   const router = useRouter();
+  const cookies = new Cookies();
   const [wishList, setWishList] = useState(false);
+  const [selectedQuantitys, setSelectedQuantitys] = useState(1);
+  const [productsImage, setProductImage] = useState([]);
+  const userLoginFlag = cookies.get("token");
+  const userDetails = cookies.get("USERDETAILS");
+  const cartId = cookies.get("CARTID");
 
+  const setQuantityHandler = (value) => {
+    setSelectedQuantitys(value);
+  };
 
-  const handleWishList = () => {
-    setWishList(!wishList)
-  }
+  const ImageHandler = (image) => {
+    const data =
+      image && image.length > 0
+        ? image.map((res) => {
+            return {
+              original: res.image ? res.image : "",
+              thumbnail: res.image ? res.image : "",
+            };
+          })
+        : [];
+    setProductImage(data);
+  };
+
+  useEffect(() => {
+    setSelectedQuantitys(minQuantity);
+  }, [minQuantity]);
+
+  useEffect(() => {
+    ImageHandler(productImage);
+  }, [productImage]);
+
+  const addTocartHandler = async () => {
+    try {
+      const payload = {
+        productId: id,
+        quantity: selectedQuantitys,
+        userId: userDetails?.id ? userDetails?.id : "",
+        pincode: "380060",
+      };
+      const cartPayload = {
+        productId: id,
+        quantity: selectedQuantitys,
+        id: cartId ? cartId : "",
+        userId: userDetails?.id ? userDetails?.id : "",
+        pincode: "380060",
+      };
+      const { count, data, message, success } = await addProductApiToCart(
+        cartId ? cartPayload : payload
+      );
+      if (success) {
+        if (!cartId) {
+          cookies.set("CARTID", data.cartId);
+        }
+        successNotification(message);
+        callBackHandler();
+      } else {
+        callBackHandler();
+        errorNotification(message);
+      }
+    } catch (err) {
+    } finally {
+    }
+  };
+
+  const wishListHanlder = async () => {
+    if (userLoginFlag) {
+      if (isWishlist) {
+        const { data, message, success } = await removeproductApiWishlist(id);
+        if (success) {
+          callBackHandler();
+          successNotification(message);
+        } else {
+          errorNotification(message);
+        }
+      } else {
+        const payload = {
+          productId: id,
+        };
+        const { count, data, message, success } = await addproductApiWishlist(
+          payload
+        );
+        if (success) {
+          callBackHandler();
+          successNotification(message);
+        } else {
+          errorNotification(message);
+        }
+      }
+    } else {
+      router.push("/login");
+    }
+  };
 
   return (
     <div className="my-20">
@@ -77,53 +158,143 @@ export default function ProductDetails() {
         <div>
           <div className="grid grid-cols-2 gap-8">
             <div>
-              <ImageGallery items={images} autoPlay={true} />
+              <ImageGallery items={productsImage} autoPlay={true} />
             </div>
             <div>
               <div>
-                <div className="text-[22px] font-semibold mb-2">Tiscon Superlinks - 8mm</div>
-                <div className="text-[#42545E] font-normal">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. </div>
+                <div className="text-[22px] font-semibold mb-2">
+                  {productName ? productName : "-"}
+                </div>
+                <div className="text-[#42545E] font-normal">
+                  {description ? description : "-"}
+                </div>
                 <div className="my-3">
                   <div className="grid grid-cols-2 gap-2">
                     <div className="flex flex-col gap-1">
-                      <div className="text-sm font-semibold"><span className="text-[#5F6C72] font-normal">Diameter : </span> 8mm</div>
-                      <div className="text-sm font-semibold"><span className="text-[#5F6C72] font-normal">Pieces per Bundle : </span> 25</div>
-                      <div className="text-sm font-semibold"><span className="text-[#5F6C72] font-normal">Dimension : </span> 178 mm x 229 mm</div>
+                      {/* <div className="text-sm font-semibold">
+                        <span className="text-[#5F6C72] font-normal">
+                          Diameter :{" "}
+                        </span>{" "}
+                        8mm
+                      </div> */}
+                      <div className="text-sm font-semibold">
+                        <span className="text-[#5F6C72] font-normal">
+                          Pieces per Bundle :{" "}
+                        </span>{" "}
+                        {pieces ? pieces : "-"}
+                      </div>
+                      <div className="text-sm font-semibold">
+                        <span className="text-[#5F6C72] font-normal">
+                          Availability :{" "}
+                        </span>{" "}
+                        {console.log("quantity",quantity)}
+                        {quantity? (
+                          <span className="text-green">In Stock</span>
+                        ) : (
+                          <span className="text-[#DA3E31]">Out of stock</span>
+                        )}
+                      </div>
+                      {/* <div className="text-sm font-semibold">
+                        <span className="text-[#5F6C72] font-normal">
+                          Dimension :{" "}
+                        </span>{" "}
+                        178 mm x 229 mm
+                      </div> */}
                     </div>
                     <div className="flex flex-col gap-1">
-                      <div className="text-sm font-semibold"><span className="text-[#5F6C72] font-normal">Availability : </span> In Stock</div>
-                      <div className="text-sm font-semibold"><span className="text-[#5F6C72] font-normal">Brand : </span> Tata</div>
-                      <div className="text-sm font-semibold"><span className="text-[#5F6C72] font-normal">Category : </span> Building Material</div>
+                      {/* <div className="text-sm font-semibold">
+                        <span className="text-[#5F6C72] font-normal">
+                          Availability :{" "}
+                        </span>{" "}
+                        In Stock
+                      </div> */}
+                      <div className="text-sm font-semibold">
+                        <span className="text-[#5F6C72] font-normal">
+                          Brand :{" "}
+                        </span>{" "}
+                        {brand ? brand : "-"}
+                      </div>
+                      <div className="text-sm font-semibold">
+                        <span className="text-[#5F6C72] font-normal">
+                          Category :{" "}
+                        </span>{" "}
+                        {category ? category?.name : "-"}
+                      </div>
                     </div>
                   </div>
                 </div>
                 <div className="flex gap-1 items-center">
-                  <div className="font-semibold text-primary text-2xl">₹750</div>
-                  <div className="text-[#77878F] text-lg font-normal line-through">₹999.00</div>
-                  <div className="text-sm px-2 py-1 bg-[#EFD33D] font-semibold rounded-sm ml-2">21% OFF</div>
+                  <div className="font-semibold text-primary text-2xl">
+                    {`₹ ${price ? price : 0}`}
+                  </div>
+                  <div className="text-[#77878F] text-lg font-normal line-through">
+                    ₹999.00
+                  </div>
+                  <div className="text-sm px-2 py-1 bg-[#EFD33D] font-semibold rounded-sm ml-2">
+                    21% OFF
+                  </div>
                 </div>
               </div>
               <div className="my-5">
                 <Separator />
               </div>
               <div>
-                <div><QtyCard className='w-[150px]' /></div>
+                <div>
+                  <QtyCard
+                    className="w-[150px]"
+                    setQuantity={setQuantityHandler}
+                    quantity={selectedQuantitys}
+                  />
+                </div>
                 <div className="flex gap-3 my-5">
-                  <Button size={'lg'} className='w-full shadow-none' onClick={() => router.push('/cart')}>
-                    <div className='flex gap-2 items-center'>
+                  <Button
+                    size={"lg"}
+                    className="w-full shadow-none"
+                    onClick={() => addTocartHandler()}
+                  >
+                    <div className="flex gap-2 items-center">
                       <div>Add to cart</div>
-                      <Image alt={''} width={20} height={20} className='object-contain' src={'/details/ShoppingCart.svg'} />
+                      <Image
+                        alt={""}
+                        width={20}
+                        height={20}
+                        className="object-contain"
+                        src={"/details/ShoppingCart.svg"}
+                      />
                     </div>
                   </Button>
-                  <BookAppointment button={<Button size='lg' className='w-full shadow-none' variant='outline'>Book Appointment</Button>} />
-                  <Button size='lg' className='w-full shadow-none' variant='outline' onClick={() => router.push('/cart')}>Buy now</Button>
+                  <BookAppointment
+                    button={
+                      <Button
+                        size="lg"
+                        className="w-full shadow-none"
+                        variant="outline"
+                      >
+                        Book Appointment
+                      </Button>
+                    }
+                  />
+                  <Button
+                    size="lg"
+                    className="w-full shadow-none"
+                    variant="outline"
+                    onClick={() => router.push("/cart")}
+                  >
+                    Buy now
+                  </Button>
                 </div>
                 <div className="border rounded-lg py-2 px-3 w-fit">
                   <Dialog>
                     <DialogTrigger>
                       <TooltipProvider>
                         <Tooltip>
-                          <TooltipTrigger> <div className="text-lg font-normal">Delivery Pincode:- <span className="font-semibold">362011</span></div></TooltipTrigger>
+                          <TooltipTrigger>
+                            {" "}
+                            <div className="text-lg font-normal">
+                              Delivery Pincode:-{" "}
+                              <span className="font-semibold">362011</span>
+                            </div>
+                          </TooltipTrigger>
                           <TooltipContent>
                             <p>Click to change Pincode</p>
                           </TooltipContent>
@@ -132,97 +303,104 @@ export default function ProductDetails() {
                     </DialogTrigger>
                     <DialogContent>
                       <DialogHeader>
-                        <DialogTitle>
-                          Choose your location
-                        </DialogTitle>
+                        <DialogTitle>Choose your location</DialogTitle>
                         <div className="flex flex-col gap-7 !mt-5">
                           <div>
-                            <Label htmlFor="" className='h-4 inline'>Enter an Indian pincode</Label>
+                            <Label htmlFor="" className="h-4 inline">
+                              Enter an Indian pincode
+                            </Label>
                             <div className="relative">
-                              <Input placeholder='' className='w-full' />
+                              <Input placeholder="" className="w-full" />
                               <Search className="absolute top-[10px] right-3 w-5 h-5" />
                             </div>
                           </div>
                           <div className="flex justify-end gap-2">
-                            <Button size='sm'>Update</Button>
-                            <Button size='sm' variant="outline">Cancel</Button>
+                            <Button size="sm">Update</Button>
+                            <Button size="sm" variant="outline">
+                              Cancel
+                            </Button>
                           </div>
                         </div>
                       </DialogHeader>
                     </DialogContent>
                   </Dialog>
-
                 </div>
                 <div className="mt-5 mb-7">
                   <div className="flex justify-between items-center">
                     <div className="flex gap-1">
-                      <Image alt={''} width={24} height={24} className='cursor-pointer' src={!wishList ? '/details/Heart.svg' : '/details/WishList.svg'} onClick={handleWishList} />
+                      <Image
+                        alt={""}
+                        width={24}
+                        height={24}
+                        className="cursor-pointer"
+                        src={
+                          !isWishlist
+                            ? "/details/Heart.svg"
+                            : "/details/WishList.svg"
+                        }
+                        onClick={() => wishListHanlder(id, isWishlist)}
+                      />
                       <div>Add to Wishlist</div>
                     </div>
                     <div className="flex gap-2 items-center mr-10">
                       <div>Share product:</div>
                       <div className="flex gap-2 items-center">
-                        <Image alt={''} width={20} height={20} className='cursor-pointer' src={'/details/Copy.svg'} />
-                        <Image alt={''} width={16} height={16} className='cursor-pointer' src={'/details/Facebook.svg'} />
-                        <Image alt={''} width={16} height={16} className='cursor-pointer' src={'/details/Twitter.svg'} />
-                        <Image alt={''} width={16} height={16} className='cursor-pointer' src={'/details/Pinterest.svg'} />
+                        <Image
+                          alt={""}
+                          width={20}
+                          height={20}
+                          className="cursor-pointer"
+                          src={"/details/Copy.svg"}
+                        />
+                        <Image
+                          alt={""}
+                          width={16}
+                          height={16}
+                          className="cursor-pointer"
+                          src={"/details/Facebook.svg"}
+                        />
+                        <Image
+                          alt={""}
+                          width={16}
+                          height={16}
+                          className="cursor-pointer"
+                          src={"/details/Twitter.svg"}
+                        />
+                        <Image
+                          alt={""}
+                          width={16}
+                          height={16}
+                          className="cursor-pointer"
+                          src={"/details/Pinterest.svg"}
+                        />
                       </div>
                     </div>
                   </div>
                 </div>
                 <div className="border rounded-lg px-5 py-4">
-                  <div className="text-sm font-normal mb-2">100% Guarantee Safe Checkout</div>
-                  <Image alt={''} width={312} height={18} className='object-contain' src={'/PaymentMethod.svg'} />
+                  <div className="text-sm font-normal mb-2">
+                    100% Guarantee Safe Checkout
+                  </div>
+                  <Image
+                    alt={""}
+                    width={312}
+                    height={18}
+                    className="object-contain"
+                    src={"/PaymentMethod.svg"}
+                  />
                 </div>
               </div>
-
             </div>
             <div className="col-span-2">
               <Tabs defaultValue="tab1" className="border rounded-lg">
-                <TabsList className='w-full bg-transparent border-b rounded-none'>
+                <TabsList className="w-full bg-transparent border-b rounded-none">
                   <TabsTrigger value="tab1">Description</TabsTrigger>
                   <TabsTrigger value="tab2">Additional information</TabsTrigger>
                   <TabsTrigger value="tab3">Specification</TabsTrigger>
                   <TabsTrigger value="tab4">Review</TabsTrigger>
                 </TabsList>
                 <TabsContent value="tab1">
-                  <div className="grid grid-cols-2 gap-14">
-                    <div>
-                      <div className="font-semibold">Description</div>
-                      <div className="text-sm text-[#5F6C72] my-2">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</div>
-                      <div className="text-sm text-[#5F6C72]">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled text ever since the 1500s, when an unknown printer took a galley of type and scrambled</div>
-                    </div>
-                    <div className="grid grid-cols-2 gap-8">
-                      <div>
-                        <div className="font-semibold mb-2">Feature</div>
-                        <div className="flex flex-col gap-[10px]">
-                          {feature.map((data, i) => {
-                            const { img, text } = data;
-                            return (
-                              <div key={i} className="flex gap-2">
-                                <Image alt={''} width={20} height={20} className='cursor-pointer' src={img} />
-                                <div className="text-sm">{text}</div>
-                              </div>
-                            )
-                          })}
-                        </div>
-                      </div>
-                      <div>
-                        <div className="font-semibold mb-2">Shipping Information</div>
-                        <div className="flex flex-col gap-[10px]">
-                          {shippingInformation.map((data, i) => {
-                            const { head, para } = data;
-                            return (
-                              <div key={i} className="flex gap-1">
-                                <div className="text-sm">{head}</div>
-                                <div className="text-sm text-[#5F6C72]">{para}</div>
-                              </div>
-                            )
-                          })}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  <ProductDescription description={description} />
                 </TabsContent>
                 <TabsContent value="tab2">Additional information</TabsContent>
                 <TabsContent value="tab3">Specification</TabsContent>
@@ -235,7 +413,7 @@ export default function ProductDetails() {
           <Separator />
         </div>
         <div>
-          <ProductSuggestion head='Products' para='Related Products' />
+          <ProductSuggestion head="Products" para="Related Products" />
         </div>
       </div>
     </div>

@@ -11,18 +11,69 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import Cookies from "universal-cookie";
 import QtyCard from "../common/product/QtyCard";
 import { removeproductApiWishlist } from "@/Service/WishList/WishList.service";
 import { errorNotification, successNotification } from "@/helper/Notification";
+import { addProductApiToCart } from "@/Service/AddTocart/AddToCart.service";
 
 function WishListCard({ index, wishlistDetails, callbackHandler }) {
+  const cookies = new Cookies();
   const { id, productId } = wishlistDetails || {};
   const [quantity, setQuantity] = useState(1);
+  const cartId = cookies.get("CARTID");
+  const userDetails = cookies.get("USERDETAILS");
+  const [selectedQuantitys,setSelectedQuantitys] = useState(1);
   const [totalAmount, setTotalAmount] = useState(0);
+
+  console.log("wishlistDetails",wishlistDetails);
 
   const setQuantityHandler = (value) => {
     setQuantity(value);
   };
+
+  useEffect(()=>{
+    setQuantity(productId.minQuantity)
+  },[productId.minQuantity]);
+
+  console.log("quantity",quantity);
+
+  
+
+  const cartHandler = async (id) => {
+    try {
+      const payload = {
+        productId: id,
+        quantity: quantity,
+        userId: userDetails?.id ? userDetails?.id : "",
+        pincode: "380060",
+      };
+      const cartPayload = {
+        productId: id,
+        quantity: quantity,
+        id: cartId ? cartId : "",
+        userId: userDetails?.id ? userDetails?.id : "",
+        pincode: "380060",
+      };
+      const { count, data, message, success } = await addProductApiToCart(
+        cartId ? cartPayload : payload
+      );
+      if (success) {
+        if (!cartId) {
+          cookies.set("CARTID", data.cartId);
+        }
+        successNotification(message);
+        callbackHandler();
+      } else {
+        callbackHandler();
+        errorNotification(message);
+      }
+    }catch(err){
+      console.log("Error: " + err);
+    }finally{
+
+    }
+  }
 
   const removeproductWishlist = async (id) => {
     const { count, data, message, success } = await removeproductApiWishlist(
@@ -64,9 +115,9 @@ function WishListCard({ index, wishlistDetails, callbackHandler }) {
             <div className="font-semibold">
               {productId?.productName ? productId?.productName : "-"}
             </div>
-            <div className="text-[13px] text-[#5D5F5F] my-[2px]">
+            {/* <div className="text-[13px] text-[#5D5F5F] my-[2px]">
               Diameter: 8mm
-            </div>
+            </div> */}
             <div className="text-[13px] text-[#5D5F5F]">
               {`Pieces per Bundle: ${
                 productId?.pieces ? productId?.pieces : 0
@@ -83,7 +134,7 @@ function WishListCard({ index, wishlistDetails, callbackHandler }) {
       </TableCell>
       <TableCell className="text-center">
         <div className="flex justify-center">
-          <QtyCard className="w-[170px]" setQuantity={setQuantityHandler} />
+          <QtyCard className="w-[170px]" setQuantity={setQuantityHandler} quantity={quantity} />
         </div>
       </TableCell>
       <TableCell className="text-end">
@@ -95,7 +146,7 @@ function WishListCard({ index, wishlistDetails, callbackHandler }) {
           >
             View Product
           </Button>
-          <Button size={"sm"} className="!text-sm !capitalize px-5">
+          <Button size={"sm"} className="!text-sm !capitalize px-5" onClick={()=>cartHandler(productId?.id)}>
             Add to Cart
           </Button>
           <Button

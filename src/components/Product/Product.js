@@ -172,6 +172,7 @@ export default function Product() {
                                 onChange={(event) => [
                                   categoryHandler(event.target.value),
                                   setCheckId(event.target.value),
+                                  setSubCheckId("")
                                 ]}
                               />
                               <label
@@ -197,6 +198,7 @@ export default function Product() {
                                         onChange={(event) => [
                                           categoryHandler(event.target.value),
                                           setSubCheckId(event.target.value),
+                                          setCheckId("")
                                         ]}
                                       />
                                       <label

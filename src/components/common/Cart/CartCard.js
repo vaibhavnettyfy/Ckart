@@ -66,9 +66,6 @@ function CartCard({ cartDetails, index, cartId ,callBackHandler}) {
             <div className="font-semibold">
               {productId?.productName ? productId.productName : "-"}
             </div>
-            <div className="text-[13px] text-[#5D5F5F] my-[2px]">
-              Diameter: 8mm
-            </div>
             <div className="text-[13px] text-[#5D5F5F]">
               {`Pieces per Bundle: ${productId.pieces ? productId.pieces : 0}`}
             </div>

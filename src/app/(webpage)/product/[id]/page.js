@@ -1,6 +1,7 @@
 import { siteMetadata } from "@/helper/siteMetaData";
 import ProductDetailsPage from "@/pages/ProductDetailsPage";
 
+
 export async function generateMetadata({ params }) {
 
   const title = 'Product Details'
@@ -26,8 +27,8 @@ export async function generateMetadata({ params }) {
   };
 }
 
-export default function Page() {
+export default function Page({params}) {
   return (
-    <ProductDetailsPage />
+    <ProductDetailsPage productKey={params.id}/>
   )
 }

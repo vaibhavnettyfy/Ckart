@@ -10,11 +10,14 @@ import { LoginPasswordValidation } from "@/helper/Validation";
 import { userLoginApiHandler } from "@/Service/Users/Users.Service";
 import { errorNotification, successNotification } from "@/helper/Notification";
 import Cookies from "universal-cookie";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 
 function LoginWithPassword() {
+  const router = useRouter();
   const cookies = new Cookies();
+  
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
@@ -29,6 +32,7 @@ function LoginWithPassword() {
         formik.values
       );
       if (success) {
+        router.push(`/`);
         successNotification(message);
         cookies.set("token", data.token);
         cookies.set("userEmail", data.email);

@@ -31,15 +31,19 @@ import Cookies from "universal-cookie";
 import { useEffect, useState } from "react";
 import { wishListByApiUser } from "@/Service/WishList/WishList.service";
 import WishListCard from "./WishListCard";
+import { productListByCart } from "@/Service/AddTocart/AddToCart.service";
+import { useAppContext } from "@/context";
 
 export default function Wishlist() {
   const router = useRouter();
   const cookies = new Cookies();
   const userId = cookies.get("token");
+  const cartId = cookies.get("CARTID");
   const [wishListData, setWishListData] = useState([]);
   const [totalPage, setTotalPage] = useState(0);
   const [pageSize, setPageSize] = useState("5");
   const [currentPage, setCurrentPage] = useState(1);
+  const { setCartLength } = useAppContext();
   const [wishListLoaderFlag, setWishListLoaderFlag] = useState(false);
 
   useEffect(() => {
@@ -72,8 +76,18 @@ export default function Wishlist() {
     }
   };
 
+  const getProductListByCartId = async (cartId) =>{
+    const { data, message, success } = await productListByCart(cartId);
+    if (success) {
+      setCartLength(data.length);
+    } else {
+      setCartLength(0);
+    }
+  };
+
   const callbackHandler = () =>{
     wishListByApiUserHandler(pageSize, currentPage);
+    getProductListByCartId(cartId);
   };
 
   return (

@@ -21,27 +21,24 @@ export const userRegisterValidation = Yup.object({
       /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z])(?=.*[!@#$%^&*()\-_=+{};:,<.>]).{6,16}$/,
       "Password must be 6-16 characters long and contain at least one number, one uppercase letter, one lowercase letter, and one special character (!@#$%^&*()-_=+{};:,<.>)."
     ),
-    gstNo: Yup.string()
-    .test('required', 'GST number is required', (value, context) => {
-      if (!context.hasOwnProperty('required')) {
-        return true; 
+  gstNo: Yup.string()
+    .test("required", "GST number is required", (value, context) => {
+      if (!context.hasOwnProperty("required")) {
+        return true;
       }
       return value.trim().length === 0 ? false : true; // Check for empty strings
     })
     .matches(/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/, {
-      message: 'Invalid GST number format',
+      message: "Invalid GST number format",
     }),
-    pancard: Yup.string()
-    .test('required', 'PAN Number is required.', (value, context) => {
-      if (!context.hasOwnProperty('required')) {
-        return true; 
+  pancard: Yup.string()
+    .test("required", "PAN Number is required.", (value, context) => {
+      if (!context.hasOwnProperty("required")) {
+        return true;
       }
       return value.trim().length === 0 ? false : true; // Check for empty strings
     })
-    .matches(
-      /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/,
-      'PAN Number is not valid.'
-    ),
+    .matches(/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/, "PAN Number is not valid."),
   addresses: Yup.array().of(
     Yup.object().shape({
       address1: Yup.string()
@@ -106,59 +103,69 @@ export const LoginPasswordValidation = Yup.object({
 
 export const LoginOtpValidation = Yup.object({
   email: Yup.string()
-  .trim()
-  .matches(
-    /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/,
-    "Invalid email format"
-  )
-  .required("Email is required"),
+    .trim()
+    .matches(
+      /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/,
+      "Invalid email format"
+    )
+    .required("Email is required"),
   otp: Yup.string().trim().required("Otp is required"),
 });
 
-
 export const SendOtpValidation = Yup.object({
   email: Yup.string()
-  .trim()
-  .matches(
-    /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/,
-    "Invalid email format"
-  )
-  .required("Email is required"),
+    .trim()
+    .matches(
+      /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/,
+      "Invalid email format"
+    )
+    .required("Email is required"),
 });
-
 
 export const bulkOrderValidation = Yup.object({
   phoneNo: Yup.string()
-  .trim()
-  .matches(/^\d+$/, "Phone number must contain only numbers")
-  .length(10, "Phone number must be 10 digits")
-  .required("Phone number is required"),
-  email : Yup.string()
-  .trim()
-  .matches(
-    /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/,
-    "Invalid email format"
-  )
-  .required("Email is required"),
-  termsConditions:Yup.boolean()
-  .oneOf([true], "Please accept the terms and conditions")
-  .required("Terms and conditions must be accepted")
+    .trim()
+    .matches(/^\d+$/, "Phone number must contain only numbers")
+    .length(10, "Phone number must be 10 digits")
+    .required("Phone number is required"),
+  email: Yup.string()
+    .trim()
+    .matches(
+      /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/,
+      "Invalid email format"
+    )
+    .required("Email is required"),
+  termsConditions: Yup.boolean()
+    .oneOf([true], "Please accept the terms and conditions")
+    .required("Terms and conditions must be accepted"),
+  date: Yup.string().trim().required("Date is required"),
+  indicativeBudget: Yup.string()
+    .trim()
+    .matches(/^\d+$/, "Budget number must contain only numbers")
+    .required("Budget number is required"),
+  time: Yup.string().trim().required("slot is required"),
 });
 
 export const consultationValidation = Yup.object({
   phoneNo: Yup.string()
-  .trim()
-  .matches(/^\d+$/, "Phone number must contain only numbers")
-  .length(10, "Phone number must be 10 digits")
-  .required("Phone number is required"),
-  email : Yup.string()
-  .trim()
-  .matches(
-    /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/,
-    "Invalid email format"
-  )
-  .required("Email is required"),
-  termsConditions:Yup.boolean()
-  .oneOf([true], "Please accept the terms and conditions")
-  .required("Terms and conditions must be accepted")
+    .trim()
+    .matches(/^\d+$/, "Phone number must contain only numbers")
+    .length(10, "Phone number must be 10 digits")
+    .required("Phone number is required"),
+  email: Yup.string()
+    .trim()
+    .matches(
+      /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/,
+      "Invalid email format"
+    )
+    .required("Email is required"),
+  termsConditions: Yup.boolean()
+    .oneOf([true], "Please accept the terms and conditions")
+    .required("Terms and conditions must be accepted"),
+  date: Yup.string().trim().required("Date is required"),
+  indicativeBudget: Yup.string()
+    .trim()
+    .matches(/^\d+$/, "Budget number must contain only numbers")
+    .required("Budget number is required"),
+  time: Yup.string().trim().required("slot is required"),
 });
