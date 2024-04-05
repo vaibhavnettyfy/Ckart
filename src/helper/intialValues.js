@@ -111,7 +111,7 @@ export const bulkOrderIv = {
     date: "",
     time: "", 
     questionsComments: "",
-    termsConditions: "",
+    termsConditions: false,
 };
 
 export const consultationIv ={
@@ -130,5 +130,5 @@ export const consultationIv ={
     date: "", 
     time: "", 
     additionalnotes: "", 
-    termsConditions: "",
+    termsConditions: false,
 };

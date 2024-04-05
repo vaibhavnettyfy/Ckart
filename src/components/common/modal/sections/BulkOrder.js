@@ -25,6 +25,7 @@ import { getAllCategoryApiList } from "@/Service/Category/Category.service";
 import { Item } from "@radix-ui/react-dropdown-menu";
 import { projectTyesData } from "@/helper";
 import Cookies from "universal-cookie";
+import { bulkOrderValidation } from "@/helper/Validation";
 
 const BulkOrder = () => {
   const cookies = new Cookies();
@@ -33,8 +34,8 @@ const BulkOrder = () => {
   const [categoryList, setCategoryList] = useState([]);
   const [availableSlotData, setAvailableSlotData] = useState([]);
   const [selectedSlotData, setSelectedSlotData] = useState("");
-  const [skuValue,setSkuValues] = useState("");
-  const [skuValueData,setSkuValueData] = useState([]);
+  const [skuValue, setSkuValues] = useState("");
+  const [skuValueData, setSkuValueData] = useState([]);
   const userDetails = cookies.get("USERDETAILS");
 
   useEffect(() => {
@@ -102,8 +103,9 @@ const BulkOrder = () => {
       formData.append("time", formik.values.time);
       formData.append("userId", userDetails?.id);
       formData.append("questionsComments", formik.values.questionsComments);
-      const { count, data, message, success } =
-        await bookAppointmentApiHandler(formData);
+      const { count, data, message, success } = await bookAppointmentApiHandler(
+        formData
+      );
       if (success) {
         successNotification(message);
       } else {
@@ -118,29 +120,26 @@ const BulkOrder = () => {
 
   const formik = useFormik({
     initialValues: bulkOrderIv,
+    validationSchema: bulkOrderValidation,
     onSubmit: bulkOrderHandler,
   });
 
-
-  const skuHandler = (value) =>{
-    console.log("value",value);
+  const skuHandler = (value) => {
+    console.log("value", value);
     setSkuValues(value);
   };
 
-
-  const skuKeyHandler = (event) =>{
-    console.log("-----------skuValue",skuValue);
-    if(event.keyCode === 13 && skuValue.trim() !== ""){
-      setSkuValueData([skuValue,...skuValueData]);
+  const skuKeyHandler = (event) => {
+    console.log("-----------skuValue", skuValue);
+    if (event.keyCode === 13 && skuValue.trim() !== "") {
+      setSkuValueData([skuValue, ...skuValueData]);
       setSkuValues("");
-      formik.setFieldValue("skus",[skuValue,...skuValueData]);
+      formik.setFieldValue("skus", [skuValue, ...skuValueData]);
     }
   };
 
+  console.log("[skuValue,...skuValueData]", formik.values);
 
-  console.log("[skuValue,...skuValueData]",formik.values);
-
-  
   const dateHandler = (value) => {
     const data = new Date(value);
     const formateData = data.toISOString();
@@ -222,20 +221,26 @@ const BulkOrder = () => {
 
         <div className="col-span-3">
           <Label htmlFor="">Specific SKUs (if known)</Label>
-          {
-            skuValueData && skuValueData.length > 0 ? (
-              skuValueData.map((item,index)=>{
-                return(
-                  <div> <h5> {item}, </h5> </div>
-                )
-              })
-            ) : (
-              <div className="text-[#5D5F5F] text-center">
-                No SKU Found
-              </div>
-            )
-          }
-          <Input className="block" name="skus" value={skuValue} onChange={(event)=>skuHandler(event.target.value)} onKeyDown={(event) =>skuKeyHandler(event) } max={250} />
+          {skuValueData && skuValueData.length > 0 ? (
+            skuValueData.map((item, index) => {
+              return (
+                <div>
+                  {" "}
+                  <h5> {item}, </h5>{" "}
+                </div>
+              );
+            })
+          ) : (
+            <div className="text-[#5D5F5F] text-center">No SKU Found</div>
+          )}
+          <Input
+            className="block"
+            name="skus"
+            value={skuValue}
+            onChange={(event) => skuHandler(event.target.value)}
+            onKeyDown={(event) => skuKeyHandler(event)}
+            max={250}
+          />
         </div>
         <div>
           <Label htmlFor="">Project Type</Label>
@@ -401,7 +406,12 @@ const BulkOrder = () => {
         </div>
         <div className="col-span-3">
           <div className="flex items-center space-x-2 col-span-2 mt-2">
-            <Checkbox id="address"  onCheckedChange={(event)=>formik.setFieldValue("termsConditions",event)}/>
+            <Checkbox
+              id="address"
+              onCheckedChange={(event) =>
+                formik.setFieldValue("termsConditions", event)
+              }
+            />
             <label
               htmlFor="address"
               className="text-sm font-medium leading-none text-[#475156] peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -410,6 +420,11 @@ const BulkOrder = () => {
               and <Link href={"/"}>Privacy Policy.</Link>
             </label>
           </div>
+            {formik.touched.termsConditions && formik.errors.termsConditions ? (
+              <span className="text-red-500 text-xs">
+                {formik.errors.termsConditions}
+              </span>
+            ) : null}
         </div>
         <div>
           <Button

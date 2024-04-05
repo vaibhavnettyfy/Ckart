@@ -23,6 +23,7 @@ import { errorNotification, successNotification } from "@/helper/Notification";
 import { projectTyesData } from "@/helper";
 import { subCategoryDropdown } from "@/Service/Category/Category.service";
 import Cookies from "universal-cookie";
+import { consultationValidation } from "@/helper/Validation";
 
 const Consultation = () => {
   const cookies = new Cookies();
@@ -140,6 +141,7 @@ const Consultation = () => {
 
   const formik = useFormik({
     initialValues: consultationIv,
+    validationSchema:consultationValidation,
     onSubmit: consultationHandler,
   });
 
@@ -449,6 +451,11 @@ const Consultation = () => {
               and <Link href={"/"}>Privacy Policy.</Link>
             </label>
           </div>
+          {formik.touched.termsConditions && formik.errors.termsConditions ? (
+              <span className="text-red-500 text-xs">
+                {formik.errors.termsConditions}
+              </span>
+            ) : null}
         </div>
         <div>
           <Button

@@ -125,3 +125,40 @@ export const SendOtpValidation = Yup.object({
   )
   .required("Email is required"),
 });
+
+
+export const bulkOrderValidation = Yup.object({
+  phoneNo: Yup.string()
+  .trim()
+  .matches(/^\d+$/, "Phone number must contain only numbers")
+  .length(10, "Phone number must be 10 digits")
+  .required("Phone number is required"),
+  email : Yup.string()
+  .trim()
+  .matches(
+    /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/,
+    "Invalid email format"
+  )
+  .required("Email is required"),
+  termsConditions:Yup.boolean()
+  .oneOf([true], "Please accept the terms and conditions")
+  .required("Terms and conditions must be accepted")
+});
+
+export const consultationValidation = Yup.object({
+  phoneNo: Yup.string()
+  .trim()
+  .matches(/^\d+$/, "Phone number must contain only numbers")
+  .length(10, "Phone number must be 10 digits")
+  .required("Phone number is required"),
+  email : Yup.string()
+  .trim()
+  .matches(
+    /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/,
+    "Invalid email format"
+  )
+  .required("Email is required"),
+  termsConditions:Yup.boolean()
+  .oneOf([true], "Please accept the terms and conditions")
+  .required("Terms and conditions must be accepted")
+});
