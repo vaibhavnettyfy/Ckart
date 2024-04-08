@@ -180,7 +180,7 @@ export const bulkOrderValidation = Yup.object({
     .matches(/^\d+$/, "Budget number must contain only numbers")
     .required("Budget number is required"),
   time: Yup.string().trim().required("slot is required"),
-  fullName: Yup.string().trim().required("FullName name is required"),
+  fullName: Yup.string().trim().required("FullName  is required"),
 });
 
 export const consultationValidation = Yup.object({
@@ -205,7 +205,7 @@ export const consultationValidation = Yup.object({
     .matches(/^\d+$/, "Budget number must contain only numbers")
     .required("Budget number is required"),
   time: Yup.string().trim().required("slot is required"),
-  fullName: Yup.string().trim().required("FullName name is required"),
+  fullName: Yup.string().trim().required("FullName is required"),
 });
 
 export const basicUserDetailsValidation = Yup.object({
