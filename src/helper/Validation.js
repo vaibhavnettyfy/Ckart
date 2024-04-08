@@ -132,7 +132,6 @@ export const forgotPasswordValidation = Yup.object({
     .required("Email is required"),
 });
 
-
 export const verfiyForgotOtpValidation = Yup.object({
   email: Yup.string()
     .trim()
@@ -141,7 +140,7 @@ export const verfiyForgotOtpValidation = Yup.object({
       "Invalid email format"
     )
     .required("Email is required"),
-    otp : Yup.string().trim().required("Otp is required")
+  otp: Yup.string().trim().required("Otp is required"),
 });
 
 export const resetPasswordValidation = Yup.object({
@@ -154,10 +153,10 @@ export const resetPasswordValidation = Yup.object({
     .required("Email is required"),
   password: Yup.string().trim().required("Password is required"),
   confirmPassword: Yup.string()
-   .trim()
-   .required("Confirm password is required")
-   .oneOf([Yup.ref("password"), null], "Passwords must match"),
-})
+    .trim()
+    .required("Confirm password is required")
+    .oneOf([Yup.ref("password"), null], "Passwords must match"),
+});
 
 export const bulkOrderValidation = Yup.object({
   phoneNo: Yup.string()
@@ -181,6 +180,8 @@ export const bulkOrderValidation = Yup.object({
     .matches(/^\d+$/, "Budget number must contain only numbers")
     .required("Budget number is required"),
   time: Yup.string().trim().required("slot is required"),
+  firstName: Yup.string().trim().required("First name is required"),
+  lastName: Yup.string().trim().required("Last name is required"),
 });
 
 export const consultationValidation = Yup.object({
@@ -205,6 +206,8 @@ export const consultationValidation = Yup.object({
     .matches(/^\d+$/, "Budget number must contain only numbers")
     .required("Budget number is required"),
   time: Yup.string().trim().required("slot is required"),
+  firstName: Yup.string().trim().required("First name is required"),
+  lastName: Yup.string().trim().required("Last name is required"),
 });
 
 export const basicUserDetailsValidation = Yup.object({
