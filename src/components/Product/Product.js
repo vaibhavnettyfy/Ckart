@@ -96,11 +96,13 @@ export default function Product() {
 
   const categoryHandler = (value) => {
     setCategory(value);
+    setSubCategory("");
     getAllProductListHandler(searchText, pageSize, value,subCategory,sponsor, currentPage);
   };
 
   const subCategoryHandler = (value) =>{
     setSubCategory(value);
+    setCategory("");
     getAllProductListHandler(searchText, pageSize, category,value,sponsor, currentPage);
   };
 
