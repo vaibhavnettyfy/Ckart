@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -21,7 +22,7 @@ function UserBillingAddress({ addressDetails }) {
     pincode,
     state,
     userId,
-  } = addressDetails;
+  } = addressDetails || {};
 
   const formik = useFormik({
     initialValues: userBillingAddressIv,

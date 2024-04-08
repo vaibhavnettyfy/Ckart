@@ -122,6 +122,43 @@ export const SendOtpValidation = Yup.object({
     .required("Email is required"),
 });
 
+export const forgotPasswordValidation = Yup.object({
+  email: Yup.string()
+    .trim()
+    .matches(
+      /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/,
+      "Invalid email format"
+    )
+    .required("Email is required"),
+});
+
+
+export const verfiyForgotOtpValidation = Yup.object({
+  email: Yup.string()
+    .trim()
+    .matches(
+      /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/,
+      "Invalid email format"
+    )
+    .required("Email is required"),
+    otp : Yup.string().trim().required("Otp is required")
+});
+
+export const resetPasswordValidation = Yup.object({
+  email: Yup.string()
+    .trim()
+    .matches(
+      /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/,
+      "Invalid email format"
+    )
+    .required("Email is required"),
+  password: Yup.string().trim().required("Password is required"),
+  confirmPassword: Yup.string()
+   .trim()
+   .required("Confirm password is required")
+   .oneOf([Yup.ref("password"), null], "Passwords must match"),
+})
+
 export const bulkOrderValidation = Yup.object({
   phoneNo: Yup.string()
     .trim()
