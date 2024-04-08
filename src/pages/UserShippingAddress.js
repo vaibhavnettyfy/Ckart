@@ -1,17 +1,17 @@
-"use client";
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useFormik } from "formik";
-import { userBillingAddressIv } from "@/helper/intialValues";
-import { billingAddressValidation } from "@/helper/Validation";
+import { userShippingAddressIv } from "@/helper/intialValues";
+import { shippingAddressValidation } from "@/helper/Validation";
 import { getDetailsByPincode } from "@/helper";
-import { basicDetailUpdateApiHandler, billingAddressUpdateApiHandler } from "@/Service/UserProfile/UserProfile.service";
+import { basicDetailUpdateApiHandler, shippingAddressUpdateApiHandler } from "@/Service/UserProfile/UserProfile.service";
 import { errorNotification, successNotification } from "@/helper/Notification";
 
-function UserBillingAddress({ addressDetails }) {
- const [pincodeFlag, setPinCodeFlag] = useState(false);
+
+function UserShippingAddress({ addressDetails }) {
+  const [pincodeFlag, setPinCodeFlag] = useState(false);
   const {
     addLet,
     addLong,
@@ -29,7 +29,7 @@ function UserBillingAddress({ addressDetails }) {
   } = addressDetails || {};
 
   useEffect(() => {
-    getBillingAddressHandler();
+    getShippingAddressHandler();
   }, []);
 
   const pinCodeResults = async (pincode) => {
@@ -60,9 +60,8 @@ function UserBillingAddress({ addressDetails }) {
     }
   };
 
- 
   const userUpdateAddressHandler = async() => {
-    const {data,message,success,count} = await billingAddressUpdateApiHandler(id,formik.values);
+    const {data,message,success,count} = await shippingAddressUpdateApiHandler(id,formik.values);
     if(success){
       successNotification(message);
     }else{
@@ -70,7 +69,9 @@ function UserBillingAddress({ addressDetails }) {
     }
   };
 
-  const getBillingAddressHandler = () => {
+
+
+  const getShippingAddressHandler = () => {
     formik.setValues({
       userId: userId,
       fullName: fullName,
@@ -88,11 +89,10 @@ function UserBillingAddress({ addressDetails }) {
   };
 
   const formik = useFormik({
-    initialValues: userBillingAddressIv,
-    validationSchema: billingAddressValidation,
+    initialValues: userShippingAddressIv,
+    validationSchema: shippingAddressValidation,
     onSubmit: userUpdateAddressHandler,
   });
-
 
   useEffect(() => {
     if (formik.values.pincode !== "" && formik.values.pincode.length == 6) {
@@ -103,7 +103,6 @@ function UserBillingAddress({ addressDetails }) {
       formik.setFieldValue("city", "");
     }
   }, [formik.values.pincode]);
-
 
   return (
     <div className="border rounded-lg">
@@ -203,7 +202,7 @@ function UserBillingAddress({ addressDetails }) {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
-export default UserBillingAddress;
+export default UserShippingAddress

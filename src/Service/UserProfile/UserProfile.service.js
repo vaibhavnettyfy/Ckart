@@ -8,3 +8,11 @@ export const userProfileApiHandler = (userId) =>{
 export const basicDetailUpdateApiHandler = (userId,payload) =>{
     return PUT(`${process.env.NEXT_PUBLIC_APIURL}/api/userV1/profileUpdate/${userId}`,payload);
 };
+
+export const billingAddressUpdateApiHandler = (userId,payload) =>{
+    return PUT(`${process.env.NEXT_PUBLIC_APIURL}/api/userV1/updateAddress/${userId}`,payload);
+};
+
+export const shippingAddressUpdateApiHandler = (userId,payload) =>{
+    return PUT(`${process.env.NEXT_PUBLIC_APIURL}/api/userV1/updateAddress/${userId}`,payload);
+};

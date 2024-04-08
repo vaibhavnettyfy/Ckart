@@ -180,7 +180,7 @@ export const bulkOrderValidation = Yup.object({
     .matches(/^\d+$/, "Budget number must contain only numbers")
     .required("Budget number is required"),
   time: Yup.string().trim().required("slot is required"),
-  fullName: Yup.string().trim().required("FullName  is required"),
+  fullName: Yup.string().trim().required("FullName name is required"),
 });
 
 export const consultationValidation = Yup.object({
@@ -205,11 +205,12 @@ export const consultationValidation = Yup.object({
     .matches(/^\d+$/, "Budget number must contain only numbers")
     .required("Budget number is required"),
   time: Yup.string().trim().required("slot is required"),
-  fullName: Yup.string().trim().required("FullName is required"),
+  fullName: Yup.string().trim().required("FullName name is required"),
 });
 
 export const basicUserDetailsValidation = Yup.object({
   firstName: Yup.string().trim().required("First name is required"),
+  // need to keep this Comment
   // profile: Yup.string().trim().required("profile is required"),
   lastName: Yup.string().trim().required("Last name is required"),
   mobileNo: Yup.string()
@@ -235,4 +236,37 @@ export const basicUserDetailsValidation = Yup.object({
       return value.trim().length === 0 ? false : true; // Check for empty strings
     })
     .matches(/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/, "PAN Number is not valid."),
+});
+
+export const billingAddressValidation = Yup.object({
+  fullName: Yup.string().trim().required("Full name is required"),
+  address1: Yup.string().trim().required("Address line 1 is required"),
+  address2: Yup.string().trim().required("Address line 2 is required"),
+  phoneNo: Yup.string()
+  .trim()
+  .matches(/^\d+$/, "Phone number must contain only numbers")
+  .length(10, "Phone number must be 10 digits")
+  .required("Phone number is required"),
+  landmark: Yup.string().trim().required("Landmark is required"),
+  state: Yup.string().trim().required("State is required"),
+  city: Yup.string().trim().required("city is required"),
+  pincode: Yup.string().trim().required("city is required"),
+  isBillingAddress: Yup.number().required("isBillingAddress is required"),
+});
+
+
+export const shippingAddressValidation = Yup.object({
+  fullName: Yup.string().trim().required("Full name is required"),
+  address1: Yup.string().trim().required("Address line 1 is required"),
+  address2: Yup.string().trim().required("Address line 2 is required"),
+  phoneNo: Yup.string()
+  .trim()
+  .matches(/^\d+$/, "Phone number must contain only numbers")
+  .length(10, "Phone number must be 10 digits")
+  .required("Phone number is required"),
+  landmark: Yup.string().trim().required("Landmark is required"),
+  state: Yup.string().trim().required("State is required"),
+  city: Yup.string().trim().required("city is required"),
+  pincode: Yup.string().trim().required("city is required"),
+  isBillingAddress: Yup.number().required("isBillingAddress is required"),
 });

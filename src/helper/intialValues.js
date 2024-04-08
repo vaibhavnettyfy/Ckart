@@ -146,9 +146,9 @@ export const basicUserDetails ={
 export const  userBillingAddressIv ={
     userId:"",
     fullName:"",
-    phoneNo:"",
     address1: "",
     address2: "",
+    phoneNo:"",
     landmark: "",
     state: "",
     city: "",
@@ -159,5 +159,16 @@ export const  userBillingAddressIv ={
 };
 
 export const  userShippingAddressIv ={
-
+    userId:"",
+    fullName:"",
+    address1: "",
+    address2: "",
+    phoneNo:"",
+    landmark: "",
+    state: "",
+    city: "",
+    pincode: "",
+    isBillingAddress: 1,
+    addLet: "",
+    addLong: ""
 };
