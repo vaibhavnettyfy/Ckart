@@ -101,7 +101,7 @@ const BulkOrder = () => {
       formData.append("date", formik.values.date);
       formData.append("type", 1);
       formData.append("time", formik.values.time);
-      formData.append("userId", userDetails?.id ? userDetails?.id : null);
+      formData.append("userId", userDetails?.id ? userDetails?.id : '');
       formData.append("questionsComments", formik.values.questionsComments);
       const { count, data, message, success } = await bookAppointmentApiHandler(
         formData
