@@ -399,7 +399,10 @@ export default function Header() {
                 </Dialog>
               </div>
               <div className="flex md:gap-3 gap-[6px] items-center">
-                {cartLength}
+                <div className='relative'>
+                  <div className='absolute -top-1 border border-[#ffed32] -right-1 bg-primary rounded-full h-5 w-5 flex items-center justify-center '>
+                    <div className="text-xs font-medium leading-none text-[#ffed32]">{cartLength}</div>
+                  </div>
                 <Image
                   onClick={() => router.push("/cart")}
                   src={"/header/cart.svg"}
@@ -407,7 +410,8 @@ export default function Header() {
                   width={32}
                   height={32}
                   className="md:w-8 w-6 md:h-8 cursor-pointer"
-                />
+                  />
+                  </div>
                 <Image
                   onClick={() => router.push("/wishlist")}
                   src={"/header/heart.svg"}

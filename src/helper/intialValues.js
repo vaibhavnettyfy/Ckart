@@ -25,8 +25,8 @@ export const userRegisterIv = {
             city: "",
             pincode: "",
             isBillingAddress: 0,
-            addLet: "1232224",
-            addLong: "431232"
+            addLet: "",
+            addLong: ""
         }
     ]
 };
@@ -131,4 +131,33 @@ export const consultationIv ={
     time: "", 
     additionalnotes: "", 
     termsConditions: false,
+};
+
+export const basicUserDetails ={
+    profile : "",
+    firstName:"",
+    lastName:"",
+    email:"",
+    mobileNo:"",
+    pancard:"",
+    gstNo:"",
+};
+
+export const  userBillingAddressIv ={
+    userId:"",
+    fullName:"",
+    phoneNo:"",
+    address1: "",
+    address2: "",
+    landmark: "",
+    state: "",
+    city: "",
+    pincode: "",
+    isBillingAddress: 1,
+    addLet: "",
+    addLong: ""
+};
+
+export const  userShippingAddressIv ={
+
 };

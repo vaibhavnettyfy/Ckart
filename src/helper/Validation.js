@@ -169,3 +169,32 @@ export const consultationValidation = Yup.object({
     .required("Budget number is required"),
   time: Yup.string().trim().required("slot is required"),
 });
+
+export const basicUserDetailsValidation = Yup.object({
+  firstName: Yup.string().trim().required("First name is required"),
+  // profile: Yup.string().trim().required("profile is required"),
+  lastName: Yup.string().trim().required("Last name is required"),
+  mobileNo: Yup.string()
+    .trim()
+    .matches(/^\d+$/, "Mobile number must contain only numbers")
+    .length(10, "Mobile number must be 10 digits")
+    .required("Mobile number is required"),
+  gstNo: Yup.string()
+    .test("required", "GST number is required", (value, context) => {
+      if (!context.hasOwnProperty("required")) {
+        return true;
+      }
+      return value.trim().length === 0 ? false : true; // Check for empty strings
+    })
+    .matches(/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/, {
+      message: "Invalid GST number format",
+    }),
+  pancard: Yup.string()
+    .test("required", "PAN Number is required.", (value, context) => {
+      if (!context.hasOwnProperty("required")) {
+        return true;
+      }
+      return value.trim().length === 0 ? false : true; // Check for empty strings
+    })
+    .matches(/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/, "PAN Number is not valid."),
+});

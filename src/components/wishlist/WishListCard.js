@@ -26,8 +26,6 @@ function WishListCard({ index, wishlistDetails, callbackHandler }) {
   const [selectedQuantitys,setSelectedQuantitys] = useState(1);
   const [totalAmount, setTotalAmount] = useState(0);
 
-  console.log("wishlistDetails",wishlistDetails);
-
   const setQuantityHandler = (value) => {
     setQuantity(value);
   };
@@ -35,10 +33,6 @@ function WishListCard({ index, wishlistDetails, callbackHandler }) {
   useEffect(()=>{
     setQuantity(productId.minQuantity)
   },[productId.minQuantity]);
-
-  console.log("quantity",quantity);
-
-  
 
   const cartHandler = async (id) => {
     try {

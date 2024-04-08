@@ -190,6 +190,39 @@ export const put = async (url, data) => {
   }
 };
 
+export const PUT = async (url, data) => {
+  try{
+    const cookies = new Cookies();
+    const TOKEN = cookies.get("token");
+    const headers = {
+      "x-auth-token": TOKEN,
+    };
+    const response = await axios.put(url, data,{
+      headers,
+    });
+    if (response.data.status) {
+      return {
+        success: true,
+        data: response.data.data,
+        message: response.data.message,
+      };
+    } else {
+      return {
+        success: false,
+        data: response.data.data,
+        message: response.data.message,
+      };
+    }
+  }catch(error){
+    return {
+      success: false,
+      data: [],
+      count: 0,
+      message: error?.response?.data?.message || 'Something went wrong',
+    };
+  }
+};
+
 export const patch = async (url, data) => {
   try {
     const TOKEN = localStorage.getItem("TOKEN");

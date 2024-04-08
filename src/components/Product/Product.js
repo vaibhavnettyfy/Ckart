@@ -35,6 +35,7 @@ export default function Product() {
   const [produtListData, setProductListData] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [category, setCategory] = useState("");
+  const [subCategory,setSubCategory] = useState("");
   const [sponsor, setSponsor] = useState(0);
   const [pageSize, setPageSize] = useState("10");
   const [totalPage, setTotalPage] = useState(0);
@@ -74,6 +75,7 @@ export default function Product() {
       searchText,
       pageSize,
       category,
+      subCategory,
       sponsor,
       currentPage
     );
@@ -89,18 +91,24 @@ export default function Product() {
   };
 
   const searchHandler = (value) => {
-    getAllProductListHandler(value, pageSize, category, sponsor, currentPage);
+    getAllProductListHandler(value, pageSize, category, subCategory,sponsor, currentPage);
   };
 
   const categoryHandler = (value) => {
     setCategory(value);
-    getAllProductListHandler(searchText, pageSize, value, sponsor, currentPage);
+    getAllProductListHandler(searchText, pageSize, value,subCategory,sponsor, currentPage);
+  };
+
+  const subCategoryHandler = (value) =>{
+    setSubCategory(value);
+    getAllProductListHandler(searchText, pageSize, category,value,sponsor, currentPage);
   };
 
   const getAllProductListHandler = async (
     searchText,
     pageSize,
     category,
+    subCategory,
     sponsor,
     page
   ) => {
@@ -113,6 +121,7 @@ export default function Product() {
         searchText,
         pageSize,
         category,
+        subCategory,
         sponsor,
         page,
         payload
@@ -133,7 +142,7 @@ export default function Product() {
 
   const handlePageChange = (value) => {
     setCurrentPage(value);
-    getAllProductListHandler(searchText, pageSize, category, sponsor, value);
+    getAllProductListHandler(searchText, pageSize, category, subCategory,sponsor, value);
   };
 
   const callBackHandler = () => {
@@ -141,6 +150,7 @@ export default function Product() {
       searchText,
       pageSize,
       category,
+      subCategory,
       sponsor,
       currentPage
     );
@@ -196,7 +206,7 @@ export default function Product() {
                                         value={item.id}
                                         checked={item.id == subCheckId}
                                         onChange={(event) => [
-                                          categoryHandler(event.target.value),
+                                          subCategoryHandler(event.target.value),
                                           setSubCheckId(event.target.value),
                                           setCheckId("")
                                         ]}

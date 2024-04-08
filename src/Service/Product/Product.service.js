@@ -4,12 +4,13 @@ export const ProductAllListApiHandler = (
   search,
   pageSize,
   category,
+  subCategory,
   sponsor,
   page,
   payload
 ) => {
   return POST(
-    `${process.env.NEXT_PUBLIC_APIURL}/api/userV1/userProductList?search=${search}&perPageSize=${pageSize}&category=${category}&sponsor=${sponsor}&page=${page}`,
+    `${process.env.NEXT_PUBLIC_APIURL}/api/userV1/userProductList?search=${search}&perPageSize=${pageSize}&category=${category}&subCategory=${subCategory}&sponsor=${sponsor}&page=${page}`,
     payload
   );
 };

@@ -101,7 +101,7 @@ const BulkOrder = () => {
       formData.append("date", formik.values.date);
       formData.append("type", 1);
       formData.append("time", formik.values.time);
-      formData.append("userId", userDetails?.id);
+      formData.append("userId", userDetails?.id ? userDetails?.id : null);
       formData.append("questionsComments", formik.values.questionsComments);
       const { count, data, message, success } = await bookAppointmentApiHandler(
         formData
@@ -125,7 +125,6 @@ const BulkOrder = () => {
   });
 
   const skuHandler = (value) => {
-    console.log("value", value);
     setSkuValues(value);
   };
 
@@ -224,7 +223,6 @@ const BulkOrder = () => {
             skuValueData.map((item, index) => {
               return (
                 <div>
-                  {" "}
                   <h5> {item}, </h5>{" "}
                 </div>
               );

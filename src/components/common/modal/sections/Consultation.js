@@ -77,7 +77,7 @@ const Consultation = () => {
       setLoading(true);
       const formData = new FormData();
       formData.append("type", 2);
-      formData.append("userId", userDetails?.id);
+      formData.append("userId", userDetails?.id ? userDetails?.id : null);
       formData.append("fullName", formik.values.fullName);
       formData.append("phoneNo", formik.values.phoneNo);
       formData.append("email", formik.values.email);

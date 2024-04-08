@@ -26,6 +26,7 @@ const SponsoredProducts = () => {
   const [totalPage, setTotalPage] = useState(0);
   const [searchText, setSearchText] = useState("");
   const [category, setCategory] = useState("");
+  const [subCategory,setSubCategory] = useState("");
   const [sponsor, setSponsor] = useState(1);
   const cookies = new Cookies();
   const cartId = cookies.get("CARTID");
@@ -38,6 +39,7 @@ const SponsoredProducts = () => {
       searchText,
       pageSize,
       category,
+      subCategory,
       sponsor,
       currentPage
     );
@@ -53,6 +55,7 @@ const SponsoredProducts = () => {
     searchText,
     pageSize,
     category,
+    subCategory,
     sponsor,
     page
   ) => {
@@ -65,6 +68,7 @@ const SponsoredProducts = () => {
         searchText,
         pageSize,
         category,
+        subCategory,
         sponsor,
         page,
         payload
@@ -94,7 +98,7 @@ const SponsoredProducts = () => {
 
   const handlePageChange = (value) => {
     setCurrentPage(value);
-    getAllSponserdProducts(searchText, pageSize, category, sponsor, value);
+    getAllSponserdProducts(searchText, pageSize, category, subCategory,sponsor, value);
   };
 
   const callBackHandler = () =>{
@@ -102,6 +106,7 @@ const SponsoredProducts = () => {
       searchText,
       pageSize,
       category,
+      subCategory,
       sponsor,
       currentPage
     );

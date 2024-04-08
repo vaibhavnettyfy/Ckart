@@ -9,6 +9,7 @@ export default function ProductSuggestion({ head, para }) {
   const [searchText, setSearchText] = useState("");
   const cookies = new Cookies();
   const [category, setCategory] = useState("");
+  const [subCategory,setSubCategory] = useState("");
   const [sponsor, setSponsor] = useState(1);
   const [pageSize, setPageSize] = useState("5");
   const userDetails = cookies.get("USERDETAILS");
@@ -17,13 +18,14 @@ export default function ProductSuggestion({ head, para }) {
   const [ProductSuggestionData,setProductSuggestionData] = useState([]);
 
   useEffect(() => {
-    getProductSuggestion(searchText, pageSize, category, sponsor, currentPage);
+    getProductSuggestion(searchText, pageSize, category,subCategory, sponsor, currentPage);
   }, []);
 
   const getProductSuggestion = async (
     searchText,
     pageSize,
     category,
+    subCategory,
     sponsor,
     currentPage
   ) => {
@@ -34,6 +36,7 @@ export default function ProductSuggestion({ head, para }) {
       const {count,data,message,success} = await ProductAllListApiHandler(searchText,
         pageSize,
         category,
+        subCategory,
         sponsor,
         currentPage,
         payload
@@ -51,7 +54,7 @@ export default function ProductSuggestion({ head, para }) {
   };
 
   const callBackHandler = () =>{
-    getProductSuggestion(searchText, pageSize, category, sponsor, currentPage);
+    getProductSuggestion(searchText, pageSize, category,subCategory,sponsor, currentPage);
   };
 
   return (

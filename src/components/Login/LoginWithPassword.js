@@ -17,7 +17,6 @@ import { Eye, EyeOff } from "lucide-react";
 function LoginWithPassword() {
   const router = useRouter();
   const cookies = new Cookies();
-  
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
