@@ -106,7 +106,7 @@ function UserShippingAddress({ addressDetails }) {
 
   return (
     <div className="border rounded-lg">
-      <div className="font-semibold py-2 px-3 border-b">Billing Address</div>
+      <div className="font-semibold py-2 px-3 border-b">Shipping Address</div>
       <div className="p-5 grid grid-cols-2 gap-5">
         <div className="col-span-2">
           <Label htmlFor="">Full Name</Label>
