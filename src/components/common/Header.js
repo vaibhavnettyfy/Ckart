@@ -30,7 +30,7 @@ import { Label } from "../ui/label";
 import { Button } from "../ui/button";
 import BookAppointment from "./modal/BookAppointment";
 import MultiSelectDropdown from "./MultiSelectDropdown";
-import { MapPin, Search } from 'lucide-react';
+import { MapPin, Search } from "lucide-react";
 import { productListByCart } from "@/Service/AddTocart/AddToCart.service";
 import { useAppContext } from "@/context";
 
@@ -55,16 +55,14 @@ export default function Header() {
   const userLoginFlag = cookies.get("token");
   const cartId = cookies.get("CARTID");
   const [cartList, setCartList] = useState([]);
-  
 
-  const {cartLength,setCartLength} = useAppContext();
-  
+  const { cartLength, setCartLength } = useAppContext();
+
   useEffect(() => {
     if (cartId) {
       getProductListByCartId(cartId);
     }
   }, [cartId]);
-
 
   const getProductListByCartId = async (cartId) => {
     const { data, message, success } = await productListByCart(cartId);
@@ -86,9 +84,9 @@ export default function Header() {
   const logout = () => {
     router.push(`/`);
     setUserLogin(false);
-    cookies.remove('token')
-    cookies.remove('userEmail')
-    cookies.remove('userPassword')
+    cookies.remove("token");
+    cookies.remove("userEmail");
+    cookies.remove("userPassword");
   };
 
   const profileDropDown = [
@@ -113,6 +111,9 @@ export default function Header() {
       onClick: () => router.push("/profile"),
     },
   ];
+
+  const filteredDropDown = userLogin ? profileDropDown :[];
+  
   return (
     <>
       <div className="z-20 relative">
@@ -214,9 +215,21 @@ export default function Header() {
                     </div>
 
                     <div className="lg:text-lg text-base text-[#6B6B6B] flex flex-col items-center gap-4">
-                      <BookAppointment button={<div>Book an appointment</div>} />
-                      <div className="hover:text-primary cursor-pointer" onClick={() => router.push('/about-us')} >About us</div>
-                      <div className="hover:text-primary cursor-pointer" onClick={() => router.push('/contact-us')} >Contact us</div>
+                      <BookAppointment
+                        button={<div>Book an appointment</div>}
+                      />
+                      <div
+                        className="hover:text-primary cursor-pointer"
+                        onClick={() => router.push("/about-us")}
+                      >
+                        About us
+                      </div>
+                      <div
+                        className="hover:text-primary cursor-pointer"
+                        onClick={() => router.push("/contact-us")}
+                      >
+                        Contact us
+                      </div>
                       {/* <div>About us</div>
                       <div>Contact us</div> */}
                     </div>
@@ -239,12 +252,12 @@ export default function Header() {
                         </DialogTrigger>
                         <DialogContent>
                           <DialogHeader>
-                            <DialogTitle>
-                              Choose your location
-                            </DialogTitle>
+                            <DialogTitle>Choose your location</DialogTitle>
                             <div className="flex flex-col gap-7 !mt-5">
                               <div>
-                                <Label htmlFor="" className='h-4 inline'>Enter an Indian pincode</Label>
+                                <Label htmlFor="" className="h-4 inline">
+                                  Enter an Indian pincode
+                                </Label>
                                 <div className="relative">
                                   <Input placeholder="" className="w-full" />
                                   <Search className="absolute top-[10px] right-3 w-5 h-5" />
@@ -361,10 +374,14 @@ export default function Header() {
                       <Tooltip>
                         <TooltipTrigger>
                           <div className="text-black bg-[#ffed32] px-[6px] py-[2px] rounded flex items-center gap-[6px] border-2 border-[#ffed32] hover:border-black">
-                            <div><MapPin /></div>
+                            <div>
+                              <MapPin />
+                            </div>
                             <div className="text-[13px] text-start">
                               <div>Delivering to Ahmedabad 380001</div>
-                              <div className="font-semibold">Update location</div>
+                              <div className="font-semibold">
+                                Update location
+                              </div>
                             </div>
                           </div>
                         </TooltipTrigger>
@@ -376,12 +393,12 @@ export default function Header() {
                   </DialogTrigger>
                   <DialogContent>
                     <DialogHeader>
-                      <DialogTitle>
-                        Choose your location
-                      </DialogTitle>
+                      <DialogTitle>Choose your location</DialogTitle>
                       <div className="flex flex-col gap-7 !mt-5">
                         <div>
-                          <Label htmlFor="" className='h-4 inline'>Enter an Indian pincode</Label>
+                          <Label htmlFor="" className="h-4 inline">
+                            Enter an Indian pincode
+                          </Label>
                           <div className="relative">
                             <Input placeholder="" className="w-full" />
                             <Search className="absolute top-[10px] right-3 w-5 h-5" />
@@ -399,27 +416,31 @@ export default function Header() {
                 </Dialog>
               </div>
               <div className="flex md:gap-3 gap-[6px] items-center">
-                <div className='relative'>
-                  <div className='absolute -top-1 border border-[#ffed32] -right-1 bg-primary rounded-full h-5 w-5 flex items-center justify-center '>
-                    <div className="text-xs font-medium leading-none text-[#ffed32]">{cartLength}</div>
+                <div className="relative">
+                  <div className="absolute -top-1 border border-[#ffed32] -right-1 bg-primary rounded-full h-5 w-5 flex items-center justify-center ">
+                    <div className="text-xs font-medium leading-none text-[#ffed32]">
+                      {cartLength}
+                    </div>
                   </div>
-                <Image
-                  onClick={() => router.push("/cart")}
-                  src={"/header/cart.svg"}
-                  alt=""
-                  width={32}
-                  height={32}
-                  className="md:w-8 w-6 md:h-8 cursor-pointer"
+                  <Image
+                    onClick={() => router.push("/cart")}
+                    src={"/header/cart.svg"}
+                    alt=""
+                    width={32}
+                    height={32}
+                    className="md:w-8 w-6 md:h-8 cursor-pointer"
                   />
-                  </div>
-                <Image
-                  onClick={() => router.push("/wishlist")}
-                  src={"/header/heart.svg"}
-                  alt=""
-                  width={32}
-                  height={32}
-                  className="md:w-8 w-6 md:h-8 cursor-pointer"
-                />
+                </div>
+                {userLogin && (
+                  <Image
+                    onClick={() => router.push("/wishlist")}
+                    src={"/header/heart.svg"}
+                    alt=""
+                    width={32}
+                    height={32}
+                    className="md:w-8 w-6 md:h-8 cursor-pointer"
+                  />
+                )}
                 <DropdownMenu>
                   <DropdownMenuTrigger>
                     <Image
@@ -431,7 +452,7 @@ export default function Header() {
                     />
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="p-2">
-                    {profileDropDown.map((data, i) => {
+                    {filteredDropDown.map((data, i) => {
                       const { name, image, onClick } = data;
                       return (
                         <DropdownMenuItem
