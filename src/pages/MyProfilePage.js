@@ -30,6 +30,7 @@ export default function AboutPage() {
   const [profilePicture, setProfilePicture] = useState("");
   const [billingAddress, setBillingAddress] = useState([]);
   const [shippingAddress, setShippingAddress] = useState([]);
+  const [file, setFile] = useState(""); 
 
   const userDetails = cookies.get("USERDETAILS");
 
@@ -66,6 +67,25 @@ export default function AboutPage() {
     onSubmit: basicDetailsHandler,
   });
 
+  const profileHandler = (e) =>{
+    const file = e.target.files[0];
+    if(file){
+      if (file.size > 2 * 1024 * 1024) {
+        errorNotification("File size exceeds 2MB. Please select a smaller file.");
+      }else{
+        const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif"];
+        if(allowedTypes.indexOf(file.type) === -1){
+          errorNotification("Invalid file type. Please select a valid image file.");
+        }else{
+          setProfilePicture(file);
+          setFile(URL.createObjectURL(e.target.files[0]));
+        }
+      }
+    }else{
+      errorNotification("No file selected")
+    }
+  };
+
   const getProfileUpdateHandler = async (id) => {
     try {
       setProfileLoading(true);
@@ -82,7 +102,7 @@ export default function AboutPage() {
       if (isShippingAddress) {
         setShippingAddress(isShippingAddress);
       }
-
+      setFile(data.profile);
       setProfileDetails(data);
       formik.setValues({
         ...formik.values,
@@ -114,9 +134,30 @@ export default function AboutPage() {
               <div className="p-5">
                 <div className="flex gap-8">
                   <div className="w-1/6">
+                    <Input
+                      type="file"
+                      accept=".jpg, .jpeg, .png, .gif"
+                      onChange={profileHandler}
+                      // onChange={(e) => {
+                      //   const file = e.target.files[0];
+                      //   if (file) {
+                      //     // Display the preview of the selected image
+                      //     const reader = new FileReader();
+                      //     reader.onloadend = () => {
+                      //       setProfileImagePreview(reader.result);
+                      //     };
+                      //     reader.readAsDataURL(file);
+
+                      //     // Set the selected image in formik values
+                      //     formik.setFieldValue("profile", file);
+                      //   }
+                      // }}
+                      className="w-full"
+                      name="profile"
+                    />
                     <Image
                       alt=""
-                      src={"/Avatar.svg"}
+                      src={file ? file :"/Avatar.svg"}
                       width={176}
                       height={176}
                     />
