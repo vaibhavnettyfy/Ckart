@@ -171,16 +171,21 @@ export const bulkOrderValidation = Yup.object({
       "Invalid email format"
     )
     .required("Email is required"),
+    estimatedQuantity : Yup.string()
+    .trim()
+    .matches(/^\d+$/, "Quantity must contain only numbers")
+    .required("Quantity is required"),
+  deliveryPinCode: Yup.string().matches(/^\d{6}$/, "Invalid pincode format").required("Pincode is required"),
   termsConditions: Yup.boolean()
     .oneOf([true], "Please accept the terms and conditions")
     .required("Terms and conditions must be accepted"),
   date: Yup.string().trim().required("Date is required"),
   indicativeBudget: Yup.string()
     .trim()
-    .matches(/^\d+$/, "Budget number must contain only numbers")
-    .required("Budget number is required"),
+    .matches(/^\d+$/, "Budget must contain only numbers")
+    .required("Budget is required"),
   time: Yup.string().trim().required("slot is required"),
-  fullName: Yup.string().trim().required("FullName name is required"),
+  fullName: Yup.string().trim().required("FullName is required"),
 });
 
 export const consultationValidation = Yup.object({
@@ -250,7 +255,7 @@ export const billingAddressValidation = Yup.object({
   landmark: Yup.string().trim().required("Landmark is required"),
   state: Yup.string().trim().required("State is required"),
   city: Yup.string().trim().required("city is required"),
-  pincode: Yup.string().trim().required("city is required"),
+  pincode: Yup.string().trim().required("pincode is required"),
   isBillingAddress: Yup.number().required("isBillingAddress is required"),
 });
 
@@ -267,6 +272,6 @@ export const shippingAddressValidation = Yup.object({
   landmark: Yup.string().trim().required("Landmark is required"),
   state: Yup.string().trim().required("State is required"),
   city: Yup.string().trim().required("city is required"),
-  pincode: Yup.string().trim().required("city is required"),
+  pincode: Yup.string().trim().required("pincode is required"),
   isBillingAddress: Yup.number().required("isBillingAddress is required"),
 });

@@ -23,7 +23,7 @@ import {
 import { errorNotification, successNotification } from "@/helper/Notification";
 import { getAllCategoryApiList } from "@/Service/Category/Category.service";
 import { Item } from "@radix-ui/react-dropdown-menu";
-import { projectTyesData } from "@/helper";
+import { getDetailsByPincode, projectTyesData } from "@/helper";
 import Cookies from "universal-cookie";
 import { bulkOrderValidation } from "@/helper/Validation";
 
@@ -87,7 +87,7 @@ const BulkOrder = () => {
       formData.append("position", formik.values.position);
       formData.append("productCategory", formik.values.productCategory);
       formData.append("estimatedQuantity", formik.values.estimatedQuantity);
-      formData.append("skus", formik.values.skus);
+      formData.append("skus", JSON.stringify(formik.values.skus));
       formData.append("projectType", formik.values.projectType);
       formData.append("deliveryPinCode", formik.values.deliveryPinCode);
       formData.append("expeditedShipping", formik.values.expeditedShipping);
@@ -129,14 +129,33 @@ const BulkOrder = () => {
   };
 
   const skuKeyHandler = (event) => {
-    console.log("-----------skuValue", skuValue);
     if (event.keyCode === 13 && skuValue.trim() !== "") {
       setSkuValueData([skuValue, ...skuValueData]);
       setSkuValues("");
+      console.log("Value",[skuValue, ...skuValueData]);
       formik.setFieldValue("skus", [skuValue, ...skuValueData]);
     }
   };
 
+
+  useEffect(()=>{
+    if(formik.values.deliveryPinCode.length === 6){
+      pinCodeResult(formik.values.deliveryPinCode);
+    }else{
+      formik.setErrors({deliveryPinCode:"pincode is not a valid"})
+    }
+  },[formik.values.deliveryPinCode]);
+
+
+  const pinCodeResult = async (pincode) =>{
+    const response = await getDetailsByPincode(pincode);
+    console.log("response: " + response);
+    if (response.data.status == "OK") {
+
+    }else{
+      formik.setErrors({deliveryPinCode:"pincode is not a valid"})
+    }
+  };
  
   const dateHandler = (value) => {
     const data = new Date(value);

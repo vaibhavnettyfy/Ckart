@@ -7,15 +7,15 @@ export const getDetailsByPincode = async (pincode)=>{
 
 export const projectTyesData = [{
     label:"Residential",
-    value:1
+    value:"Residential"
 },{
     label:"Commercial",
-    value:2
+    value:"Commercial"
 },{
     label:"Industrial",
-    value:3
+    value:"Industrial"
 },{
     label:"Other",
-    value:4
+    value:"Other"
 }];
 
