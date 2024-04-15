@@ -101,7 +101,7 @@ const BulkOrder = () => {
       formData.append("date", formik.values.date);
       formData.append("type", 1);
       formData.append("time", formik.values.time);
-      formData.append("userId", userDetails?.id ? userDetails?.id : '');
+      formData.append("userId", userDetails?.id ? userDetails?.id : "");
       formData.append("questionsComments", formik.values.questionsComments);
       const { count, data, message, success } = await bookAppointmentApiHandler(
         formData
@@ -132,37 +132,48 @@ const BulkOrder = () => {
     if (event.keyCode === 13 && skuValue.trim() !== "") {
       setSkuValueData([skuValue, ...skuValueData]);
       setSkuValues("");
-      console.log("Value",[skuValue, ...skuValueData]);
+      console.log("Value", [skuValue, ...skuValueData]);
       formik.setFieldValue("skus", [skuValue, ...skuValueData]);
     }
   };
 
+  {
+    console.log("Formik", formik.values);
+  }
 
-  useEffect(()=>{
-    if(formik.values.deliveryPinCode.length === 6){
+  useEffect(() => {
+    if (formik.values.deliveryPinCode.length === 6) {
       pinCodeResult(formik.values.deliveryPinCode);
-    }else{
-      formik.setErrors({deliveryPinCode:"pincode is not a valid"})
+    } else {
+      formik.setErrors({ deliveryPinCode: "pincode is not a valid" });
     }
-  },[formik.values.deliveryPinCode]);
+  }, [formik.values.deliveryPinCode]);
 
-
-  const pinCodeResult = async (pincode) =>{
+  const pinCodeResult = async (pincode) => {
     const response = await getDetailsByPincode(pincode);
     console.log("response: " + response);
     if (response.data.status == "OK") {
-
-    }else{
-      formik.setErrors({deliveryPinCode:"pincode is not a valid"})
+    } else {
+      formik.setErrors({ deliveryPinCode: "pincode is not a valid" });
     }
   };
- 
+
   const dateHandler = (value) => {
     const data = new Date(value);
     const formateData = data.toISOString();
     formik.setFieldValue("date", formateData);
     availableSlotsByDate(formateData);
   };
+
+  const deleteSkuHandler = (index) =>{
+    const newSkuValueData = [...skuValueData];
+    newSkuValueData.splice(index, 1); 
+    setSkuValueData(newSkuValueData);
+    formik.setFieldValue("skus", newSkuValueData);
+  };
+
+
+  {console.log('Formik',formik.values)};
 
   return (
     <div className="max-h-[500px] overflow-y-auto px-2">
@@ -238,17 +249,6 @@ const BulkOrder = () => {
 
         <div className="col-span-3">
           <Label htmlFor="">Specific SKUs (if known)</Label>
-          {skuValueData && skuValueData.length > 0 ? (
-            skuValueData.map((item, index) => {
-              return (
-                <div>
-                  <h5> {item}, </h5>{" "}
-                </div>
-              );
-            })
-          ) : (
-            <div className="text-[#5D5F5F] text-center">No SKU Found</div>
-          )}
           <Input
             className="block"
             name="skus"
@@ -257,6 +257,35 @@ const BulkOrder = () => {
             onKeyDown={(event) => skuKeyHandler(event)}
             max={250}
           />
+          {skuValueData && skuValueData.length > 0 ? (
+            <div className="flex gap-1 mt-2 flex-wrap">
+              {skuValueData.map((item, index) => {
+                return (
+                  <div
+                    key={index}
+                    className="border rounded-3xl flex items-center "
+                  >
+                    <div className="px-2 py-[1px]">{item}</div>
+                    <div className="pr-1 cursor-pointer" onClick={()=>deleteSkuHandler(index)}>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="1em"
+                        height="1em"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fill="#666"
+                          d="M2.93 17.07A10 10 0 1 1 17.07 2.93A10 10 0 0 1 2.93 17.07M11.4 10l2.83-2.83l-1.41-1.41L10 8.59L7.17 5.76L5.76 7.17L8.59 10l-2.83 2.83l1.41 1.41L10 11.41l2.83 2.83l1.41-1.41L11.41 10z"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="text-[#5D5F5F] text-center mt-1">No SKU Found</div>
+          )}
         </div>
         <div>
           <Label htmlFor="">Project Type</Label>
@@ -304,14 +333,14 @@ const BulkOrder = () => {
             }
           >
             <div className="flex items-center space-x-2">
-              <RadioGroupItem id="1" value={1} />
-              <Label className="text-[#475156]" htmlFor="1">
+              <RadioGroupItem id="1" value={"Yes"} />
+              <Label className="text-[#475156]" htmlFor="Yes">
                 Yes
               </Label>
             </div>
             <div className="flex items-center space-x-2">
-              <RadioGroupItem value={0} id="2" />
-              <Label className="text-[#475156]" htmlFor="2">
+              <RadioGroupItem value={"No"} id="2" />
+              <Label className="text-[#475156]" htmlFor="No">
                 No
               </Label>
             </div>
@@ -356,20 +385,20 @@ const BulkOrder = () => {
             }
           >
             <div className="flex items-center space-x-2">
-              <RadioGroupItem value={1} id="1" />
-              <Label className="text-[#475156]" htmlFor="1">
+              <RadioGroupItem value={"SMS"} id="1" />
+              <Label className="text-[#475156]" htmlFor="SMS">
                 SMS
               </Label>
             </div>
             <div className="flex items-center space-x-2">
-              <RadioGroupItem value={2} id="2" />
-              <Label className="text-[#475156]" htmlFor="2">
+              <RadioGroupItem value={"Email"} id="2" />
+              <Label className="text-[#475156]" htmlFor="Email">
                 Email
               </Label>
             </div>
             <div className="flex items-center space-x-2">
-              <RadioGroupItem value={3} id="3" />
-              <Label className="text-[#475156]" htmlFor="3">
+              <RadioGroupItem value={"None"} id="3" />
+              <Label className="text-[#475156]" htmlFor="None">
                 None
               </Label>
             </div>
@@ -386,38 +415,40 @@ const BulkOrder = () => {
               onChange={(event) => dateHandler(event.target.value)}
             />
             {formik.touched.date && formik.errors.date ? (
-              <span className="text-red-500 text-xs">
-                {formik.errors.date}
-              </span>
+              <span className="text-red-500 text-xs">{formik.errors.date}</span>
             ) : null}
           </div>
         </div>
-        <div className="col-span-3">
-          <Label htmlFor="">Available slots</Label>
-          <div className="flex gap-1 flex-wrap">
-            {availableSlotData && availableSlotData.length > 0 ? (
-              availableSlotData.map((item, index) => {
-                return (
-                  <div
-                    key={index}
-                    onClick={() => availableSlotHandler(item.id, item.time)}
-                    className="border rounded-md px-3 py-1 w-fit cursor-pointer"
-                  >
-                    <div className="text-sm font-semibold">{item.time}</div>
-                    {/* <div className="text-xs text-[#5D5F5F]">{item.time}</div> */}
-                  </div>
-                );
-              })
-            ) : (
-              <div className="text-[#5D5F5F] text-center">No slots Found</div>
-            )}
-          </div>
-          {formik.touched.time && formik.errors.time ? (
-              <span className="text-red-500 text-xs">
-                {formik.errors.time}
-              </span>
+        {formik.values.date && (
+          <div className="col-span-3">
+            <Label htmlFor="">Available slots</Label>
+            <div className="flex gap-1 flex-wrap">
+              {availableSlotData && availableSlotData.length > 0 ? (
+                availableSlotData.map((item, index) => {
+                  return (
+                    <div
+                      key={index}
+                      onClick={() => availableSlotHandler(item.id, item.time)}
+                      className={`border rounded-md px-3 py-1 w-fit cursor-pointer ${
+                        item.id === selectedSlotData
+                          ? "bg-primary text-white"
+                          : ""
+                      }`}
+                    >
+                      <div className="text-sm font-semibold">{item.time}</div>
+                      {/* <div className="text-xs text-[#5D5F5F]">{item.time}</div> */}
+                    </div>
+                  );
+                })
+              ) : (
+                <div className="text-[#5D5F5F] text-center">No slots Found</div>
+              )}
+            </div>
+            {formik.touched.time && formik.errors.time ? (
+              <span className="text-red-500 text-xs">{formik.errors.time}</span>
             ) : null}
-        </div>
+          </div>
+        )}
         <div className="col-span-3">
           <Label htmlFor="">Questions/Comments</Label>
           <Textarea
@@ -446,11 +477,11 @@ const BulkOrder = () => {
               and <Link href={"/"}>Privacy Policy.</Link>
             </label>
           </div>
-            {formik.touched.termsConditions && formik.errors.termsConditions ? (
-              <span className="text-red-500 text-xs">
-                {formik.errors.termsConditions}
-              </span>
-            ) : null}
+          {formik.touched.termsConditions && formik.errors.termsConditions ? (
+            <span className="text-red-500 text-xs">
+              {formik.errors.termsConditions}
+            </span>
+          ) : null}
         </div>
         <div>
           <Button

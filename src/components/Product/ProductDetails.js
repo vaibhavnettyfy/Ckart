@@ -230,9 +230,9 @@ export default function ProductDetails({ detailsData, callBackHandler }) {
                   <div className="text-[#77878F] text-lg font-normal line-through">
                     ₹999.00
                   </div>
-                  <div className="text-sm px-2 py-1 bg-[#EFD33D] font-semibold rounded-sm ml-2">
+                  {/* <div className="text-sm px-2 py-1 bg-[#EFD33D] font-semibold rounded-sm ml-2">
                     21% OFF
-                  </div>
+                  </div> */}
                 </div>
               </div>
               <div className="my-5">

@@ -71,6 +71,8 @@ const Consultation = () => {
     availableSlotsByDate(formateData);
   };
 
+  
+
   const userId = "";
   const consultationHandler = async () => {
     try {
@@ -246,20 +248,20 @@ const Consultation = () => {
               formik.setFieldValue("previousExperience", event)
             }>
             <div className="flex items-center space-x-2">
-              <RadioGroupItem value={1} id="1" />
-              <Label className="text-[#475156]" htmlFor="1">
+              <RadioGroupItem value={"None"} id="1" />
+              <Label className="text-[#475156]" htmlFor="None">
                 None
               </Label>
             </div>
             <div className="flex items-center space-x-2">
-              <RadioGroupItem value={2} id="2" />
-              <Label className="text-[#475156]" htmlFor="2">
+              <RadioGroupItem value={"Some"} id="2" />
+              <Label className="text-[#475156]" htmlFor="Some">
                 Some
               </Label>
             </div>
             <div className="flex items-center space-x-2">
-              <RadioGroupItem value={3} id="2" />
-              <Label className="text-[#475156]" htmlFor="2">
+              <RadioGroupItem value={"Extensive"} id="2" />
+              <Label className="text-[#475156]" htmlFor="Extensive">
                 Extensive
               </Label>
             </div>
@@ -304,14 +306,14 @@ const Consultation = () => {
             }
           >
             <div className="flex items-center space-x-2">
-              <RadioGroupItem value={1} id="1" />
-              <Label className="text-[#475156]" htmlFor="1">
+              <RadioGroupItem value={"Yes"} id="1" />
+              <Label className="text-[#475156]" htmlFor="Yes">
                 Yes
               </Label>
             </div>
             <div className="flex items-center space-x-2">
-              <RadioGroupItem value={0} id="2" />
-              <Label className="text-[#475156]" htmlFor="2">
+              <RadioGroupItem value={"No"} id="2" />
+              <Label className="text-[#475156]" htmlFor="No">
                 No
               </Label>
             </div>
@@ -345,14 +347,14 @@ const Consultation = () => {
             }
           >
             <div className="flex items-center space-x-2">
-              <RadioGroupItem value={1} id="1" />
-              <Label className="text-[#475156]" htmlFor="1">
+              <RadioGroupItem value={"Yes"} id="1" />
+              <Label className="text-[#475156]" htmlFor="Yes">
                 Yes
               </Label>
             </div>
             <div className="flex items-center space-x-2">
-              <RadioGroupItem value={0} id="2" />
-              <Label className="text-[#475156]" htmlFor="2">
+              <RadioGroupItem value={"No"} id="2" />
+              <Label className="text-[#475156]" htmlFor="No">
                 No
               </Label>
             </div>
@@ -368,19 +370,19 @@ const Consultation = () => {
             }
           >
             <div className="flex items-center space-x-2">
-              <RadioGroupItem value={1} id="1" />
-              <Label className="text-[#475156]" htmlFor="1">
+              <RadioGroupItem value={"SMS"} id="1" />
+              <Label className="text-[#475156]" htmlFor="SMS">
                 SMS
               </Label>
             </div>
             <div className="flex items-center space-x-2">
-              <RadioGroupItem value={2} id="2" />
-              <Label className="text-[#475156]" htmlFor="2">
+              <RadioGroupItem value={"Email"} id="2" />
+              <Label className="text-[#475156]" htmlFor="Email">
                 Email
               </Label>
             </div>
             <div className="flex items-center space-x-2">
-              <RadioGroupItem value={3} id="3" />
+              <RadioGroupItem value={"None"} id="None" />
               <Label className="text-[#475156]" htmlFor="3">
                 None
               </Label>
@@ -402,6 +404,9 @@ const Consultation = () => {
             />
           </div>
         </div>
+        {console.log("Formik",formik.values)}
+        {
+          formik.values.date && (
         <div className="col-span-3">
           <Label htmlFor="">Available slots</Label>
           <div className="flex gap-1 flex-wrap">
@@ -411,7 +416,7 @@ const Consultation = () => {
                   <div
                     key={index}
                     onClick={() => availableSlotHandler(item.id, item.time)}
-                    className="border rounded-md px-3 py-1 w-fit cursor-pointer"
+                    className={`border rounded-md px-3 py-1 w-fit cursor-pointer ${item.id === selectedSlotData ? 'bg-primary text-white' : ''}`}
                   >
                     <div className="text-sm font-semibold">{item.time}</div>
                     {/* <div className="text-xs text-[#5D5F5F]">{item.time}</div> */}
@@ -423,6 +428,8 @@ const Consultation = () => {
             )}
           </div>
         </div>
+          )
+        }
         <div className="col-span-3">
           <Label htmlFor="">Additional Notes</Label>
           <Textarea
