@@ -1,8 +1,8 @@
 "use client";
 import Product from "@/components/Product/Product";
 
-export default function ProductPage() {
+export default function ProductPage({categories,subCategories}) {
   return (
-    <Product />
+    <Product categories={categories}  subCategories={subCategories}/>
   );
 }

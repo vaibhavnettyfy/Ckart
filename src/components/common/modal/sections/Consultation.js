@@ -396,6 +396,7 @@ const Consultation = ({ setOpen }) => {
               type="date"
               className="block"
               name="date"
+              min={new Date().toISOString().split('T')[0]}
               onChange={(event) => {
                 dateHandler(event.target.value);
                 // formik.setFieldValue("date", event.target.value)
@@ -413,8 +414,12 @@ const Consultation = ({ setOpen }) => {
                     return (
                       <div
                         key={index}
-                        onClick={() => availableSlotHandler(item.id, item.time)}
-                        className={`border rounded-md px-3 py-1 w-fit cursor-pointer ${item.id === selectedSlotData ? 'bg-primary text-white' : ''}`}
+                        onClick={() => {
+                          if(item.status !== 1){
+                            availableSlotHandler(item.id, item.time)
+                          }
+                        }}
+                        className={`border rounded-md px-3 py-1 w-fit cursor-pointer ${item.status === 1 &&  "text-[#666] cursor-not-allowed"} ${item.id === selectedSlotData ? 'bg-primary text-white' : ''}`}
                       >
                         <div className="text-sm font-semibold">{item.time}</div>
                         {/* <div className="text-xs text-[#5D5F5F]">{item.time}</div> */}

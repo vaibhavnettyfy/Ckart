@@ -403,7 +403,7 @@ const BulkOrder = ({ setOpen }) => {
             <Label htmlFor="">Meeting Date</Label>
             <Input className="block"
               type="date"
-
+              min={new Date().toISOString().split('T')[0]}
               name="date"
               onChange={(event) => dateHandler(event.target.value)}
             />
@@ -421,8 +421,13 @@ const BulkOrder = ({ setOpen }) => {
                   return (
                     <div
                       key={index}
-                      onClick={() => availableSlotHandler(item.id, item.time)}
-                      className={`border rounded-md px-3 py-1 w-fit cursor-pointer ${item.id === selectedSlotData
+                      onClick={() => {
+                        if(item.status !== 1){
+                          availableSlotHandler(item.id, item.time)}
+                        }
+                      }
+
+                      className={`border rounded-md px-3 py-1 w-fit cursor-pointer  ${item.status === 1 && "text-[#666] cursor-not-allowed"} ${item.id === selectedSlotData
                         ? "bg-primary text-white"
                         : ""
                         }`}

@@ -77,6 +77,11 @@ const ProductCollection = () => {
     browseCategoriesDatahandler();
   }, []);
 
+
+  const ProductHandler = (cat,subCat) =>{
+    router.push(`/product/${cat}/${subCat ? subCat : '' }`);
+  };
+
   const getRandomItem = (array) => {
     return array[Math.floor(Math.random() * array.length)];
   };
@@ -135,7 +140,7 @@ const ProductCollection = () => {
                           {name ? name : "-"}
                         </div>
                         <div className="my-3">
-                          <Select onValueChange={(event) => setSubCategoreyId(event)}>
+                          <Select onValueChange={(event) => [setSubCategoreyId(event),ProductHandler(id,event)]}>
                             <SelectTrigger className="">
                               <SelectValue placeholder="Sub Categories" />
                             </SelectTrigger>
@@ -169,7 +174,7 @@ const ProductCollection = () => {
                             <Button
                               size={"card"}
                               variant="card"
-                              onClick={() => categoreySubcategoryHandler(id)}
+                              onClick={() => [categoreySubcategoryHandler(id),ProductHandler(id,null)]}
                             >
                               See all
                             </Button>

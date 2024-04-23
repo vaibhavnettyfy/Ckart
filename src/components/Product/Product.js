@@ -27,7 +27,7 @@ import {
 import { ProductAllListApiHandler } from "@/Service/Product/Product.service";
 import { productListByCart } from "@/Service/AddTocart/AddToCart.service";
 import { useAppContext } from "@/context";
-export default function Product() {
+export default function Product({categories,subCategories}) {
   const cookies = new Cookies();
   const [categoryList, setCategoryList] = useState([]);
   const [categoryLoader, setCategoryLoader] = useState(false);
@@ -79,7 +79,18 @@ export default function Product() {
       sponsor,
       currentPage
     );
-  }, []);
+  }, [category,subCategory]);
+
+  useEffect(()=>{
+    if(categories){
+      setCategory(categories);
+      setCheckId(categories);
+    }
+    if(subCategories){
+      setSubCategory(subCategories);
+      setSubCheckId(subCategories);
+    }
+  },[])
 
   const getProductListByCartId = async (cartId) => {
     const { data, message, success } = await productListByCart(cartId);

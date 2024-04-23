@@ -16,9 +16,11 @@ import QtyCard from "../common/product/QtyCard";
 import { removeproductApiWishlist } from "@/Service/WishList/WishList.service";
 import { errorNotification, successNotification } from "@/helper/Notification";
 import { addProductApiToCart } from "@/Service/AddTocart/AddToCart.service";
+import { useAppContext } from "@/context";
 
 function WishListCard({ index, wishlistDetails, callbackHandler }) {
   const cookies = new Cookies();
+  const {setDeliveryAddress, deliveryAddress} = useAppContext();
   const { id, productId } = wishlistDetails || {};
   const [quantity, setQuantity] = useState(1);
   const cartId = cookies.get("CARTID");
@@ -40,14 +42,18 @@ function WishListCard({ index, wishlistDetails, callbackHandler }) {
         productId: id,
         quantity: quantity,
         userId: userDetails?.id ? userDetails?.id : "",
-        pincode: "380060",
+        pincode: deliveryAddress.postalCode
+        ? deliveryAddress.postalCode
+        : "",
       };
       const cartPayload = {
         productId: id,
         quantity: quantity,
         id: cartId ? cartId : "",
         userId: userDetails?.id ? userDetails?.id : "",
-        pincode: "380060",
+        pincode: deliveryAddress.postalCode
+        ? deliveryAddress.postalCode
+        : "",
       };
       const { count, data, message, success } = await addProductApiToCart(
         cartId ? cartPayload : payload

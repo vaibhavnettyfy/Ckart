@@ -35,6 +35,10 @@ import { errorNotification, successNotification } from "@/helper/Notification";
 import { useAppContext } from "@/context";
 import { addProductApiToCart } from "@/Service/AddTocart/AddToCart.service";
 import ProductDescription from "../ProductDescription";
+import { useFormik } from "formik";
+import { updateLocationIv } from "@/helper/intialValues";
+import { updateLocationValidation } from "@/helper/Validation";
+import { getDetailsByPincode } from "@/helper";
 
 export default function ProductDetails({ detailsData, callBackHandler }) {
   const {
@@ -65,11 +69,13 @@ export default function ProductDetails({ detailsData, callBackHandler }) {
   const userLoginFlag = cookies.get("token");
   const userDetails = cookies.get("USERDETAILS");
   const cartId = cookies.get("CARTID");
+  const {setDeliveryAddress, deliveryAddress} = useAppContext();
 
   const setQuantityHandler = (value) => {
     setSelectedQuantitys(value);
   };
 
+  
   const ImageHandler = (image) => {
     const data =
       image && image.length > 0
@@ -87,6 +93,29 @@ export default function ProductDetails({ detailsData, callBackHandler }) {
     setSelectedQuantitys(minQuantity);
   }, [minQuantity]);
 
+  const updateLocationHandler = async () =>{
+    const response = await getDetailsByPincode(formik.values.pincode);
+    if (response.data.status == "OK") {
+      const location = response.data.results[0].address_components;
+      const l1 = response.data.results[0];
+      const payload = {
+        postalCode: formik.values.pincode,
+        suburb: location.find((component) => component.types.includes("locality")).long_name
+      }
+      setDeliveryAddress(payload);
+      cookies.set("deliveryAddress", payload);
+      setOpen(false);
+    } else {
+      formik.setErrors({ pincode: "pincode is not a valid" });
+    }
+  };
+
+  const formik = useFormik({
+    initialValues: updateLocationIv,
+    validationSchema: updateLocationValidation,
+    onSubmit: updateLocationHandler,
+  })
+
   useEffect(() => {
     ImageHandler(productImage);
   }, [productImage]);
@@ -97,14 +126,18 @@ export default function ProductDetails({ detailsData, callBackHandler }) {
         productId: id,
         quantity: selectedQuantitys,
         userId: userDetails?.id ? userDetails?.id : "",
-        pincode: "380060",
+        pincode: deliveryAddress.postalCode
+        ? deliveryAddress.postalCode
+        : "",
       };
       const cartPayload = {
         productId: id,
         quantity: selectedQuantitys,
         id: cartId ? cartId : "",
         userId: userDetails?.id ? userDetails?.id : "",
-        pincode: "380060",
+        pincode:deliveryAddress.postalCode
+        ? deliveryAddress.postalCode
+        : "",
       };
       const { count, data, message, success } = await addProductApiToCart(
         cartId ? cartPayload : payload
@@ -293,7 +326,7 @@ export default function ProductDetails({ detailsData, callBackHandler }) {
                             {" "}
                             <div className="md:text-lg sm:text-base text-sm font-normal">
                               Delivery Pincode:-{" "}
-                              <span className="font-semibold">362011</span>
+                              <span className="font-semibold">{deliveryAddress.postalCode ? deliveryAddress.postalCode : '-'}</span>
                             </div>
                           </TooltipTrigger>
                           <TooltipContent>
@@ -311,7 +344,7 @@ export default function ProductDetails({ detailsData, callBackHandler }) {
                               Enter an Indian pincode
                             </Label>
                             <div className="relative">
-                              <Input placeholder="" className="w-full" />
+                              <Input placeholder="" className="w-full" name="pincode" formik={formik}/>
                               <Search className="absolute top-[10px] right-3 w-5 h-5" />
                             </div>
                           </div>

@@ -1,11 +1,9 @@
 import { siteMetadata } from "@/helper/siteMetaData";
-import ProductPage from "@/pages/ProductPage";
-
+import ProductDetailsPage from "@/pages/ProductDetailsPage";
 
 export async function generateMetadata({ params }) {
-
-  const title = 'Product'
-  const description = 'Product Description'
+  const title = "Product Details";
+  const description = "Product Details Description";
 
   return {
     title: title,
@@ -13,7 +11,7 @@ export async function generateMetadata({ params }) {
     openGraph: {
       title: title,
       description: description,
-      url: 'https://ckart.vercel.app/about',
+      url: `https://ckart.vercel.app/product-details/${params.id}`,
       siteName: 'Ckart',
       locale: "en_US",
       images: '/about.png',
@@ -25,11 +23,10 @@ export async function generateMetadata({ params }) {
       images: '/about.png',
     },
   };
-}
+  }
+  export default function Page({params}) {
+    return (
+      <ProductDetailsPage productKey={params.id}/>
+    )
+  }
 
-export default function Page({params}) {
-  console.log("{params}",params);
-  return (
-    <ProductPage categories={params.id} subCategories={params.subcate}/>
-  )
-}

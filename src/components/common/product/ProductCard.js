@@ -24,6 +24,7 @@ import {
 import { usePathname } from 'next/navigation';
 import { errorNotification, successNotification } from "@/helper/Notification";
 import { addProductApiToCart } from "@/Service/AddTocart/AddToCart.service";
+import { useAppContext } from "@/context";
 
 
 
@@ -41,9 +42,11 @@ const ProductCard = ({ productDetails, callBackHandler }) => {
     id,
     specificationData,
   } = productDetails ?? {};
+
   const router = useRouter();
   const cookies = new Cookies();
   const [wishList, setWishList] = useState(false);
+  const {setDeliveryAddress, deliveryAddress} = useAppContext();
   const [quantity, setQuantity] = useState(1);
   const [totalAmount, setTotalAmount] = useState();
   const userLoginFlag = cookies.get("token");
@@ -69,14 +72,18 @@ const ProductCard = ({ productDetails, callBackHandler }) => {
       productId: id,
       quantity: quantity,
       userId: userDetails?.id ? userDetails?.id : "",
-      pincode: "380060",
+      pincode: deliveryAddress.postalCode
+      ? deliveryAddress.postalCode
+      : "",
     };
     const cartIdPayload = {
       productId: id,
       quantity: quantity,
       id: cartId ? cartId : "",
       userId: userDetails?.id ? userDetails?.id : "",
-      pincode: "380060",
+      pincode: deliveryAddress.postalCode
+      ? deliveryAddress.postalCode
+      : "",
     };
     const { count, data, message, success } = await addProductApiToCart(
       cartId ? cartIdPayload : payload
@@ -126,7 +133,7 @@ const ProductCard = ({ productDetails, callBackHandler }) => {
   };
 
   const productDetailsHandler = async (id, productKey) => {
-    router.push(`product/${productKey}`);
+    router.push(`/product-details/${productKey}`);
   };
 
   return (
