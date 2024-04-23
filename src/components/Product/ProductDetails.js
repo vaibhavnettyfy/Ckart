@@ -126,8 +126,8 @@ export default function ProductDetails({ detailsData, callBackHandler }) {
         productId: id,
         quantity: selectedQuantitys,
         userId: userDetails?.id ? userDetails?.id : "",
-        pincode: deliveryAddress.postalCode
-        ? deliveryAddress.postalCode
+        pincode: deliveryAddress?.postalCode
+        ? deliveryAddress?.postalCode
         : "",
       };
       const cartPayload = {
@@ -135,8 +135,8 @@ export default function ProductDetails({ detailsData, callBackHandler }) {
         quantity: selectedQuantitys,
         id: cartId ? cartId : "",
         userId: userDetails?.id ? userDetails?.id : "",
-        pincode:deliveryAddress.postalCode
-        ? deliveryAddress.postalCode
+        pincode:deliveryAddress?.postalCode
+        ? deliveryAddress?.postalCode
         : "",
       };
       const { count, data, message, success } = await addProductApiToCart(
@@ -326,7 +326,7 @@ export default function ProductDetails({ detailsData, callBackHandler }) {
                             {" "}
                             <div className="md:text-lg sm:text-base text-sm font-normal">
                               Delivery Pincode:-{" "}
-                              <span className="font-semibold">{deliveryAddress.postalCode ? deliveryAddress.postalCode : '-'}</span>
+                              <span className="font-semibold">{deliveryAddress?.postalCode ? deliveryAddress?.postalCode : '-'}</span>
                             </div>
                           </TooltipTrigger>
                           <TooltipContent>
