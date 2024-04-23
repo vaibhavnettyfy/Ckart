@@ -131,7 +131,7 @@ const ProductCard = ({ productDetails, callBackHandler }) => {
 
   return (
     <div
-      className="border bg-white md:rounded-2xl sm:rounded-xl rounded-lg lg:p-4 md:p-3 p-2 overflow-hidden cursor-pointer"
+      className="border bg-white md:rounded-2xl sm:rounded-xl rounded-lg lg:p-4 md:p-3 p-2 overflow-hidden cursor-pointer h-full"
       onClick={() => productDetailsHandler(id, productKey)}
     >
       <div>
@@ -140,7 +140,7 @@ const ProductCard = ({ productDetails, callBackHandler }) => {
             alt={""}
             width={170}
             height={150}
-            className="lg:w-[170px] md:w-[140px] sm:w-[100px] w-24 object-contain"
+            className="lg:w-[170px] md:w-[140px] sm:w-[100px] w-24 object-contain mix-blend-darken"
             src={imageData ? imageData : "/ProductImage.svg"}
           />
           {/* need to keep this commented */}
@@ -163,7 +163,7 @@ const ProductCard = ({ productDetails, callBackHandler }) => {
             }}
           />
         </div>
-        <div className="xl:text-[22px] lg:text-xl md:text-lg font-semibold mt-2 mb-1">
+        <div className="xl:text-[22px] lg:text-xl md:text-lg text-sm font-semibold mt-2 mb-1">
           {productName}
         </div>
         <DropdownMenu onClick={(e) => e.stopPropagation()}>
@@ -204,9 +204,8 @@ const ProductCard = ({ productDetails, callBackHandler }) => {
         >
           <div className="text-[#42545E] lg:text-base md:text-sm text-xs py-2">
             Per Bundle{" "}
-            <span className="font-semibold text-black">{`₹ ${
-              price ? price : 0
-            }`}</span>
+            <span className="font-semibold text-black">{`₹ ${price ? price : 0
+              }`}</span>
           </div>
           <div className="text-[#77878F] text-[13px] font-normal line-through">
             ₹999.00

@@ -30,7 +30,7 @@ export default function AboutPage() {
   const [profilePicture, setProfilePicture] = useState("");
   const [billingAddress, setBillingAddress] = useState([]);
   const [shippingAddress, setShippingAddress] = useState([]);
-  const [file, setFile] = useState(""); 
+  const [file, setFile] = useState("");
 
   const userDetails = cookies.get("USERDETAILS");
 
@@ -67,21 +67,21 @@ export default function AboutPage() {
     onSubmit: basicDetailsHandler,
   });
 
-  const profileHandler = (e) =>{
+  const profileHandler = (e) => {
     const file = e.target.files[0];
-    if(file){
+    if (file) {
       if (file.size > 2 * 1024 * 1024) {
         errorNotification("File size exceeds 2MB. Please select a smaller file.");
-      }else{
+      } else {
         const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif"];
-        if(allowedTypes.indexOf(file.type) === -1){
+        if (allowedTypes.indexOf(file.type) === -1) {
           errorNotification("Invalid file type. Please select a valid image file.");
-        }else{
+        } else {
           setProfilePicture(file);
           setFile(URL.createObjectURL(e.target.files[0]));
         }
       }
-    }else{
+    } else {
       errorNotification("No file selected")
     }
   };
@@ -122,8 +122,12 @@ export default function AboutPage() {
     }
   };
 
+  console.log("Value", formik.values);
+
+  console.log("errr", formik.errors);
+
   return (
-    <div className="my-20">
+    <div className="lg:my-20 md:my-16 sm:my-10 my-6">
       <div className="container px-3 sm:px-6">
         <div className="flex flex-col gap-5 max-w-[1000px] m-auto">
           <div>
@@ -131,35 +135,22 @@ export default function AboutPage() {
               <div className="font-semibold py-2 px-3 border-b">
                 Account Setting
               </div>
-              <div className="p-5">
-                <div className="flex gap-8">
-                  <div className="w-1/6">
+              <div className="sm:p-5 p-3">
+                <div className="flex md:flex-nowrap flex-wrap sm:gap-8 gap-4">
+                  <div className="flex flex-col items-center">
+                    <Image
+                      alt=""
+                      src={file ? file : "/Avatar.svg"}
+                      width={144}
+                      height={144}
+                      className="rounded-full object-cover !w-36 !h-36"
+                    />
                     <Input
                       type="file"
                       accept=".jpg, .jpeg, .png, .gif"
                       onChange={profileHandler}
-                      // onChange={(e) => {
-                      //   const file = e.target.files[0];
-                      //   if (file) {
-                      //     // Display the preview of the selected image
-                      //     const reader = new FileReader();
-                      //     reader.onloadend = () => {
-                      //       setProfileImagePreview(reader.result);
-                      //     };
-                      //     reader.readAsDataURL(file);
-
-                      //     // Set the selected image in formik values
-                      //     formik.setFieldValue("profile", file);
-                      //   }
-                      // }}
-                      className="w-full"
+                      className="w-full mt-2"
                       name="profile"
-                    />
-                    <Image
-                      alt=""
-                      src={file ? file :"/Avatar.svg"}
-                      width={176}
-                      height={176}
                     />
                     {formik.touched.profile && formik.errors.profile ? (
                       <span className="text-red-500 text-xs">
@@ -167,12 +158,7 @@ export default function AboutPage() {
                       </span>
                     ) : null}
                   </div>
-                  <div className="grid grid-cols-2 gap-5 w-5/6">
-                    {/* need to keep this commented */}
-                    {/* <div>
-                      <Label htmlFor="">Display name</Label>
-                      <Input placeholder="" className="w-full" />
-                    </div> */}
+                  <div className="grid grid-cols-2 sm:gap-5 gap-3 w-full">
                     <div>
                       <Label htmlFor="">FirstName</Label>
                       <Input
@@ -284,7 +270,7 @@ export default function AboutPage() {
               </div>
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-5">
+          <div className="grid md:grid-cols-2 sm:gap-5 gap-3">
             {billingAddress && billingAddress.length > 0 ? (
               billingAddress.map((response, index) => {
                 return <UserBillingAddress addressDetails={response} />;

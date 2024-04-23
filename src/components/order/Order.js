@@ -23,12 +23,12 @@ export default function Order() {
   const router = useRouter()
 
   return (
-    <div className="my-20">
+    <div className="lg:my-20 md:my-16 sm:my-10 my-5">
       <div className="container px-3 sm:px-6">
         <div>
           <div>
             <div>
-              <div className="text-2xl font-semibold mb-5">Order History</div>
+              <div className="sm:text-2xl text-xl font-semibold sm:mb-5 mb-3">Order History</div>
             </div>
             <div className="grid grid-cols-1 gap-5">
               <div className="col-span-1">
@@ -48,7 +48,7 @@ export default function Order() {
                       return (
                         <TableRow key={i}>
                           <TableCell>
-                            <div className="flex gap-3 items-center">
+                            <div className="flex gap-3 items-center w-max">
                               <Image alt={''} width={100} height={80} className='w-[80px] object-contain' src={'/ProductImage.svg'} />
                               <div>
                                 <div className="font-semibold">Tiscon Superlinks - 8mm</div>

@@ -5,9 +5,10 @@ const appContext = createContext(0);
 
 export function AppWrapper({children}){
     let [cartLength,setCartLength] = useState(0);
+    let [deliveryAddress,setDeliveryAddress] = useState({});
 
     return (
-        <appContext.Provider value={{cartLength,setCartLength}}>
+        <appContext.Provider value={{cartLength,setCartLength,setDeliveryAddress,deliveryAddress}}>
             {children}
         </appContext.Provider>
     )

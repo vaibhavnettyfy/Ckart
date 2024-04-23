@@ -102,7 +102,7 @@ function LoginWithPassword() {
               alt={""}
               width={20}
               height={20}
-              className="w-[18px] object-contain rounded-lg"
+              className="sm:w-[18px] w-[14px] object-contain rounded-lg"
               src={"/ArrowRight.svg"}
             />
           </div>

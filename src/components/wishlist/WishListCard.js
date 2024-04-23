@@ -23,16 +23,16 @@ function WishListCard({ index, wishlistDetails, callbackHandler }) {
   const [quantity, setQuantity] = useState(1);
   const cartId = cookies.get("CARTID");
   const userDetails = cookies.get("USERDETAILS");
-  const [selectedQuantitys,setSelectedQuantitys] = useState(1);
+  const [selectedQuantitys, setSelectedQuantitys] = useState(1);
   const [totalAmount, setTotalAmount] = useState(0);
 
   const setQuantityHandler = (value) => {
     setQuantity(value);
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     setQuantity(productId.minQuantity)
-  },[productId.minQuantity]);
+  }, [productId.minQuantity]);
 
   const cartHandler = async (id) => {
     try {
@@ -62,9 +62,9 @@ function WishListCard({ index, wishlistDetails, callbackHandler }) {
         callbackHandler();
         errorNotification(message);
       }
-    }catch(err){
+    } catch (err) {
       console.log("Error: " + err);
-    }finally{
+    } finally {
 
     }
   }
@@ -97,7 +97,7 @@ function WishListCard({ index, wishlistDetails, callbackHandler }) {
   return (
     <TableRow key={index}>
       <TableCell>
-        <div className="flex gap-3 items-center">
+        <div className="flex gap-3 items-center w-max">
           <Image
             alt={""}
             width={100}
@@ -107,15 +107,14 @@ function WishListCard({ index, wishlistDetails, callbackHandler }) {
           />
           <div>
             <div className="font-semibold">
-              {productId?.productName ? productId?.productName : "-"}
+              {productId?.productName ? `${productId?.productName.slice(0, 40)}...` : "-"}
             </div>
             {/* <div className="text-[13px] text-[#5D5F5F] my-[2px]">
               Diameter: 8mm
             </div> */}
             <div className="text-[13px] text-[#5D5F5F]">
-              {`Pieces per Bundle: ${
-                productId?.pieces ? productId?.pieces : 0
-              }`}
+              {`Pieces per Bundle: ${productId?.pieces ? productId?.pieces : 0
+                }`}
             </div>
           </div>
         </div>
@@ -140,7 +139,7 @@ function WishListCard({ index, wishlistDetails, callbackHandler }) {
           >
             View Product
           </Button>
-          <Button size={"sm"} className="!text-sm !capitalize px-5" onClick={()=>cartHandler(productId?.id)}>
+          <Button size={"sm"} className="!text-sm !capitalize px-5" onClick={() => cartHandler(productId?.id)}>
             Add to Cart
           </Button>
           <Button

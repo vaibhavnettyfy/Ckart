@@ -61,6 +61,7 @@ export default function ProductDetails({ detailsData, callBackHandler }) {
   const [wishList, setWishList] = useState(false);
   const [selectedQuantitys, setSelectedQuantitys] = useState(1);
   const [productsImage, setProductImage] = useState([]);
+  const [open, setOpen] = useState(false);
   const userLoginFlag = cookies.get("token");
   const userDetails = cookies.get("USERDETAILS");
   const cartId = cookies.get("CARTID");
@@ -73,11 +74,11 @@ export default function ProductDetails({ detailsData, callBackHandler }) {
     const data =
       image && image.length > 0
         ? image.map((res) => {
-            return {
-              original: res.image ? res.image : "",
-              thumbnail: res.image ? res.image : "",
-            };
-          })
+          return {
+            original: res.image ? res.image : "",
+            thumbnail: res.image ? res.image : "",
+          };
+        })
         : [];
     setProductImage(data);
   };
@@ -153,19 +154,19 @@ export default function ProductDetails({ detailsData, callBackHandler }) {
   };
 
   return (
-    <div className="my-20">
+    <div className="lg:my-20 md:my-16 sm:my-10 my-5">
       <div className="container px-3 sm:px-6">
         <div>
-          <div className="grid grid-cols-2 gap-8">
-            <div>
+          <div className="grid lg:grid-cols-2 gap-8">
+            <div className="col-span-1">
               <ImageGallery items={productsImage} autoPlay={true} />
             </div>
             <div>
               <div>
-                <div className="text-[22px] font-semibold mb-2">
+                <div className="lg:text-[22px] md:text-xl text-lg font-semibold mb-2">
                   {productName ? productName : "-"}
                 </div>
-                <div className="text-[#42545E] font-normal">
+                <div className="text-[#42545E] font-normal sm:text-base text-sm">
                   {description ? description : "-"}
                 </div>
                 <div className="my-3">
@@ -177,24 +178,24 @@ export default function ProductDetails({ detailsData, callBackHandler }) {
                         </span>{" "}
                         8mm
                       </div> */}
-                      <div className="text-sm font-semibold">
+                      <div className="sm:text-sm text-xs font-semibold">
                         <span className="text-[#5F6C72] font-normal">
                           Pieces per Bundle :{" "}
                         </span>{" "}
                         {pieces ? pieces : "-"}
                       </div>
-                      <div className="text-sm font-semibold">
+                      <div className="sm:text-sm text-xs font-semibold">
                         <span className="text-[#5F6C72] font-normal">
                           Availability :{" "}
                         </span>{" "}
-                        {console.log("quantity",quantity)}
-                        {quantity? (
+                        {console.log("quantity", quantity)}
+                        {quantity ? (
                           <span className="text-green">In Stock</span>
                         ) : (
                           <span className="text-[#DA3E31]">Out of stock</span>
                         )}
                       </div>
-                      {/* <div className="text-sm font-semibold">
+                      {/* <div className="sm:text-sm text-xs font-semibold">
                         <span className="text-[#5F6C72] font-normal">
                           Dimension :{" "}
                         </span>{" "}
@@ -202,19 +203,19 @@ export default function ProductDetails({ detailsData, callBackHandler }) {
                       </div> */}
                     </div>
                     <div className="flex flex-col gap-1">
-                      {/* <div className="text-sm font-semibold">
+                      {/* <div className="sm:text-sm text-xs font-semibold">
                         <span className="text-[#5F6C72] font-normal">
                           Availability :{" "}
                         </span>{" "}
                         In Stock
                       </div> */}
-                      <div className="text-sm font-semibold">
+                      <div className="sm:text-sm text-xs font-semibold">
                         <span className="text-[#5F6C72] font-normal">
                           Brand :{" "}
                         </span>{" "}
                         {brand ? brand : "-"}
                       </div>
-                      <div className="text-sm font-semibold">
+                      <div className="sm:text-sm text-xs font-semibold">
                         <span className="text-[#5F6C72] font-normal">
                           Category :{" "}
                         </span>{" "}
@@ -224,10 +225,10 @@ export default function ProductDetails({ detailsData, callBackHandler }) {
                   </div>
                 </div>
                 <div className="flex gap-1 items-center">
-                  <div className="font-semibold text-primary text-2xl">
+                  <div className="font-semibold text-primary lg:text-2xl md:text-xl text-lg">
                     {`₹ ${price ? price : 0}`}
                   </div>
-                  <div className="text-[#77878F] text-lg font-normal line-through">
+                  <div className="text-[#77878F] lg:text-lg md:text-base text-sm font-normal line-through">
                     ₹999.00
                   </div>
                   {/* <div className="text-sm px-2 py-1 bg-[#EFD33D] font-semibold rounded-sm ml-2">
@@ -246,10 +247,10 @@ export default function ProductDetails({ detailsData, callBackHandler }) {
                     quantity={selectedQuantitys}
                   />
                 </div>
-                <div className="flex gap-3 my-5">
+                <div className="flex flex-wrap sm:gap-3 gap-2 sm:my-5 my-3">
                   <Button
                     size={"lg"}
-                    className="w-full shadow-none"
+                    className="shadow-none"
                     onClick={() => addTocartHandler()}
                   >
                     <div className="flex gap-2 items-center">
@@ -267,7 +268,7 @@ export default function ProductDetails({ detailsData, callBackHandler }) {
                     button={
                       <Button
                         size="lg"
-                        className="w-full shadow-none"
+                        className="shadow-none"
                         variant="outline"
                       >
                         Book Appointment
@@ -276,7 +277,7 @@ export default function ProductDetails({ detailsData, callBackHandler }) {
                   />
                   <Button
                     size="lg"
-                    className="w-full shadow-none"
+                    className="shadow-none"
                     variant="outline"
                     onClick={() => router.push("/cart")}
                   >
@@ -284,13 +285,13 @@ export default function ProductDetails({ detailsData, callBackHandler }) {
                   </Button>
                 </div>
                 <div className="border rounded-lg py-2 px-3 w-fit">
-                  <Dialog>
+                  <Dialog open={open} onOpenChange={setOpen}>
                     <DialogTrigger>
                       <TooltipProvider>
                         <Tooltip>
                           <TooltipTrigger>
                             {" "}
-                            <div className="text-lg font-normal">
+                            <div className="md:text-lg sm:text-base text-sm font-normal">
                               Delivery Pincode:-{" "}
                               <span className="font-semibold">362011</span>
                             </div>
@@ -315,8 +316,8 @@ export default function ProductDetails({ detailsData, callBackHandler }) {
                             </div>
                           </div>
                           <div className="flex justify-end gap-2">
-                            <Button size="sm">Update</Button>
-                            <Button size="sm" variant="outline">
+                            <Button size="sm" onClick={() => formik.handleSubmit()}>Update</Button>
+                            <Button size="sm" variant="outline" onClick={() => setOpen(false)}>
                               Cancel
                             </Button>
                           </div>
@@ -325,14 +326,14 @@ export default function ProductDetails({ detailsData, callBackHandler }) {
                     </DialogContent>
                   </Dialog>
                 </div>
-                <div className="mt-5 mb-7">
-                  <div className="flex justify-between items-center">
-                    <div className="flex gap-1">
+                <div className="sm:mt-5 mt-3 sm:mb-7 mb-4">
+                  <div className="flex gap-2 justify-between items-center sm:text-base text-sm">
+                    <div className="flex gap-1 items-center">
                       <Image
                         alt={""}
                         width={24}
                         height={24}
-                        className="cursor-pointer"
+                        className="cursor-pointer sm:w-6 sm:h-6 w-5 h-5"
                         src={
                           !isWishlist
                             ? "/details/Heart.svg"
@@ -342,7 +343,7 @@ export default function ProductDetails({ detailsData, callBackHandler }) {
                       />
                       <div>Add to Wishlist</div>
                     </div>
-                    <div className="flex gap-2 items-center mr-10">
+                    <div className="flex gap-2 items-center sm:mr-10">
                       <div>Share product:</div>
                       <div className="flex gap-2 items-center">
                         <Image
@@ -391,20 +392,20 @@ export default function ProductDetails({ detailsData, callBackHandler }) {
                 </div>
               </div>
             </div>
-            <div className="col-span-2">
+            <div className="lg:col-span-2">
               <Tabs defaultValue="tab1" className="border rounded-lg">
                 <TabsList className="w-full bg-transparent border-b rounded-none">
                   <TabsTrigger value="tab1">Description</TabsTrigger>
-                  <TabsTrigger value="tab2">Additional information</TabsTrigger>
+                  {/* <TabsTrigger value="tab2">Additional information</TabsTrigger>
                   <TabsTrigger value="tab3">Specification</TabsTrigger>
-                  <TabsTrigger value="tab4">Review</TabsTrigger>
+                  <TabsTrigger value="tab4">Review</TabsTrigger> */}
                 </TabsList>
                 <TabsContent value="tab1">
                   <ProductDescription description={description} />
                 </TabsContent>
-                <TabsContent value="tab2">Additional information</TabsContent>
+                {/* <TabsContent value="tab2">Additional information</TabsContent>
                 <TabsContent value="tab3">Specification</TabsContent>
-                <TabsContent value="tab4">Review</TabsContent>
+                <TabsContent value="tab4">Review</TabsContent> */}
               </Tabs>
             </div>
           </div>

@@ -32,5 +32,6 @@ import SponsoredProducts from './SponsoredProducts';
 import Appointment from './Appointment';
 import Selling from './Selling';
 import OurProcess from './OurProcess';
+import Whyus from './Whyus';
 
-export { Banner, ProductCollection, SponsoredProducts, Appointment, Selling, OurProcess }
+export { Banner, ProductCollection, SponsoredProducts, Appointment, Selling, OurProcess, Whyus }

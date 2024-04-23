@@ -171,11 +171,13 @@ export const bulkOrderValidation = Yup.object({
       "Invalid email format"
     )
     .required("Email is required"),
-    estimatedQuantity : Yup.string()
+  estimatedQuantity: Yup.string()
     .trim()
     .matches(/^\d+$/, "Quantity must contain only numbers")
     .required("Quantity is required"),
-  deliveryPinCode: Yup.string().matches(/^\d{6}$/, "Invalid pincode format").required("Pincode is required"),
+  deliveryPinCode: Yup.string()
+    .matches(/^\d{6}$/, "Invalid pincode format")
+    .required("Pincode is required"),
   termsConditions: Yup.boolean()
     .oneOf([true], "Please accept the terms and conditions")
     .required("Terms and conditions must be accepted"),
@@ -248,30 +250,58 @@ export const billingAddressValidation = Yup.object({
   address1: Yup.string().trim().required("Address line 1 is required"),
   address2: Yup.string().trim().required("Address line 2 is required"),
   phoneNo: Yup.string()
-  .trim()
-  .matches(/^\d+$/, "Phone number must contain only numbers")
-  .length(10, "Phone number must be 10 digits")
-  .required("Phone number is required"),
+    .trim()
+    .matches(/^\d+$/, "Phone number must contain only numbers")
+    .length(10, "Phone number must be 10 digits")
+    .required("Phone number is required"),
   landmark: Yup.string().trim().required("Landmark is required"),
   state: Yup.string().trim().required("State is required"),
   city: Yup.string().trim().required("city is required"),
-  pincode: Yup.string().trim().required("pincode is required"),
+  pincode: Yup.string()
+    .matches(/^\d{6}$/, "Invalid pincode format")
+    .required("Pincode is required"),
   isBillingAddress: Yup.number().required("isBillingAddress is required"),
 });
-
 
 export const shippingAddressValidation = Yup.object({
   fullName: Yup.string().trim().required("Full name is required"),
   address1: Yup.string().trim().required("Address line 1 is required"),
   address2: Yup.string().trim().required("Address line 2 is required"),
   phoneNo: Yup.string()
+    .trim()
+    .matches(/^\d+$/, "Phone number must contain only numbers")
+    .length(10, "Phone number must be 10 digits")
+    .required("Phone number is required"),
+  landmark: Yup.string().trim().required("Landmark is required"),
+  state: Yup.string().trim().required("State is required"),
+  city: Yup.string().trim().required("city is required"),
+  pincode: Yup.string()
+    .matches(/^\d{6}$/, "Invalid pincode format")
+    .required("Pincode is required"),
+  isBillingAddress: Yup.number().required("isBillingAddress is required"),
+});
+
+export const contactUsValidation = Yup.object({
+  name: Yup.string().trim().required("Name is required"),
+  email: Yup.string()
+  .trim()
+  .matches(
+    /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/,
+    "Invalid email format"
+  )
+  .required("Email is required"),
+  phoneNo: Yup.string()
   .trim()
   .matches(/^\d+$/, "Phone number must contain only numbers")
   .length(10, "Phone number must be 10 digits")
   .required("Phone number is required"),
-  landmark: Yup.string().trim().required("Landmark is required"),
-  state: Yup.string().trim().required("State is required"),
-  city: Yup.string().trim().required("city is required"),
-  pincode: Yup.string().trim().required("pincode is required"),
-  isBillingAddress: Yup.number().required("isBillingAddress is required"),
+  message: Yup.string().trim().required("message is required"),
+  subject: Yup.string().trim().required("subject is required"),
 });
+
+
+export const updateLocationValidation = Yup.object({
+  pincode: Yup.string()
+    .matches(/^\d{6}$/, "Invalid pincode format")
+    .required("Pincode is required")
+})

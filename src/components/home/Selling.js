@@ -12,8 +12,8 @@ const Selling = () => {
     <div className='lg:py-16 md:py-12 sm:py-8 py-5'>
       <div className='container px-3 sm:px-6'>
         <div className='flex md:flex-row flex-col xl:gap-20 lg:gap-14 md:gap-8 gap-5 items-center'>
-          <div className='md:w-1/2 p-14'>
-            <Image alt={''} width={630} height={595} className='lg:w-[630px] md:w-[500px] w-[350px] object-contain rounded-lg relative md:right-0 right-8' src={'/selling/selling.svg'} />
+          <div className='md:w-1/2 sm:p-14 p-10'>
+            <Image alt={''} width={630} height={595} className='lg:w-[630px] md:w-[500px] w-[350px] object-contain rounded-lg' src={'/selling/selling.svg'} />
           </div>
           <div className='xl:w-1/2 md:w-[50%]'>
             <div className='flex items-center md:justify-start justify-center sm:gap-3 gap-2 sm:mb-2 mb-1'>

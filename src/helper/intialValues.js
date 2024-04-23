@@ -172,3 +172,15 @@ export const  userShippingAddressIv ={
     addLet: "",
     addLong: ""
 };
+
+export const contactUsIv ={
+    name : "",
+    email : "",
+    phoneNo:"",
+    message : "",
+    subject : "",
+};
+
+export const updateLocationIv = {
+    pincode :"",
+};

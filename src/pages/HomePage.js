@@ -1,5 +1,5 @@
 "use client";
-import { Banner, ProductCollection, SponsoredProducts, Appointment, Selling, OurProcess } from '@/components/home'
+import { Banner, ProductCollection, SponsoredProducts, Appointment, Selling, OurProcess, Whyus } from '@/components/home'
 
 const HomePage = () => {
   return (
@@ -10,6 +10,7 @@ const HomePage = () => {
       <Appointment />
       <Selling />
       <OurProcess />
+      <Whyus />
     </>
   )
 }

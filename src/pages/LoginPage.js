@@ -14,7 +14,7 @@ export default function LoginPage() {
   const router = useRouter();
   return (
     <div className="flex h-screen overflow-hidden">
-      <div className="w-3/5">
+      <div className="lg:w-3/5 hidden lg:block">
         <Image
           src={"/LoginBanner.svg"}
           alt=""
@@ -23,10 +23,10 @@ export default function LoginPage() {
           className="object-cover h-full w-full"
         />
       </div>
-      <div className="w-2/5">
-        <div className="flex flex-col items-center h-full max-w-[400px] m-auto justify-center">
+      <div className="lg:w-2/5 w-full">
+        <div className="flex flex-col items-center h-full max-w-[400px] m-auto justify-center p-5">
 
-          <Link href="/" className="flex flex-col gap-5 w-full">
+          <Link href="/" className="flex flex-col sm:gap-5 gap-3 w-full">
             <Image
               src={"/logoBlack.png"}
               alt=""
@@ -35,7 +35,7 @@ export default function LoginPage() {
               className="lg:w-[170px] md:w-[150px] sm:w-[110px] w-[100px] md:h-huto cursor-pointer"
             />
             <div className="mb-2">
-              <div className="text-2xl font-bold mt-2">Welcome Back</div>
+              <div className="sm:text-2xl text-xl font-bold mt-2">Welcome Back</div>
             </div>
           </Link>
           <Tabs defaultValue="tab1" className="w-full mt-3">
@@ -48,13 +48,13 @@ export default function LoginPage() {
               </TabsTrigger>
             </TabsList>
             <TabsContent value="tab1" className="p-0 w-full">
-              <LoginWithPassword/>
+              <LoginWithPassword />
             </TabsContent>
             <TabsContent value="tab2" className="p-0">
-              <LoginWithOtp/>
+              <LoginWithOtp />
             </TabsContent>
           </Tabs>
-          <div className="">
+          <div className="sm:text-base text-sm">
             New member? <Link href="/signup">Register Now</Link>
           </div>
         </div>

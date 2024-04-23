@@ -57,14 +57,15 @@ function UserShippingAddress({ addressDetails }) {
       formik.setFieldValue("city", "");
       formik.setFieldValue("addLet", "");
       formik.setFieldValue("addLong", "");
+      // formik.errors.pincode = "pincode is not a valid";
     }
   };
 
-  const userUpdateAddressHandler = async() => {
-    const {data,message,success,count} = await shippingAddressUpdateApiHandler(id,formik.values);
-    if(success){
+  const userUpdateAddressHandler = async () => {
+    const { data, message, success, count } = await shippingAddressUpdateApiHandler(id, formik.values);
+    if (success) {
       successNotification(message);
-    }else{
+    } else {
       errorNotification(message);
     }
   };
@@ -101,13 +102,14 @@ function UserShippingAddress({ addressDetails }) {
       setPinCodeFlag(false);
       formik.setFieldValue("state", "");
       formik.setFieldValue("city", "");
+      // formik.errors.pincode = "pincode is not a valid";
     }
   }, [formik.values.pincode]);
 
   return (
     <div className="border rounded-lg">
       <div className="font-semibold py-2 px-3 border-b">Shipping Address</div>
-      <div className="p-5 grid grid-cols-2 gap-5">
+      <div className="sm:p-5 p-3 grid grid-cols-2 sm:gap-5 gap-3">
         <div className="col-span-2">
           <Label htmlFor="">Full Name</Label>
           <Input
@@ -160,12 +162,22 @@ function UserShippingAddress({ addressDetails }) {
           />
         </div>
         <div>
+          <Label htmlFor="">Pin Code</Label>
+          <Input
+            placeholder=""
+            className="w-full"
+            name="pincode"
+            formik={formik}
+            max={30}
+          />
+        </div>
+        <div>
           <Label htmlFor="">State</Label>
           <Input
             placeholder=""
             className="w-full"
             name="state"
-            disabled={pincodeFlag}
+            disabled={true}
             formik={formik}
             max={50}
           />
@@ -176,21 +188,12 @@ function UserShippingAddress({ addressDetails }) {
             placeholder=""
             className="w-full"
             name="city"
-            disabled={pincodeFlag}
+            disabled={true}
             formik={formik}
             max={50}
           />
         </div>
-        <div>
-          <Label htmlFor="">Pin Code</Label>
-          <Input
-            placeholder=""
-            className="w-full"
-            name="pincode"
-            formik={formik}
-            max={30}
-          />
-        </div>
+
         <div className="col-span-2">
           <Button
             size="sm"

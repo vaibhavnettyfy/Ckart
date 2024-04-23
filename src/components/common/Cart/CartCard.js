@@ -14,7 +14,7 @@ import QtyCard from "../product/QtyCard";
 import { removeProductApiFromCart } from "@/Service/AddTocart/AddToCart.service";
 import { errorNotification, successNotification } from "@/helper/Notification";
 
-function CartCard({ cartDetails, index, cartId ,callBackHandler}) {
+function CartCard({ cartDetails, index, cartId, callBackHandler }) {
   const { id, productId, quantity } = cartDetails || {};
   const [quantitys, setQuantitys] = useState(1);
   const [price, setPrice] = useState(0);
@@ -40,11 +40,11 @@ function CartCard({ cartDetails, index, cartId ,callBackHandler}) {
       cartId,
       productId
     );
-    if(success) {
-        callBackHandler();
-        successNotification(message);
-    }else{
-        errorNotification(message);
+    if (success) {
+      callBackHandler();
+      successNotification(message);
+    } else {
+      errorNotification(message);
     }
   };
 
@@ -54,17 +54,17 @@ function CartCard({ cartDetails, index, cartId ,callBackHandler}) {
         <X onClick={() => removeProductFromCart(cartId, productId?.id)} />
       </TableCell>
       <TableCell>
-        <div className="flex gap-3 items-center">
+        <div className="flex gap-3 items-center w-max">
           <Image
             alt={""}
             width={100}
             height={80}
             className="w-[80px] object-contain"
-            src={productId?.image ? productId?.image:"/ProductImage.svg"}
+            src={productId?.image ? productId?.image : "/ProductImage.svg"}
           />
           <div>
             <div className="font-semibold">
-              {productId?.productName ? productId.productName : "-"}
+              {productId?.productName ? `${productId.productName.slice(0, 20)}...` : "-"}
             </div>
             <div className="text-[13px] text-[#5D5F5F]">
               {`Pieces per Bundle: ${productId.pieces ? productId.pieces : 0}`}

@@ -35,7 +35,7 @@ export default function Product() {
   const [produtListData, setProductListData] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [category, setCategory] = useState("");
-  const [subCategory,setSubCategory] = useState("");
+  const [subCategory, setSubCategory] = useState("");
   const [sponsor, setSponsor] = useState(0);
   const [pageSize, setPageSize] = useState("10");
   const [totalPage, setTotalPage] = useState(0);
@@ -91,19 +91,19 @@ export default function Product() {
   };
 
   const searchHandler = (value) => {
-    getAllProductListHandler(value, pageSize, category, subCategory,sponsor, currentPage);
+    getAllProductListHandler(value, pageSize, category, subCategory, sponsor, currentPage);
   };
 
   const categoryHandler = (value) => {
     setCategory(value);
     setSubCategory("");
-    getAllProductListHandler(searchText, pageSize, value,subCategory,sponsor, currentPage);
+    getAllProductListHandler(searchText, pageSize, value, subCategory, sponsor, currentPage);
   };
 
-  const subCategoryHandler = (value) =>{
+  const subCategoryHandler = (value) => {
     setSubCategory(value);
     setCategory("");
-    getAllProductListHandler(searchText, pageSize, category,value,sponsor, currentPage);
+    getAllProductListHandler(searchText, pageSize, category, value, sponsor, currentPage);
   };
 
   const getAllProductListHandler = async (
@@ -144,7 +144,7 @@ export default function Product() {
 
   const handlePageChange = (value) => {
     setCurrentPage(value);
-    getAllProductListHandler(searchText, pageSize, category, subCategory,sponsor, value);
+    getAllProductListHandler(searchText, pageSize, category, subCategory, sponsor, value);
   };
 
   const callBackHandler = () => {
@@ -160,9 +160,9 @@ export default function Product() {
   };
 
   return (
-    <div className="my-20">
+    <div className="lg:my-20 md:my-16 sm:my-10 my-5">
       <div className="container px-3 sm:px-6">
-        <div className="grid grid-cols-4 gap-5">
+        <div className="grid md:grid-cols-4 grid-cols-1 gap-5">
           <div className="col-span-1">
             <div>
               <div className="text-lg font-medium uppercase text-[#191C1F] mb-3">
@@ -198,7 +198,7 @@ export default function Product() {
                           <AccordionContent>
                             <div className="px-4">
                               {response?.subCategorys &&
-                              response?.subCategorys.length > 0 ? (
+                                response?.subCategorys.length > 0 ? (
                                 response?.subCategorys.map((item, index) => {
                                   return (
                                     <div className="flex items-center space-x-2 col-span-2 mt-2">
@@ -245,7 +245,7 @@ export default function Product() {
               <Separator />
             </div>
           </div>
-          <div className="col-span-3">
+          <div className="md:col-span-3">
             <div className="relative text-gray-600 border w-[300px]">
               <input
                 className="bg-white w-full md:px-4 px-3 md:py-[10px] py-2 pr-10 text-[#77878F] text-sm focus:outline-none"
@@ -278,7 +278,7 @@ export default function Product() {
                 </div>
               </div>
             </div>
-            <div className="grid grid-cols-3 gap-3 ">
+            <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-3 grid-cols-2 lg:gap-5 sm:gap-3 gap-2">
               {produtListData && produtListData.length > 0 ? (
                 produtListData.map((item, index) => {
                   return (
@@ -296,7 +296,7 @@ export default function Product() {
                 </div>
               )}
             </div>
-            <div>
+            <div className="mt-2">
               <Pagination>
                 <PaginationContent className="md:gap-2 gap-1">
                   <PaginationItem>

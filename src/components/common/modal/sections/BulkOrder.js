@@ -27,7 +27,7 @@ import { getDetailsByPincode, projectTyesData } from "@/helper";
 import Cookies from "universal-cookie";
 import { bulkOrderValidation } from "@/helper/Validation";
 
-const BulkOrder = () => {
+const BulkOrder = ({ setOpen }) => {
   const cookies = new Cookies();
   const [loading, setLoading] = useState(false);
   const [categoryLoader, setCategoryLoader] = useState(false);
@@ -108,6 +108,7 @@ const BulkOrder = () => {
       );
       if (success) {
         successNotification(message);
+        setOpen(false)
       } else {
         errorNotification(message);
       }
@@ -132,14 +133,10 @@ const BulkOrder = () => {
     if (event.keyCode === 13 && skuValue.trim() !== "") {
       setSkuValueData([skuValue, ...skuValueData]);
       setSkuValues("");
-      console.log("Value", [skuValue, ...skuValueData]);
       formik.setFieldValue("skus", [skuValue, ...skuValueData]);
     }
   };
 
-  {
-    console.log("Formik", formik.values);
-  }
 
   useEffect(() => {
     if (formik.values.deliveryPinCode.length === 6) {
@@ -165,19 +162,16 @@ const BulkOrder = () => {
     availableSlotsByDate(formateData);
   };
 
-  const deleteSkuHandler = (index) =>{
+  const deleteSkuHandler = (index) => {
     const newSkuValueData = [...skuValueData];
-    newSkuValueData.splice(index, 1); 
+    newSkuValueData.splice(index, 1);
     setSkuValueData(newSkuValueData);
     formik.setFieldValue("skus", newSkuValueData);
   };
 
-
-  {console.log('Formik',formik.values)};
-
   return (
     <div className="max-h-[500px] overflow-y-auto px-2">
-      <div className="grid grid-cols-3 gap-3 py-5">
+      <div className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-3 py-5">
         <div>
           <Label htmlFor="">Full Name</Label>
           <Input className="block" name="fullName" formik={formik} max={100} />
@@ -188,9 +182,9 @@ const BulkOrder = () => {
         </div>
         <div>
           <Label htmlFor="">Email Address</Label>
-          <Input
+          <Input className="block"
             type="email"
-            className="block"
+
             name="email"
             formik={formik}
             max={100}
@@ -198,8 +192,8 @@ const BulkOrder = () => {
         </div>
         <div>
           <Label htmlFor="">Company Name</Label>
-          <Input
-            className="block"
+          <Input className="block"
+
             name="companyName"
             formik={formik}
             max={100}
@@ -238,19 +232,18 @@ const BulkOrder = () => {
         </div>
         <div>
           <Label htmlFor="">Estimated Quantity of Materials</Label>
-          <Input
+          <Input className="block"
             type="number"
-            className="block"
+
             name="estimatedQuantity"
             formik={formik}
             max={10}
           />
         </div>
-
-        <div className="col-span-3">
+        <div className="md:col-span-3 sm:col-span-2 col-span-1">
           <Label htmlFor="">Specific SKUs (if known)</Label>
-          <Input
-            className="block"
+          <Input className="block"
+
             name="skus"
             value={skuValue}
             onChange={(event) => skuHandler(event.target.value)}
@@ -266,7 +259,7 @@ const BulkOrder = () => {
                     className="border rounded-3xl flex items-center "
                   >
                     <div className="px-2 py-[1px]">{item}</div>
-                    <div className="pr-1 cursor-pointer" onClick={()=>deleteSkuHandler(index)}>
+                    <div className="pr-1 cursor-pointer" onClick={() => deleteSkuHandler(index)}>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="1em"
@@ -316,8 +309,8 @@ const BulkOrder = () => {
         </div>
         <div>
           <Label htmlFor="">Delivery PIN Code</Label>
-          <Input
-            className="block"
+          <Input className="block"
+
             name="deliveryPinCode"
             formik={formik}
             max={250}
@@ -348,8 +341,8 @@ const BulkOrder = () => {
         </div>
         <div>
           <Label htmlFor="">Specific Brand Preference</Label>
-          <Input
-            className="block"
+          <Input className="block"
+
             name="brandPreference"
             formik={formik}
             max={100}
@@ -357,9 +350,9 @@ const BulkOrder = () => {
         </div>
         <div>
           <Label htmlFor="">Delivery Timeline</Label>
-          <Input
+          <Input className="block"
             type="date"
-            className="block"
+
             name="deliveryTimeline"
             formik={formik}
             max={100}
@@ -367,9 +360,9 @@ const BulkOrder = () => {
         </div>
         <div>
           <Label htmlFor="">Indicative Budget</Label>
-          <Input
+          <Input className="block"
             type="number"
-            className="block"
+
             name="indicativeBudget"
             formik={formik}
             max={250}
@@ -405,12 +398,12 @@ const BulkOrder = () => {
           </RadioGroup>
         </div>
 
-        <div className="col-span-3 grid grid-cols-3">
+        <div className="md:col-span-3 sm:col-span-2 col-span-1 grid sm:grid-cols-3">
           <div className="col-span-1">
             <Label htmlFor="">Meeting Date</Label>
-            <Input
+            <Input className="block"
               type="date"
-              className="block"
+
               name="date"
               onChange={(event) => dateHandler(event.target.value)}
             />
@@ -420,7 +413,7 @@ const BulkOrder = () => {
           </div>
         </div>
         {formik.values.date && (
-          <div className="col-span-3">
+          <div className="md:col-span-3 sm:col-span-2 col-span-1">
             <Label htmlFor="">Available slots</Label>
             <div className="flex gap-1 flex-wrap">
               {availableSlotData && availableSlotData.length > 0 ? (
@@ -429,11 +422,10 @@ const BulkOrder = () => {
                     <div
                       key={index}
                       onClick={() => availableSlotHandler(item.id, item.time)}
-                      className={`border rounded-md px-3 py-1 w-fit cursor-pointer ${
-                        item.id === selectedSlotData
-                          ? "bg-primary text-white"
-                          : ""
-                      }`}
+                      className={`border rounded-md px-3 py-1 w-fit cursor-pointer ${item.id === selectedSlotData
+                        ? "bg-primary text-white"
+                        : ""
+                        }`}
                     >
                       <div className="text-sm font-semibold">{item.time}</div>
                       {/* <div className="text-xs text-[#5D5F5F]">{item.time}</div> */}
@@ -449,7 +441,7 @@ const BulkOrder = () => {
             ) : null}
           </div>
         )}
-        <div className="col-span-3">
+        <div className="md:col-span-3 sm:col-span-2 col-span-1">
           <Label htmlFor="">Questions/Comments</Label>
           <Textarea
             placeholder="Enter your message here....."
@@ -461,7 +453,7 @@ const BulkOrder = () => {
             max={2000}
           />
         </div>
-        <div className="col-span-3">
+        <div className="md:col-span-3 sm:col-span-2 col-span-1">
           <div className="flex items-center space-x-2 col-span-2 mt-2">
             <Checkbox
               id="address"

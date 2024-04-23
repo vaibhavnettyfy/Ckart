@@ -1,7 +1,5 @@
 import { Urbanist } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/common/Header";
-import Footer from "@/components/common/Footer";
 import { siteMetadata } from "@/helper/siteMetaData";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";

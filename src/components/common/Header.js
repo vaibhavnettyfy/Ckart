@@ -7,25 +7,10 @@ import Cookies from "universal-cookie";
 import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, } from "@/components/ui/dropdown-menu";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from "@/components/ui/select";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger, } from "@/components/ui/tooltip";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, } from "@/components/ui/dialog";
 import { Label } from "../ui/label";
 import { Button } from "../ui/button";
 import BookAppointment from "./modal/BookAppointment";
@@ -33,6 +18,10 @@ import MultiSelectDropdown from "./MultiSelectDropdown";
 import { MapPin, Search } from "lucide-react";
 import { productListByCart } from "@/Service/AddTocart/AddToCart.service";
 import { useAppContext } from "@/context";
+import { useFormik } from "formik";
+import { updateLocationIv } from "@/helper/intialValues";
+import { updateLocationValidation } from "@/helper/Validation";
+import { getDetailsByPincode } from "@/helper";
 
 export const categoryOption = [
   { value: "Category 1" },
@@ -55,14 +44,56 @@ export default function Header() {
   const userLoginFlag = cookies.get("token");
   const cartId = cookies.get("CARTID");
   const [cartList, setCartList] = useState([]);
+  const [location, setLoaction] = useState();
+  const [userAddress, setUserAddress] = useState([]);
+  const [open, setOpen] = useState(false);
 
-  const { cartLength, setCartLength } = useAppContext();
+  const { cartLength, setCartLength, setDeliveryAddress, deliveryAddress } =
+    useAppContext();
 
+  const deliveryAddressData = cookies.get("deliveryAddress");
   useEffect(() => {
     if (cartId) {
       getProductListByCartId(cartId);
     }
   }, [cartId]);
+
+  useEffect(() => {
+    if (!deliveryAddressData?.postalCode && !deliveryAddressData?.suburb) {
+      if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(({ coords }) => {
+          const { latitude, longitude } = coords;
+          setLoaction({ latitude, longitude });
+          fetchApiData({ latitude, longitude });
+        });
+      }
+    } else {
+      setDeliveryAddress(deliveryAddressData);
+    }
+  }, []);
+
+  const fetchApiData = async ({ latitude, longitude }) => {
+    // solution -4
+    const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`;
+    fetch(url)
+      .then((res) => res.json())
+      .then((data) => {
+        setUserAddress(data?.address);
+        console.log(data.address);
+        const payload = {
+          postalCode: data?.address?.postcode,
+          suburb: data?.address?.suburb,
+        };
+        setDeliveryAddress(payload);
+        cookies.set("deliveryAddress", payload);
+      });
+  };
+
+  useEffect(() => {
+    if (location) {
+      fetchApiData(location);
+    }
+  }, [location]);
 
   const getProductListByCartId = async (cartId) => {
     const { data, message, success } = await productListByCart(cartId);
@@ -112,8 +143,31 @@ export default function Header() {
     },
   ];
 
-  const filteredDropDown = userLogin ? profileDropDown :[];
-  
+  const filteredDropDown = userLogin ? profileDropDown : [];
+
+  const updateLocationHandler = async () => {
+    const response = await getDetailsByPincode(formik.values.pincode);
+    if (response.data.status == "OK") {
+      const location = response.data.results[0].address_components;
+      const l1 = response.data.results[0];
+      const payload = {
+        postalCode: formik.values.pincode,
+        suburb: location.find((component) => component.types.includes("locality")).long_name
+      }
+      setDeliveryAddress(payload);
+      cookies.set("deliveryAddress", payload);
+      setOpen(false);
+    } else {
+      formik.setErrors({ pincode: "pincode is not a valid" });
+    }
+  };
+
+  const formik = useFormik({
+    initialValues: updateLocationIv,
+    validationSchema: updateLocationValidation,
+    onSubmit: updateLocationHandler,
+  })
+
   return (
     <>
       <div className="z-20 relative">
@@ -203,16 +257,31 @@ export default function Header() {
                 </SheetTrigger>
                 <SheetContent className="w-full">
                   <div className="mt-10 flex flex-col gap-4">
-                    <div>
-                      <MultiSelectDropdown
-                        formFieldName={"Category"}
-                        options={category}
-                        onChange={(selected) => {
-                          console.debug("selected", selected);
-                        }}
-                        prompt="All Category"
-                      />
-                    </div>
+                    {/* <MultiSelectDropdown
+                      formFieldName={"Category"}
+                      options={category}
+                      onChange={(selected) => {
+                        console.debug("selected", selected);
+                      }}
+                      prompt="All Category"
+                    /> */}
+                    <Select onValueChange={(event) => console.log("SelectedEvent", event)}>
+                      <SelectTrigger className='bg-border justify-center items-center gap-3'>
+                        <SelectValue placeholder="Select Categories" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {
+                          category && category.map((res, index) => {
+                            return (
+                              <SelectItem key={index} value={res}>
+                                {res}
+                              </SelectItem>
+                            )
+                          })
+                        }
+                      </SelectContent>
+                    </Select>
+                    <div></div>
 
                     <div className="lg:text-lg text-base text-[#6B6B6B] flex flex-col items-center gap-4">
                       <BookAppointment
@@ -237,12 +306,18 @@ export default function Header() {
                     <Separator />
 
                     <div className="text-center">
-                      <Dialog>
+                      <Dialog open={open} onOpenChange={setOpen}>
                         <DialogTrigger>
                           <TooltipProvider>
                             <Tooltip>
                               <TooltipTrigger>
-                                Delivery Pincode :- 362011
+                                {`Delivering to ${deliveryAddress.suburb
+                                  ? deliveryAddress.suburb
+                                  : "-"
+                                  } ${deliveryAddress.postalCode
+                                    ? deliveryAddress.postalCode
+                                    : "-"
+                                  }`}
                               </TooltipTrigger>
                               <TooltipContent>
                                 <p>Click to change Pincode</p>
@@ -259,13 +334,12 @@ export default function Header() {
                                   Enter an Indian pincode
                                 </Label>
                                 <div className="relative">
-                                  <Input placeholder="" className="w-full" />
-                                  <Search className="absolute top-[10px] right-3 w-5 h-5" />
+                                  <Input placeholder="" className="w-full" name="pincode" formik={formik} />
                                 </div>
                               </div>
                               <div className="flex justify-end gap-2">
-                                <Button size="sm">Update</Button>
-                                <Button size="sm" variant="outline">
+                                <Button size="sm" onClick={() => formik.handleSubmit()}>Update</Button>
+                                <Button size="sm" variant="outline" onClick={() => setOpen(false)}>
                                   Cancel
                                 </Button>
                               </div>
@@ -368,7 +442,7 @@ export default function Header() {
             </div>
             <div className="flex items-center gap-10">
               <div className="lg:flex hidden items-center">
-                <Dialog>
+                <Dialog open={open} onOpenChange={setOpen}>
                   <DialogTrigger>
                     <TooltipProvider>
                       <Tooltip>
@@ -378,7 +452,13 @@ export default function Header() {
                               <MapPin />
                             </div>
                             <div className="text-[13px] text-start">
-                              <div>Delivering to Ahmedabad 380001</div>
+                              <div>{`Delivering to ${deliveryAddress.suburb
+                                ? deliveryAddress.suburb
+                                : "-"
+                                } ${deliveryAddress.postalCode
+                                  ? deliveryAddress.postalCode
+                                  : "-"
+                                }`}</div>
                               <div className="font-semibold">
                                 Update location
                               </div>
@@ -400,13 +480,12 @@ export default function Header() {
                             Enter an Indian pincode
                           </Label>
                           <div className="relative">
-                            <Input placeholder="" className="w-full" />
-                            <Search className="absolute top-[10px] right-3 w-5 h-5" />
+                            <Input placeholder="" className="w-full" name="pincode" formik={formik} />
                           </div>
                         </div>
                         <div className="flex justify-end gap-2">
-                          <Button size="sm">Update</Button>
-                          <Button size="sm" variant="outline">
+                          <Button size="sm" onClick={() => { formik.handleSubmit() }}>Update</Button>
+                          <Button size="sm" variant="outline" onClick={() => setOpen(false)}>
                             Cancel
                           </Button>
                         </div>
@@ -417,8 +496,8 @@ export default function Header() {
               </div>
               <div className="flex md:gap-3 gap-[6px] items-center">
                 <div className="relative">
-                  <div className="absolute -top-1 border border-[#ffed32] -right-1 bg-primary rounded-full h-5 w-5 flex items-center justify-center ">
-                    <div className="text-xs font-medium leading-none text-[#ffed32]">
+                  <div className="absolute -top-1 border border-[#ffed32] -right-1 bg-primary rounded-full sm:h-5 sm:w-5 w-4 h-4 flex items-center justify-center ">
+                    <div className="sm:text-xs text-[10px] font-medium leading-none text-[#ffed32]">
                       {cartLength}
                     </div>
                   </div>
@@ -521,14 +600,30 @@ export default function Header() {
         >
           <div className="container px-3 sm:px-6 flex justify-start gap-6 items-center">
             <div>
-              <MultiSelectDropdown
+              {/* <MultiSelectDropdown
                 formFieldName={"category"}
                 options={category}
                 onChange={(selected) => {
                   console.debug("selected", selected);
                 }}
                 prompt="All Category"
-              />
+              /> */}
+              <Select onValueChange={(event) => console.log("SelectedEvent", event)}>
+                <SelectTrigger className='w-[200px] bg-border'>
+                  <SelectValue placeholder="Select Categories" />
+                </SelectTrigger>
+                <SelectContent>
+                  {
+                    category && category.map((res, index) => {
+                      return (
+                        <SelectItem key={index} value={res}>
+                          {res}
+                        </SelectItem>
+                      )
+                    })
+                  }
+                </SelectContent>
+              </Select>
             </div>
             <div className="lg:text-lg text-base text-[#6B6B6B]  flex items-center gap-6">
               <BookAppointment

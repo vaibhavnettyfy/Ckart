@@ -27,7 +27,7 @@ const ourProcessList = [
 
 const OurProcess = () => {
   return (
-    <div className='z-20 relative bg-bgsecondary md:py-16 sm:py-12 py-8 md:my-20 sm:my-14 my-8'>
+    <div className='z-20 relative bg-bgsecondary md:py-16 sm:py-12 py-8 md:mt-20 sm:mt-14 mt-8'>
       <div className='container px-3 sm:px-6'>
         <Heading head={'Our Process'} para={'Our Working Process'} />
       </div>

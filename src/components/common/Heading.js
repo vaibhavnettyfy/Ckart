@@ -8,7 +8,7 @@ const Heading = ({ head, para }) => {
         <div className='font-semibold uppercase text-primary-foreground lg:text-base md:text-sm text-xs'>{head}</div>
         <div className="border border-primary-foreground sm:w-5 w-3"></div>
       </div>
-      <div className='font-extrabold xl:text-5xl lg:text-4xl md:text-3xl text-2xl'>{para}</div>
+      <div className='font-extrabold xl:text-5xl lg:text-4xl md:text-3xl text-2xl text-center'>{para}</div>
     </div>
   )
 }

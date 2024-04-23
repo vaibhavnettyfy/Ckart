@@ -1,4 +1,5 @@
-import React from 'react'
+'use client'
+import React, { useState } from 'react'
 import {
   Dialog,
   DialogContent,
@@ -14,34 +15,30 @@ import BulkOrder from './sections/BulkOrder'
 
 
 const BookAppointment = ({ button }) => {
-
+  const [open, setOpen] = useState(false);
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger>{button}</DialogTrigger>
-      <DialogContent className='max-w-[800px] p-0 !rounded-none'>
+      <DialogContent className='md:!max-w-[800px] w-full max-w-xs'>
         <div >
           <div className='flex items-center h-full'>
-            {/* <div className='w-1/2 h-full'>
-              <Image src={'/SideBanner.svg'} alt='' width={500} height={600} className='h-full w-full object-cover' />
-            </div> */}
-            <div className='w-full p-7'>
+            <div className='w-full'>
               <div className='flex flex-col gap-5'>
                 <div className='text-2xl font-bold'>Book an Appointment</div>
                 <div className=''>
                   <Tabs defaultValue="tab1" className="">
                     <TabsList className='w-full bg-transparent border-b rounded-none'>
-                      <TabsTrigger value="tab1" className='w-full'>Bulk Ordering</TabsTrigger>
-                      <TabsTrigger value="tab2" className='w-full'>Expert Consultation</TabsTrigger>
+                      <TabsTrigger value="tab1" className='w-full sm:text-sm text-xs'>Bulk Ordering</TabsTrigger>
+                      <TabsTrigger value="tab2" className='w-full sm:text-sm text-xs'>Expert Consultation</TabsTrigger>
                     </TabsList>
                     <TabsContent value="tab1" className='p-0'>
-                      <BulkOrder />
+                      <BulkOrder setOpen={setOpen} />
                     </TabsContent>
                     <TabsContent value="tab2" className='p-0'>
-                      <Consultation />
+                      <Consultation setOpen={setOpen} />
                     </TabsContent>
                   </Tabs>
                 </div>
-
               </div>
             </div>
           </div>

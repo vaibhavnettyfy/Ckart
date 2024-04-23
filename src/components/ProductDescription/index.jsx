@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
 
-function ProductDescription({description}) {
+function ProductDescription({ description }) {
   const feature = [
     { img: "/details/Medal.svg", text: "Free 1 Year Warranty" },
     { img: "/details/Truck.svg", text: "Free Shipping & Fasted Delivery" },
@@ -16,14 +16,14 @@ function ProductDescription({description}) {
     { head: "Unishop Global Export :", para: "3-4 days, ₹39.00" },
   ];
   return (
-    <div className="grid grid-cols-2 gap-14">
-      <div>
+    <div className="grid xl:grid-cols-2 lg:grid-cols-5 grid-cols-2 xl:gap-14 lg:gap-10 md:gap-8 gap-4">
+      <div className="xl:col-span-1 col-span-2">
         <div className="font-semibold">Description</div>
-        <div className="text-sm text-[#5F6C72] my-2">
+        <div className="text-sm text-[#5F6C72] mt-2">
           {description}
         </div>
       </div>
-      <div className="grid grid-cols-2 gap-8">
+      <div className="grid sm:grid-cols-2 lg:gap-8 md:gap-6 gap-4 xl:col-span-1 col-span-3">
         <div>
           <div className="font-semibold mb-2">Feature</div>
           <div className="flex flex-col gap-[10px]">

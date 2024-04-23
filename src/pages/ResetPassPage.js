@@ -54,7 +54,7 @@ export default function ResetPassPage() {
 
   return (
     <div className="flex h-screen overflow-hidden">
-      <div className="w-3/5">
+      <div className="lg:w-3/5 hidden lg:block">
         <Image
           src={"/LoginBanner.svg"}
           alt=""
@@ -63,21 +63,21 @@ export default function ResetPassPage() {
           className="object-cover h-full w-full"
         />
       </div>
-      <div className="w-2/5">
-        <div className="flex flex-col items-center h-full max-w-[400px] m-auto justify-center">
-          <div className="flex flex-col gap-5 w-full">
-          <Link href="/">
-            <Image
-              src={"/logoBlack.png"}
-              alt=""
-              width={156}
-              height={48}
-              className="lg:w-[170px] md:w-[150px] sm:w-[110px] w-[100px] md:h-huto cursor-pointer"
-            />
-          </Link>
+      <div className="lg:w-2/5 w-full">
+        <div className="flex flex-col items-center h-full max-w-[400px] m-auto justify-center p-5">
+          <div className="flex flex-col sm:gap-5 gap-3 w-full">
+            <Link href="/">
+              <Image
+                src={"/logoBlack.png"}
+                alt=""
+                width={156}
+                height={48}
+                className="lg:w-[170px] md:w-[150px] sm:w-[110px] w-[100px] md:h-huto cursor-pointer"
+              />
+            </Link>
             <div className="mb-2">
-              <div className="text-2xl font-bold mt-2 mb-1">Reset Password</div>
-              <div className="text-[#5F6C72]">Reset Your Password</div>
+              <div className="sm:text-2xl text-xl font-bold mt-2 mb-1">Reset Password</div>
+              <div className="sm:text-base text-sm text-[#5F6C72]">Reset Your Password</div>
             </div>
             <div>
               <Label htmlFor="">Password</Label>
@@ -123,7 +123,7 @@ export default function ResetPassPage() {
                     alt={""}
                     width={20}
                     height={20}
-                    className="w-[18px] object-contain rounded-lg"
+                    className="sm:w-[18px] w-[14px] object-contain rounded-lg"
                     src={"/ArrowRight.svg"}
                   />
                 </div>

@@ -52,7 +52,7 @@ export default function ForgotPassPage() {
   const verifyForgotOtpHandler = async () => {
     try {
       setLoading(true);
-      const { data,message,success } = await verifyForgotOtpApiHandler(
+      const { data, message, success } = await verifyForgotOtpApiHandler(
         formik.values
       );
       if (success) {
@@ -79,7 +79,7 @@ export default function ForgotPassPage() {
 
   return (
     <div className="flex h-screen overflow-hidden">
-      <div className="w-3/5">
+      <div className="lg:w-3/5 hidden lg:block">
         <Image
           src={"/LoginBanner.svg"}
           alt=""
@@ -88,9 +88,9 @@ export default function ForgotPassPage() {
           className="object-cover h-full w-full"
         />
       </div>
-      <div className="w-2/5">
-        <div className="flex flex-col items-center h-full max-w-[400px] m-auto justify-center">
-          <div className="flex flex-col gap-5 w-full">
+      <div className="lg:w-2/5 w-full">
+        <div className="flex flex-col items-center h-full max-w-[400px] m-auto justify-center p-5">
+          <div className="flex flex-col sm:gap-5 gap-3 w-full">
             <Image
               src={"/logoBlack.png"}
               alt=""
@@ -99,10 +99,10 @@ export default function ForgotPassPage() {
               className="lg:w-[170px] md:w-[150px] sm:w-[110px] w-[100px] md:h-huto cursor-pointer"
             />
             <div className="mb-2">
-              <div className="text-2xl font-bold mt-2 mb-1">
+              <div className="sm:text-2xl text-xl font-bold mt-2 mb-1">
                 Forgot Password
               </div>
-              <div className="text-[#5F6C72]">
+              <div className="sm:text-base text-sm text-[#5F6C72]">
                 Enter the email address associated with your Ckart account.
               </div>
             </div>
@@ -141,7 +141,7 @@ export default function ForgotPassPage() {
                 </span>
               </>
             )}
-            <div className="mt-2">
+            <div className="my-2">
               <Button
                 size="lg"
                 className="w-full shadow-none"
@@ -155,24 +155,24 @@ export default function ForgotPassPage() {
                     alt={""}
                     width={20}
                     height={20}
-                    className="w-[18px] object-contain rounded-lg"
+                    className="sm:w-[18px] w-[14px] object-contain rounded-lg"
                     src={"/ArrowRight.svg"}
                   />
                 </div>
               </Button>
             </div>
             <div className="flex flex-col gap-1">
-              <div className="text-[#5F6C72]">
+              <div className="text-[#5F6C72] sm:text-base text-sm">
                 Already have account? <Link href="/login">Sign In</Link>
               </div>
-              <div className="text-[#5F6C72]">
+              <div className="text-[#5F6C72] sm:text-base text-sm">
                 Don’t have account? <Link href="/signup">Sign Up</Link>
               </div>
             </div>
             <div className="pt-2 pb-1">
               <Separator />
             </div>
-            <div className="text-[#5F6C72]">
+            <div className="text-[#5F6C72] sm:text-base text-sm">
               You may contact <Link href="/">Customer Service</Link> for help
               restoring access to your account.
             </div>

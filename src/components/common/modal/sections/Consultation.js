@@ -25,7 +25,7 @@ import { subCategoryDropdown } from "@/Service/Category/Category.service";
 import Cookies from "universal-cookie";
 import { consultationValidation } from "@/helper/Validation";
 
-const Consultation = () => {
+const Consultation = ({ setOpen }) => {
   const cookies = new Cookies();
   const [loading, setLoading] = useState(false);
   const [subCateList, setSubCateList] = useState([]);
@@ -71,8 +71,6 @@ const Consultation = () => {
     availableSlotsByDate(formateData);
   };
 
-  
-
   const userId = "";
   const consultationHandler = async () => {
     try {
@@ -103,6 +101,7 @@ const Consultation = () => {
         await bookAppointmentApiHandler(formData);
       if (success) {
         successNotification(message);
+        setOpen(false)
       } else {
         errorNotification(message);
       }
@@ -143,13 +142,13 @@ const Consultation = () => {
 
   const formik = useFormik({
     initialValues: consultationIv,
-    validationSchema:consultationValidation,
+    validationSchema: consultationValidation,
     onSubmit: consultationHandler,
   });
 
   return (
     <div className="max-h-[500px] overflow-y-auto px-2">
-      <div className="grid grid-cols-3 gap-3 py-5">
+      <div className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-3 py-5">
         <div>
           <Label htmlFor="">Full Name</Label>
           <Input className="block" name="fullName" formik={formik} max={100} />
@@ -240,13 +239,13 @@ const Consultation = () => {
           </Select>
         </div>
 
-        <div className="col-span-3">
+        <div className="md:col-span-3 sm:col-span-2 col-span-1">
           <Label htmlFor="">
             Previous Experience with Construction Projects
           </Label>
           <RadioGroup defaultValue="" className="flex h-9 items-center" onValueChange={(event) =>
-              formik.setFieldValue("previousExperience", event)
-            }>
+            formik.setFieldValue("previousExperience", event)
+          }>
             <div className="flex items-center space-x-2">
               <RadioGroupItem value={"None"} id="1" />
               <Label className="text-[#475156]" htmlFor="None">
@@ -390,7 +389,7 @@ const Consultation = () => {
           </RadioGroup>
         </div>
 
-        <div className="col-span-3 grid grid-cols-3">
+        <div className="md:col-span-3 sm:col-span-2 col-span-1 grid sm:grid-cols-3">
           <div className="col-span-1">
             <Label htmlFor="">Meeting Date</Label>
             <Input
@@ -404,33 +403,32 @@ const Consultation = () => {
             />
           </div>
         </div>
-        {console.log("Formik",formik.values)}
         {
           formik.values.date && (
-        <div className="col-span-3">
-          <Label htmlFor="">Available slots</Label>
-          <div className="flex gap-1 flex-wrap">
-            {availableSlotData && availableSlotData.length > 0 ? (
-              availableSlotData.map((item, index) => {
-                return (
-                  <div
-                    key={index}
-                    onClick={() => availableSlotHandler(item.id, item.time)}
-                    className={`border rounded-md px-3 py-1 w-fit cursor-pointer ${item.id === selectedSlotData ? 'bg-primary text-white' : ''}`}
-                  >
-                    <div className="text-sm font-semibold">{item.time}</div>
-                    {/* <div className="text-xs text-[#5D5F5F]">{item.time}</div> */}
-                  </div>
-                );
-              })
-            ) : (
-              <div className="text-[#5D5F5F] text-center">No slots Found</div>
-            )}
-          </div>
-        </div>
+            <div className="md:col-span-3 sm:col-span-2 col-span-1">
+              <Label htmlFor="">Available slots</Label>
+              <div className="flex gap-1 flex-wrap">
+                {availableSlotData && availableSlotData.length > 0 ? (
+                  availableSlotData.map((item, index) => {
+                    return (
+                      <div
+                        key={index}
+                        onClick={() => availableSlotHandler(item.id, item.time)}
+                        className={`border rounded-md px-3 py-1 w-fit cursor-pointer ${item.id === selectedSlotData ? 'bg-primary text-white' : ''}`}
+                      >
+                        <div className="text-sm font-semibold">{item.time}</div>
+                        {/* <div className="text-xs text-[#5D5F5F]">{item.time}</div> */}
+                      </div>
+                    );
+                  })
+                ) : (
+                  <div className="text-[#5D5F5F] text-center">No slots Found</div>
+                )}
+              </div>
+            </div>
           )
         }
-        <div className="col-span-3">
+        <div className="md:col-span-3 sm:col-span-2 col-span-1">
           <Label htmlFor="">Additional Notes</Label>
           <Textarea
             placeholder="Enter your message here....."
@@ -442,7 +440,7 @@ const Consultation = () => {
             max={100}
           />
         </div>
-        <div className="col-span-3">
+        <div className="md:col-span-3 sm:col-span-2 col-span-1">
           <div className="flex items-center space-x-2 col-span-2 mt-2">
             <Checkbox
               id="address"
@@ -459,10 +457,10 @@ const Consultation = () => {
             </label>
           </div>
           {formik.touched.termsConditions && formik.errors.termsConditions ? (
-              <span className="text-red-500 text-xs">
-                {formik.errors.termsConditions}
-              </span>
-            ) : null}
+            <span className="text-red-500 text-xs">
+              {formik.errors.termsConditions}
+            </span>
+          ) : null}
         </div>
         <div>
           <Button
