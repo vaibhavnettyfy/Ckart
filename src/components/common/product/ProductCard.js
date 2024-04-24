@@ -37,11 +37,14 @@ const ProductCard = ({ productDetails, callBackHandler }) => {
     productName,
     productKey,
     subcategoryname,
+    mrp,
     flag,
     pieces,
     id,
     specificationData,
   } = productDetails ?? {};
+
+  console.log("productDetails",productDetails);
 
   const router = useRouter();
   const cookies = new Cookies();
@@ -215,7 +218,7 @@ const ProductCard = ({ productDetails, callBackHandler }) => {
               }`}</span>
           </div>
           <div className="text-[#77878F] text-[13px] font-normal line-through">
-            ₹999.00
+            {mrp && `₹ ${mrp}`}
           </div>
         </div>
         <div onClick={(e) => e.stopPropagation()}>

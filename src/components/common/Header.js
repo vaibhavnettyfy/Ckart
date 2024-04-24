@@ -7,10 +7,32 @@ import Cookies from "universal-cookie";
 import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, } from "@/components/ui/dropdown-menu";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from "@/components/ui/select";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger, } from "@/components/ui/tooltip";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, } from "@/components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Label } from "../ui/label";
 import { Button } from "../ui/button";
 import BookAppointment from "./modal/BookAppointment";
@@ -22,6 +44,7 @@ import { useFormik } from "formik";
 import { updateLocationIv } from "@/helper/intialValues";
 import { updateLocationValidation } from "@/helper/Validation";
 import { getDetailsByPincode } from "@/helper";
+import { categorySubCategoryList } from "@/Service/Category/Category.service";
 
 export const categoryOption = [
   { value: "Category 1" },
@@ -43,6 +66,7 @@ export default function Header() {
   const cookies = new Cookies();
   const userLoginFlag = cookies.get("token");
   const cartId = cookies.get("CARTID");
+  const [categoreyData, setCategoreyData] = useState([]);
   const [cartList, setCartList] = useState([]);
   const [location, setLoaction] = useState();
   const [userAddress, setUserAddress] = useState([]);
@@ -57,6 +81,23 @@ export default function Header() {
       getProductListByCartId(cartId);
     }
   }, [cartId]);
+
+  useEffect(()=>{
+    categoriesDataHandler();
+  },[])
+
+  const categoriesDataHandler = async () => {
+    try {
+      const { data, message, success } = await categorySubCategoryList();
+      if (success) {
+        setCategoreyData(data);
+      } else {
+        setCategoreyData([]);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   useEffect(() => {
     if (!deliveryAddressData?.postalCode && !deliveryAddressData?.suburb) {
@@ -152,8 +193,10 @@ export default function Header() {
       const l1 = response.data.results[0];
       const payload = {
         postalCode: formik.values.pincode,
-        suburb: location.find((component) => component.types.includes("locality")).long_name
-      }
+        suburb: location.find((component) =>
+          component.types.includes("locality")
+        ).long_name,
+      };
       setDeliveryAddress(payload);
       cookies.set("deliveryAddress", payload);
       setOpen(false);
@@ -162,11 +205,17 @@ export default function Header() {
     }
   };
 
+  // const
+
+  const productHandler = (cat) => {
+    router.push(`/product/${cat}/${""}`);
+  };
+
   const formik = useFormik({
     initialValues: updateLocationIv,
     validationSchema: updateLocationValidation,
     onSubmit: updateLocationHandler,
-  })
+  });
 
   return (
     <>
@@ -257,20 +306,26 @@ export default function Header() {
                 </SheetTrigger>
                 <SheetContent className="w-full">
                   <div className="mt-10 flex flex-col gap-4">
-                    {/* <MultiSelectDropdown
-                      formFieldName={"Category"}
-                      options={category}
-                      onChange={(selected) => {
-                        console.debug("selected", selected);
-                      }}
-                      prompt="All Category"
-                    /> */}
-                    <Select onValueChange={(event) => console.log("SelectedEvent", event)}>
-                      <SelectTrigger className='bg-border justify-center items-center gap-3'>
+                    <Select onValueChange={(event) => productHandler(event)}>
+                      <SelectTrigger className="bg-border justify-center items-center gap-3">
                         <SelectValue placeholder="Select Categories" />
                       </SelectTrigger>
                       <SelectContent>
-                        {
+                        {console.log("Select Categories",categoreyData)}
+                        {categoreyData && categoreyData.length > 0 ? (
+                          categoreyData.map((response, index) => {
+                            const { id, image, name, status, subCategorys } =
+                              response || {};
+                            return (
+                              <SelectItem key={index} value={id}>
+                                {name}
+                              </SelectItem>
+                            );
+                          })
+                        ) : (
+                          <></>
+                        )}
+                        {/* {
                           category && category.map((res, index) => {
                             return (
                               <SelectItem key={index} value={res}>
@@ -278,7 +333,7 @@ export default function Header() {
                               </SelectItem>
                             )
                           })
-                        }
+                        } */}
                       </SelectContent>
                     </Select>
                     <div></div>
@@ -311,13 +366,15 @@ export default function Header() {
                           <TooltipProvider>
                             <Tooltip>
                               <TooltipTrigger>
-                                {`Delivering to ${deliveryAddress.suburb
-                                  ? deliveryAddress.suburb
-                                  : "-"
-                                  } ${deliveryAddress.postalCode
+                                {`Delivering to ${
+                                  deliveryAddress.suburb
+                                    ? deliveryAddress.suburb
+                                    : "-"
+                                } ${
+                                  deliveryAddress.postalCode
                                     ? deliveryAddress.postalCode
                                     : "-"
-                                  }`}
+                                }`}
                               </TooltipTrigger>
                               <TooltipContent>
                                 <p>Click to change Pincode</p>
@@ -334,12 +391,26 @@ export default function Header() {
                                   Enter an Indian pincode
                                 </Label>
                                 <div className="relative">
-                                  <Input placeholder="" className="w-full" name="pincode" formik={formik} />
+                                  <Input
+                                    placeholder=""
+                                    className="w-full"
+                                    name="pincode"
+                                    formik={formik}
+                                  />
                                 </div>
                               </div>
                               <div className="flex justify-end gap-2">
-                                <Button size="sm" onClick={() => formik.handleSubmit()}>Update</Button>
-                                <Button size="sm" variant="outline" onClick={() => setOpen(false)}>
+                                <Button
+                                  size="sm"
+                                  onClick={() => formik.handleSubmit()}
+                                >
+                                  Update
+                                </Button>
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  onClick={() => setOpen(false)}
+                                >
                                   Cancel
                                 </Button>
                               </div>
@@ -452,13 +523,15 @@ export default function Header() {
                               <MapPin />
                             </div>
                             <div className="text-[13px] text-start">
-                              <div>{`Delivering to ${deliveryAddress.suburb
-                                ? deliveryAddress.suburb
-                                : "-"
-                                } ${deliveryAddress.postalCode
+                              <div>{`Delivering to ${
+                                deliveryAddress.suburb
+                                  ? deliveryAddress.suburb
+                                  : "-"
+                              } ${
+                                deliveryAddress.postalCode
                                   ? deliveryAddress.postalCode
                                   : "-"
-                                }`}</div>
+                              }`}</div>
                               <div className="font-semibold">
                                 Update location
                               </div>
@@ -480,12 +553,28 @@ export default function Header() {
                             Enter an Indian pincode
                           </Label>
                           <div className="relative">
-                            <Input placeholder="" className="w-full" name="pincode" formik={formik} />
+                            <Input
+                              placeholder=""
+                              className="w-full"
+                              name="pincode"
+                              formik={formik}
+                            />
                           </div>
                         </div>
                         <div className="flex justify-end gap-2">
-                          <Button size="sm" onClick={() => { formik.handleSubmit() }}>Update</Button>
-                          <Button size="sm" variant="outline" onClick={() => setOpen(false)}>
+                          <Button
+                            size="sm"
+                            onClick={() => {
+                              formik.handleSubmit();
+                            }}
+                          >
+                            Update
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => setOpen(false)}
+                          >
                             Cancel
                           </Button>
                         </div>
@@ -600,28 +689,24 @@ export default function Header() {
         >
           <div className="container px-3 sm:px-6 flex justify-start gap-6 items-center">
             <div>
-              {/* <MultiSelectDropdown
-                formFieldName={"category"}
-                options={category}
-                onChange={(selected) => {
-                  console.debug("selected", selected);
-                }}
-                prompt="All Category"
-              /> */}
-              <Select onValueChange={(event) => console.log("SelectedEvent", event)}>
-                <SelectTrigger className='w-[200px] bg-border'>
+              <Select onValueChange={(event) => productHandler(event)}>
+                <SelectTrigger className="w-[200px] bg-border">
                   <SelectValue placeholder="Select Categories" />
                 </SelectTrigger>
                 <SelectContent>
-                  {
-                    category && category.map((res, index) => {
+                  {categoreyData && categoreyData.length > 0 ? (
+                    categoreyData.map((response, index) => {
+                      const { id, image, name, status, subCategorys } =
+                        response || {};
                       return (
-                        <SelectItem key={index} value={res}>
-                          {res}
+                        <SelectItem key={index} value={id}>
+                          {name}
                         </SelectItem>
-                      )
+                      );
                     })
-                  }
+                  ) : (
+                    <></>
+                  )}
                 </SelectContent>
               </Select>
             </div>

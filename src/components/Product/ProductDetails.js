@@ -41,6 +41,7 @@ import { updateLocationValidation } from "@/helper/Validation";
 import { getDetailsByPincode } from "@/helper";
 
 export default function ProductDetails({ detailsData, callBackHandler }) {
+  console.log("detailsData-detailsData",detailsData);
   const {
     brand,
     category,
@@ -48,6 +49,7 @@ export default function ProductDetails({ detailsData, callBackHandler }) {
     id,
     isWishlist,
     location,
+    mrp,
     maxQuantity,
     minQuantity,
     pieces,
@@ -262,7 +264,7 @@ export default function ProductDetails({ detailsData, callBackHandler }) {
                     {`₹ ${price ? price : 0}`}
                   </div>
                   <div className="text-[#77878F] lg:text-lg md:text-base text-sm font-normal line-through">
-                    ₹999.00
+                  {mrp && `₹ ${mrp}`}
                   </div>
                   {/* <div className="text-sm px-2 py-1 bg-[#EFD33D] font-semibold rounded-sm ml-2">
                     21% OFF
