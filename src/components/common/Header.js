@@ -139,8 +139,8 @@ export default function Header() {
   const getProductListByCartId = async (cartId) => {
     const { data, message, success } = await productListByCart(cartId);
     if (success) {
-      setCartList(data);
-      setCartLength(data.length);
+      setCartList(data.cartData);
+      setCartLength(data.cartData.length);
     } else {
       setCartLength(0);
       setCartList([]);
@@ -159,6 +159,7 @@ export default function Header() {
     cookies.remove("token");
     cookies.remove("userEmail");
     cookies.remove("userPassword");
+    cookies.remove("USERDETAILS");
   };
 
   const profileDropDown = [

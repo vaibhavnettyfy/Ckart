@@ -17,3 +17,8 @@ export const productListByCart = (cartId) =>{
     return GET(`${process.env.NEXT_PUBLIC_APIURL}/api/userV1/userCartList?cartId=${cartId}`)
 };
 
+// To Update Quantity while cart 
+
+export const quantityUpdateHandler = (payload) =>{
+    return put(`${process.env.NEXT_PUBLIC_APIURL}/api/userV1/updateProductQuantity`,payload);
+};

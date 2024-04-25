@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import Image from "next/image";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
@@ -11,12 +11,39 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../ui/select"
+} from "../ui/select";
 import { Textarea } from "../ui/textarea";
-import { Checkbox } from "@/components/ui/checkbox"
+import { Checkbox } from "@/components/ui/checkbox";
+import { useEffect, useState } from "react";
+import Cookies from "universal-cookie";
+import { userProfileApiHandler } from "@/Service/UserProfile/UserProfile.service";
 
 export default function CheckOut() {
-  const router = useRouter()
+  const router = useRouter();
+  const cookies = new Cookies();
+  const [loading, setLoading] = useState(false);
+  const [shippingAddress, setShippingAdress] = useState([]);
+  const userDetails = cookies.get("USERDETAILS");
+
+  const getshippingAddress = async (userId) => {
+    try {
+      setLoading(true);
+      const { data, message, success } = await userProfileApiHandler(userId);
+      const isShippingAddress =
+        data.userAddress &&
+        data.userAddress.filter((res) => res.isBillingAddress === 0);
+      setShippingAdress(isShippingAddress);
+      console.log("data:" + data);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getshippingAddress(userDetails?.id);
+  }, []);
 
   return (
     <div className="lg:my-20 md:my-16 sm:my-12 my-8">
@@ -24,7 +51,9 @@ export default function CheckOut() {
         <div>
           <div>
             <div>
-              <div className="sm:text-2xl text-xl font-semibold sm:mb-5 mb-3">Billing Information</div>
+              <div className="sm:text-2xl text-xl font-semibold sm:mb-5 mb-3">
+                Billing Information
+              </div>
             </div>
             <div className="grid lg:grid-cols-6 gap-5 ">
               <div className="lg:col-span-4 bill_info_area">
@@ -32,17 +61,20 @@ export default function CheckOut() {
                   <div>
                     <Label htmlFor="">User name</Label>
                     <div className="grid grid-cols-2 sm:gap-3 gap-2">
-                      <Input placeholder='First name' />
-                      <Input placeholder='last name' />
+                      <Input placeholder="First name" />
+                      <Input placeholder="last name" />
                     </div>
                   </div>
                   <div>
-                    <Label htmlFor="">Company Name <span className="text-[#929FA5]">(Optional)</span></Label>
-                    <Input placeholder='' />
+                    <Label htmlFor="">
+                      Company Name{" "}
+                      <span className="text-[#929FA5]">(Optional)</span>
+                    </Label>
+                    <Input placeholder="" />
                   </div>
                   <div className="sm:col-span-2">
                     <Label htmlFor="">Address</Label>
-                    <Input placeholder='' />
+                    <Input placeholder="" />
                   </div>
 
                   <div className="grid sm:grid-cols-2 grid-cols-1 sm:gap-3 gap-2">
@@ -83,17 +115,17 @@ export default function CheckOut() {
                     </div>
                     <div>
                       <Label htmlFor="">Zip Code</Label>
-                      <Input placeholder='' />
+                      <Input placeholder="" />
                     </div>
                   </div>
 
                   <div>
                     <Label htmlFor="">Email</Label>
-                    <Input placeholder='' />
+                    <Input placeholder="" />
                   </div>
                   <div>
                     <Label htmlFor="">Phone Number</Label>
-                    <Input placeholder='' />
+                    <Input placeholder="" />
                   </div>
 
                   <div className="flex items-center space-x-2 sm:col-span-2 mt-2">
@@ -106,30 +138,63 @@ export default function CheckOut() {
                     </label>
                   </div>
 
-                  <div className="sm:text-lg font-medium mt-3 sm:col-span-2">Additional Information</div>
+                  <div className="sm:text-lg font-medium mt-3 sm:col-span-2">
+                    Additional Information
+                  </div>
                   <div className="sm:col-span-2">
-                    <Label htmlFor="">Order Notes <span className="text-[#929FA5]">(Optional)</span></Label>
-                    <Textarea placeholder='Notes about your order, e.g. special notes for delivery' />
+                    <Label htmlFor="">
+                      Order Notes{" "}
+                      <span className="text-[#929FA5]">(Optional)</span>
+                    </Label>
+                    <Textarea placeholder="Notes about your order, e.g. special notes for delivery" />
                   </div>
                 </div>
               </div>
               <div className="lg:col-span-2">
                 <div className="border px-4 py-3">
                   <div className="flex flex-col gap-[6px]">
-                    <div className="sm:text-xl text-lg font-semibold mb-1">Order Summary</div>
+                    <div className="sm:text-xl text-lg font-semibold mb-1">
+                      Order Summary
+                    </div>
                     <div className="grid gap-2 py-2 px-2">
                       <div className="flex sm:gap-3 gap-2 items-center">
-                        <Image alt={''} width={80} height={80} className='sm:w-[70px] w-[50px] object-contain' src={'/ProductImage.svg'} />
+                        <Image
+                          alt={""}
+                          width={80}
+                          height={80}
+                          className="sm:w-[70px] w-[50px] object-contain"
+                          src={"/ProductImage.svg"}
+                        />
                         <div>
-                          <div className="sm:text-base text-sm font-semibold mb-1">Tiscon Superlinks - 8mm</div>
-                          <div className="sm:text-sm text-xs text-[#5D5F5F]">1 x <span className="sm:text-base text-sm text-primary-foreground font-semibold">₹750</span></div>
+                          <div className="sm:text-base text-sm font-semibold mb-1">
+                            Tiscon Superlinks - 8mm
+                          </div>
+                          <div className="sm:text-sm text-xs text-[#5D5F5F]">
+                            1 x{" "}
+                            <span className="sm:text-base text-sm text-primary-foreground font-semibold">
+                              ₹750
+                            </span>
+                          </div>
                         </div>
                       </div>
                       <div className="flex sm:gap-3 gap-2 items-center">
-                        <Image alt={''} width={80} height={80} className='sm:w-[70px] w-[50px] object-contain' src={'/ProductImage.svg'} />
+                        <Image
+                          alt={""}
+                          width={80}
+                          height={80}
+                          className="sm:w-[70px] w-[50px] object-contain"
+                          src={"/ProductImage.svg"}
+                        />
                         <div>
-                          <div className="sm:text-base text-sm font-semibold mb-1">Tiscon Superlinks - 8mm</div>
-                          <div className="sm:text-sm text-xs text-[#5D5F5F]">1 x <span className="sm:text-base text-sm text-primary-foreground font-semibold">₹750</span></div>
+                          <div className="sm:text-base text-sm font-semibold mb-1">
+                            Tiscon Superlinks - 8mm
+                          </div>
+                          <div className="sm:text-sm text-xs text-[#5D5F5F]">
+                            1 x{" "}
+                            <span className="sm:text-base text-sm text-primary-foreground font-semibold">
+                              ₹750
+                            </span>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -139,20 +204,36 @@ export default function CheckOut() {
                   </div>
                   <div className="flex flex-col gap-[6px] text-base">
                     <div className="flex justify-between">
-                      <div className="sm:text-base text-sm font-normal text-[#5D5F5F]">Subtotal</div>
-                      <div className="sm:text-base text-sm font-medium">₹1500.00</div>
+                      <div className="sm:text-base text-sm font-normal text-[#5D5F5F]">
+                        Subtotal
+                      </div>
+                      <div className="sm:text-base text-sm font-medium">
+                        ₹1500.00
+                      </div>
                     </div>
                     <div className="flex justify-between">
-                      <div className="sm:text-base text-sm font-normal text-[#5D5F5F]">Shipping</div>
-                      <div className="sm:text-base text-sm font-medium">Free</div>
+                      <div className="sm:text-base text-sm font-normal text-[#5D5F5F]">
+                        Shipping
+                      </div>
+                      <div className="sm:text-base text-sm font-medium">
+                        Free
+                      </div>
                     </div>
                     <div className="flex justify-between">
-                      <div className="sm:text-base text-sm font-normal text-[#5D5F5F]">Discount</div>
-                      <div className="sm:text-base text-sm font-medium">₹50</div>
+                      <div className="sm:text-base text-sm font-normal text-[#5D5F5F]">
+                        Discount
+                      </div>
+                      <div className="sm:text-base text-sm font-medium">
+                        ₹50
+                      </div>
                     </div>
                     <div className="flex justify-between">
-                      <div className="sm:text-base text-sm font-normal text-[#5D5F5F]">Tax</div>
-                      <div className="sm:text-base text-sm font-medium">₹50</div>
+                      <div className="sm:text-base text-sm font-normal text-[#5D5F5F]">
+                        Tax
+                      </div>
+                      <div className="sm:text-base text-sm font-medium">
+                        ₹50
+                      </div>
                     </div>
                   </div>
                   <div className="sm:py-5 py-3">
@@ -160,14 +241,28 @@ export default function CheckOut() {
                   </div>
                   <div>
                     <div className="flex justify-between items-center text-base">
-                      <div className="sm:text-base text-sm font-normal text-[#5D5F5F]">Total</div>
-                      <div className="sm:text-base text-sm font-semibold text-lg">₹1600.00</div>
+                      <div className="sm:text-base text-sm font-normal text-[#5D5F5F]">
+                        Total
+                      </div>
+                      <div className="sm:text-base text-sm font-semibold text-lg">
+                        ₹1600.00
+                      </div>
                     </div>
                     <div className="mt-5">
-                      <Button size='lg' onClick={() => router.push('/order-placed')} className='shadow-none w-full'>
-                        <div className='flex gap-2 items-center'>
+                      <Button
+                        size="lg"
+                        onClick={() => router.push("/order-placed")}
+                        className="shadow-none w-full"
+                      >
+                        <div className="flex gap-2 items-center">
                           <div>Place Order</div>
-                          <Image alt={''} width={20} height={20} className='w-[18px] object-contain rounded-lg' src={'/ArrowRight.svg'} />
+                          <Image
+                            alt={""}
+                            width={20}
+                            height={20}
+                            className="w-[18px] object-contain rounded-lg"
+                            src={"/ArrowRight.svg"}
+                          />
                         </div>
                       </Button>
                     </div>

@@ -11,10 +11,10 @@ import {
 } from "@/components/ui/table";
 import { MoveLeft, X } from "lucide-react";
 import QtyCard from "../product/QtyCard";
-import { removeProductApiFromCart } from "@/Service/AddTocart/AddToCart.service";
+import { quantityUpdateHandler, removeProductApiFromCart } from "@/Service/AddTocart/AddToCart.service";
 import { errorNotification, successNotification } from "@/helper/Notification";
 
-function CartCard({ cartDetails, index, cartId, callBackHandler }) {
+function CartCard({ cartDetails, index, quantityUpdate,cartId, callBackHandler }) {
   const { id, productId, quantity } = cartDetails || {};
   const [quantitys, setQuantitys] = useState(1);
   const [price, setPrice] = useState(0);
@@ -22,6 +22,19 @@ function CartCard({ cartDetails, index, cartId, callBackHandler }) {
 
   const setQuantityHandler = (value) => {
     setQuantitys(value);
+    productUpdateHandler(value)
+  };
+
+  const productUpdateHandler = async(value) =>{
+    const payload ={
+      cartId :cartId,
+      productId:productId?.id,
+      quantity:value
+    };
+    const {data,message,success} = await quantityUpdateHandler(payload);
+    if(success){
+      callBackHandler();
+    }
   };
 
   useEffect(() => {
