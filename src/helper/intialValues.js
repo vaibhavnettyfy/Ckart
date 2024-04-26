@@ -168,7 +168,7 @@ export const  userShippingAddressIv ={
     state: "",
     city: "",
     pincode: "",
-    isBillingAddress: 1,
+    isBillingAddress: 0,
     addLet: "",
     addLong: ""
 };

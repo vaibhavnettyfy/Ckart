@@ -1,4 +1,4 @@
-import { PUT, get } from "../../../web.request";
+import { DELETE, PUT, get, post } from "../../../web.request";
 
 // All Profile get 
 export const userProfileApiHandler = (userId) =>{
@@ -15,4 +15,12 @@ export const billingAddressUpdateApiHandler = (userId,payload) =>{
 
 export const shippingAddressUpdateApiHandler = (userId,payload) =>{
     return PUT(`${process.env.NEXT_PUBLIC_APIURL}/api/userV1/updateAddress/${userId}`,payload);
+};
+
+export const addShippingAddressApiHandler = (payload) =>{
+    return post(`${process.env.NEXT_PUBLIC_APIURL}/api/userV1/addShippingAddress`,payload);
+};
+
+export const deleteShippingAddressApiHandler = (id) =>{
+    return DELETE(`${process.env.NEXT_PUBLIC_APIURL}/api/userV1/deleteUserAddress/${id}`);
 };

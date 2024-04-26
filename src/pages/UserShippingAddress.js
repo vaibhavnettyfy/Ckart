@@ -8,9 +8,10 @@ import { shippingAddressValidation } from "@/helper/Validation";
 import { getDetailsByPincode } from "@/helper";
 import { basicDetailUpdateApiHandler, shippingAddressUpdateApiHandler } from "@/Service/UserProfile/UserProfile.service";
 import { errorNotification, successNotification } from "@/helper/Notification";
+import { Trash2 } from "lucide-react";
 
 
-function UserShippingAddress({ addressDetails }) {
+function UserShippingAddress({ addressDetails ,deleteAddresshandler}) {
   const [pincodeFlag, setPinCodeFlag] = useState(false);
   const {
     addLet,
@@ -108,7 +109,10 @@ function UserShippingAddress({ addressDetails }) {
 
   return (
     <div className="border rounded-lg">
-      <div className="font-semibold py-2 px-3 border-b">Shipping Address</div>
+      <div className="py-2 px-3 border-b flex justify-between items-center">
+      <div className="font-semibold ">Shipping Address</div>
+      <Trash2 className="w-5 h-5 text-red-600 cursor-pointer" onClick={()=>deleteAddresshandler(id)}/>
+      </div>
       <div className="sm:p-5 p-3 grid grid-cols-2 sm:gap-5 gap-3">
         <div className="col-span-2">
           <Label htmlFor="">Full Name</Label>

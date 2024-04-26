@@ -131,6 +131,10 @@
   border-radius: 2px !important;
 }
 
+.bill_info_area .radio_button {
+  border-radius: 50% !important;
+}
+
 a {
   color: #975BEC;
 }

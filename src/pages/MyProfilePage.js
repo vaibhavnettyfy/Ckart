@@ -14,6 +14,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import {
   basicDetailUpdateApiHandler,
+  deleteShippingAddressApiHandler,
   userProfileApiHandler,
 } from "@/Service/UserProfile/UserProfile.service";
 import { useFormik } from "formik";
@@ -66,6 +67,20 @@ export default function AboutPage() {
     validationSchema: basicUserDetailsValidation,
     onSubmit: basicDetailsHandler,
   });
+
+  const deleteAdressHandler = async(id) =>{
+    try{
+      const {data,message,success} = await deleteShippingAddressApiHandler(id);
+      if(success){
+        successNotification(message);
+        getProfileUpdateHandler(userDetails.id);
+      }else{
+        errorNotification(message);
+      }
+    }catch(err){
+      console.error(err);
+    }
+  };
 
   const profileHandler = (e) => {
     const file = e.target.files[0];
@@ -220,42 +235,6 @@ export default function AboutPage() {
                         max={30}
                       />
                     </div>
-                    {/* need to keep this commented */}
-                    {/* <div>
-                      <Label htmlFor="">Secondary Email</Label>
-                      <Input placeholder="" className="w-full" />
-                    </div> */}
-
-                    {/* need to keep this commented */}
-                    {/* <div>
-                      <Label htmlFor="">Country/Region</Label>
-                      <Select className="w-full">
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="categories1">Country</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div> */}
-                    {/* need to keep this commented */}
-                    {/* <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <Label htmlFor="">States</Label>
-                        <Select className="w-full">
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="categories1">State</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      <div>
-                        <Label htmlFor="">Zip Code</Label>
-                        <Input placeholder="" className="w-full" />
-                      </div>
-                    </div> */}
                     <div>
                       <Button
                         size="sm"
@@ -281,7 +260,7 @@ export default function AboutPage() {
 
             {shippingAddress && shippingAddress.length > 0 ? (
               shippingAddress.map((res, index) => {
-                return <UserShippingAddress addressDetails={res} />;
+                return <UserShippingAddress addressDetails={res} deleteAddresshandler={deleteAdressHandler}/>;
               })
             ) : (
               <h1> no address Found</h1>

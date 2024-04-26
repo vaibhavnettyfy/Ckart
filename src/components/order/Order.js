@@ -74,6 +74,10 @@ export default function Order() {
     }
   };
 
+  const orderDetailsHandler = (id) =>{
+    router.push(`/order-details/${id}`);
+  };
+
   return (
     <div className="lg:my-20 md:my-16 sm:my-10 my-5">
       <div className="container px-3 sm:px-6">
@@ -128,16 +132,16 @@ export default function Order() {
                         } = response;
 
                         return (
-                          <TableRow key={index}>
+                          <TableRow key={index} onClick={()=>orderDetailsHandler(id)}>
                             <TableCell>
                               {orderNumber ? orderNumber : "-"}
                             </TableCell>
                             <TableCell className="text-center">
-                              {discountAmount ? `₹ ${discountAmount}` : "-"}
+                            ₹ {discountAmount ? ` ${discountAmount}` : "-"}
                             </TableCell>
 
                             <TableCell className="font-semibold text-center">
-                              {totalAmount ? `₹ ${totalAmount}` : 0}
+                            ₹ {totalAmount ? ` ${totalAmount}` : 0}
                             </TableCell>
                             <TableCell className="text-center text-green font-semibold uppercase">
                               {renderStatus(orderStatus)}

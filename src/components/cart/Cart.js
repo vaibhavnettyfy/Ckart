@@ -48,8 +48,7 @@ export default function Cart() {
   const couponApplyHandler = async () => {
     const payload = {
       couponCode: coupanText,
-      amount: 1000,
-      // amount:cartSummary.subtotal || 1000,
+      amount:cartSummary.subtotal,
       cartId: cartId,
     };
     const { count, data, message, success } = await couponApplyApiHandler(
