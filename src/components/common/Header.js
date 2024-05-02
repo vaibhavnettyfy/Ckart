@@ -82,9 +82,9 @@ export default function Header() {
     }
   }, [cartId]);
 
-  useEffect(()=>{
+  useEffect(() => {
     categoriesDataHandler();
-  },[])
+  }, []);
 
   const categoriesDataHandler = async () => {
     try {
@@ -120,7 +120,6 @@ export default function Header() {
       .then((res) => res.json())
       .then((data) => {
         setUserAddress(data?.address);
-        console.log(data.address);
         const payload = {
           postalCode: data?.address?.postcode,
           suburb: data?.address?.suburb,
@@ -312,7 +311,7 @@ export default function Header() {
                         <SelectValue placeholder="Select Categories" />
                       </SelectTrigger>
                       <SelectContent>
-                        {console.log("Select Categories",categoreyData)}
+                        {console.log("Select Categories", categoreyData)}
                         {categoreyData && categoreyData.length > 0 ? (
                           categoreyData.map((response, index) => {
                             const { id, image, name, status, subCategorys } =

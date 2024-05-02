@@ -41,7 +41,6 @@ import { updateLocationValidation } from "@/helper/Validation";
 import { getDetailsByPincode } from "@/helper";
 
 export default function ProductDetails({ detailsData, callBackHandler }) {
-  console.log("detailsData-detailsData",detailsData);
   const {
     brand,
     category,
@@ -71,22 +70,21 @@ export default function ProductDetails({ detailsData, callBackHandler }) {
   const userLoginFlag = cookies.get("token");
   const userDetails = cookies.get("USERDETAILS");
   const cartId = cookies.get("CARTID");
-  const {setDeliveryAddress, deliveryAddress} = useAppContext();
+  const { setDeliveryAddress, deliveryAddress } = useAppContext();
 
   const setQuantityHandler = (value) => {
     setSelectedQuantitys(value);
   };
 
-  
   const ImageHandler = (image) => {
     const data =
       image && image.length > 0
         ? image.map((res) => {
-          return {
-            original: res.image ? res.image : "",
-            thumbnail: res.image ? res.image : "",
-          };
-        })
+            return {
+              original: res.image ? res.image : "",
+              thumbnail: res.image ? res.image : "",
+            };
+          })
         : [];
     setProductImage(data);
   };
@@ -95,15 +93,17 @@ export default function ProductDetails({ detailsData, callBackHandler }) {
     setSelectedQuantitys(minQuantity);
   }, [minQuantity]);
 
-  const updateLocationHandler = async () =>{
+  const updateLocationHandler = async () => {
     const response = await getDetailsByPincode(formik.values.pincode);
     if (response.data.status == "OK") {
       const location = response.data.results[0].address_components;
       const l1 = response.data.results[0];
       const payload = {
         postalCode: formik.values.pincode,
-        suburb: location.find((component) => component.types.includes("locality")).long_name
-      }
+        suburb: location.find((component) =>
+          component.types.includes("locality")
+        ).long_name,
+      };
       setDeliveryAddress(payload);
       cookies.set("deliveryAddress", payload);
       setOpen(false);
@@ -116,30 +116,26 @@ export default function ProductDetails({ detailsData, callBackHandler }) {
     initialValues: updateLocationIv,
     validationSchema: updateLocationValidation,
     onSubmit: updateLocationHandler,
-  })
+  });
 
   useEffect(() => {
     ImageHandler(productImage);
   }, [productImage]);
 
-  const addTocartHandler = async () => {
+  const addTocartHandler = async (buynowFlage) => {
     try {
       const payload = {
         productId: id,
         quantity: selectedQuantitys,
         userId: userDetails?.id ? userDetails?.id : "",
-        pincode: deliveryAddress?.postalCode
-        ? deliveryAddress?.postalCode
-        : "",
+        pincode: deliveryAddress?.postalCode ? deliveryAddress?.postalCode : "",
       };
       const cartPayload = {
         productId: id,
         quantity: selectedQuantitys,
         id: cartId ? cartId : "",
         userId: userDetails?.id ? userDetails?.id : "",
-        pincode:deliveryAddress?.postalCode
-        ? deliveryAddress?.postalCode
-        : "",
+        pincode: deliveryAddress?.postalCode ? deliveryAddress?.postalCode : "",
       };
       const { count, data, message, success } = await addProductApiToCart(
         cartId ? cartPayload : payload
@@ -147,6 +143,9 @@ export default function ProductDetails({ detailsData, callBackHandler }) {
       if (success) {
         if (!cartId) {
           cookies.set("CARTID", data.cartId);
+        }
+        if (buynowFlage) {
+          router.push("/cart");
         }
         successNotification(message);
         callBackHandler();
@@ -223,7 +222,6 @@ export default function ProductDetails({ detailsData, callBackHandler }) {
                         <span className="text-[#5F6C72] font-normal">
                           Availability :{" "}
                         </span>{" "}
-                        {console.log("quantity", quantity)}
                         {quantity ? (
                           <span className="text-green">In Stock</span>
                         ) : (
@@ -264,7 +262,7 @@ export default function ProductDetails({ detailsData, callBackHandler }) {
                     {`₹ ${price ? price : 0}`}
                   </div>
                   <div className="text-[#77878F] lg:text-lg md:text-base text-sm font-normal line-through">
-                  {mrp && `₹ ${mrp}`}
+                    {mrp && `₹ ${mrp}`}
                   </div>
                   {/* <div className="text-sm px-2 py-1 bg-[#EFD33D] font-semibold rounded-sm ml-2">
                     21% OFF
@@ -314,7 +312,7 @@ export default function ProductDetails({ detailsData, callBackHandler }) {
                     size="lg"
                     className="shadow-none"
                     variant="outline"
-                    onClick={() => router.push("/cart")}
+                    onClick={() => addTocartHandler(true)}
                   >
                     Buy now
                   </Button>
@@ -328,7 +326,11 @@ export default function ProductDetails({ detailsData, callBackHandler }) {
                             {" "}
                             <div className="md:text-lg sm:text-base text-sm font-normal">
                               Delivery Pincode:-{" "}
-                              <span className="font-semibold">{deliveryAddress?.postalCode ? deliveryAddress?.postalCode : '-'}</span>
+                              <span className="font-semibold">
+                                {deliveryAddress?.postalCode
+                                  ? deliveryAddress?.postalCode
+                                  : "-"}
+                              </span>
                             </div>
                           </TooltipTrigger>
                           <TooltipContent>
@@ -346,13 +348,27 @@ export default function ProductDetails({ detailsData, callBackHandler }) {
                               Enter an Indian pincode
                             </Label>
                             <div className="relative">
-                              <Input placeholder="" className="w-full" name="pincode" formik={formik}/>
+                              <Input
+                                placeholder=""
+                                className="w-full"
+                                name="pincode"
+                                formik={formik}
+                              />
                               <Search className="absolute top-[10px] right-3 w-5 h-5" />
                             </div>
                           </div>
                           <div className="flex justify-end gap-2">
-                            <Button size="sm" onClick={() => formik.handleSubmit()}>Update</Button>
-                            <Button size="sm" variant="outline" onClick={() => setOpen(false)}>
+                            <Button
+                              size="sm"
+                              onClick={() => formik.handleSubmit()}
+                            >
+                              Update
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => setOpen(false)}
+                            >
                               Cancel
                             </Button>
                           </div>

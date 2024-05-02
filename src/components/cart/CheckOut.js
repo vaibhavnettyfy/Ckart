@@ -47,7 +47,6 @@ export default function CheckOut() {
     try {
       setSummaryLoader(true);
       const { data, message, success } = await productListByCart(cartId);
-      console.log("datadatadatadata-data", data);
       if (success) {
         setCartList(data.cartData);
         setCartSummary(data.cart);
@@ -87,7 +86,6 @@ export default function CheckOut() {
       const isBillingAddress =
         data.userAddress &&
         data.userAddress.filter((res) => res.isBillingAddress === 1);
-      console.log("isBillingAddress", isBillingAddress);
       setSelectedBillAddress(isBillingAddress[0].id);
       const isShippingAddress =
         data.userAddress &&
@@ -96,7 +94,6 @@ export default function CheckOut() {
       if (isShippingAddress) {
         setSelectedShippingAdd(isShippingAddress[0].id);
       }
-      console.log("isShippingAddress", isShippingAddress);
     } catch (err) {
       console.error(err);
     } finally {
@@ -109,11 +106,10 @@ export default function CheckOut() {
   }, []);
 
   const selectAddresHandler = (data) => {
-    console.log(data, "selectData");
     setSelectedShippingAdd(data);
   };
 
-  const callBackHandler = () =>{
+  const callBackHandler = () => {
     getshippingAddress(userDetails?.id);
   };
 
@@ -129,7 +125,7 @@ export default function CheckOut() {
                   <div className="sm:text-2xl text-xl font-semibold">
                     Shipping Information
                   </div>
-                  <ShippingAddress callBackHandler={callBackHandler}/>
+                  <ShippingAddress callBackHandler={callBackHandler} />
                 </div>
                 {loading ? (
                   <></>
@@ -166,7 +162,8 @@ export default function CheckOut() {
                       {cartList &&
                         cartList.length > 0 &&
                         cartList.map((response, index) => {
-                          const {amount,price,quantity,productId} = response;
+                          const { amount, price, quantity, productId } =
+                            response;
                           return (
                             <div className="flex sm:gap-3 gap-2 items-center">
                               <Image
@@ -174,11 +171,17 @@ export default function CheckOut() {
                                 width={80}
                                 height={80}
                                 className="sm:w-[70px] w-[50px] object-contain"
-                                src={productId.image ? productId.image :"/ProductImage.svg" }
+                                src={
+                                  productId.image
+                                    ? productId.image
+                                    : "/ProductImage.svg"
+                                }
                               />
                               <div>
                                 <div className="sm:text-base text-sm font-semibold mb-1">
-                                  {productId.productName ? productId.productName : '-'}
+                                  {productId.productName
+                                    ? productId.productName
+                                    : "-"}
                                 </div>
                                 <div className="sm:text-sm text-xs text-[#5D5F5F]">
                                   {quantity} x{" "}

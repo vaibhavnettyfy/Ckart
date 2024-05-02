@@ -2,12 +2,18 @@ import React from "react";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
-const SelectAddress = ({ shippingAddress,selectAddressHandler,selectedShippingAdd }) => {
-  console.log("shippingAddress", shippingAddress);
-  console.log("selectedShippingAdd", selectedShippingAdd);
+const SelectAddress = ({
+  shippingAddress,
+  selectAddressHandler,
+  selectedShippingAdd,
+}) => {
   return (
     <div>
-      <RadioGroup chec={selectedShippingAdd} onValueChange={(event)=>selectAddressHandler(event)} className="grid sm:grid-cols-2">
+      <RadioGroup
+        chec={selectedShippingAdd}
+        onValueChange={(event) => selectAddressHandler(event)}
+        className="grid sm:grid-cols-2"
+      >
         {shippingAddress && shippingAddress.length > 0 ? (
           shippingAddress.map((response, index) => {
             const {

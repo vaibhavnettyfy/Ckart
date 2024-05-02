@@ -21,12 +21,10 @@ import {
   addproductApiWishlist,
   removeproductApiWishlist,
 } from "@/Service/WishList/WishList.service";
-import { usePathname } from 'next/navigation';
+import { usePathname } from "next/navigation";
 import { errorNotification, successNotification } from "@/helper/Notification";
 import { addProductApiToCart } from "@/Service/AddTocart/AddToCart.service";
 import { useAppContext } from "@/context";
-
-
 
 const ProductCard = ({ productDetails, callBackHandler }) => {
   const {
@@ -44,12 +42,10 @@ const ProductCard = ({ productDetails, callBackHandler }) => {
     specificationData,
   } = productDetails ?? {};
 
-  console.log("productDetails",productDetails);
-
   const router = useRouter();
   const cookies = new Cookies();
   const [wishList, setWishList] = useState(false);
-  const {setDeliveryAddress, deliveryAddress} = useAppContext();
+  const { setDeliveryAddress, deliveryAddress } = useAppContext();
   const [quantity, setQuantity] = useState(1);
   const [totalAmount, setTotalAmount] = useState();
   const userLoginFlag = cookies.get("token");
@@ -68,25 +64,21 @@ const ProductCard = ({ productDetails, callBackHandler }) => {
     setQuantity(value);
   };
 
-  const cartHandler = async (details, id) => {
+  const cartHandler = async (details, id, buynowFlage) => {
     const cartId = cookies.get("CARTID");
 
     const payload = {
       productId: id,
       quantity: quantity,
       userId: userDetails?.id ? userDetails?.id : "",
-      pincode: deliveryAddress.postalCode
-      ? deliveryAddress.postalCode
-      : "",
+      pincode: deliveryAddress.postalCode ? deliveryAddress.postalCode : "",
     };
     const cartIdPayload = {
       productId: id,
       quantity: quantity,
       id: cartId ? cartId : "",
       userId: userDetails?.id ? userDetails?.id : "",
-      pincode: deliveryAddress.postalCode
-      ? deliveryAddress.postalCode
-      : "",
+      pincode: deliveryAddress.postalCode ? deliveryAddress.postalCode : "",
     };
     const { count, data, message, success } = await addProductApiToCart(
       cartId ? cartIdPayload : payload
@@ -94,6 +86,9 @@ const ProductCard = ({ productDetails, callBackHandler }) => {
     if (success) {
       if (!cartId) {
         cookies.set("CARTID", data.cartId);
+      }
+      if (buynowFlage) {
+        router.push("/cart");
       }
       successNotification(message);
       callBackHandler();
@@ -214,8 +209,9 @@ const ProductCard = ({ productDetails, callBackHandler }) => {
         >
           <div className="text-[#42545E] lg:text-base md:text-sm text-xs py-2">
             Per Bundle{" "}
-            <span className="font-semibold text-black">{`₹ ${price ? price : 0
-              }`}</span>
+            <span className="font-semibold text-black">{`₹ ${
+              price ? price : 0
+            }`}</span>
           </div>
           <div className="text-[#77878F] text-[13px] font-normal line-through">
             {mrp && `₹ ${mrp}`}
@@ -265,7 +261,7 @@ const ProductCard = ({ productDetails, callBackHandler }) => {
             size={"card"}
             variant="outline"
             className="w-full"
-            onClick={() => router.push("/cart")}
+            onClick={() => cartHandler(productDetails, id, true)}
           >
             buy now
           </Button>

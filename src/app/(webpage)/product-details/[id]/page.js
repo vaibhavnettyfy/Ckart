@@ -12,21 +12,23 @@ export async function generateMetadata({ params }) {
       title: title,
       description: description,
       url: `https://ckart.vercel.app/product-details/${params.id}`,
-      siteName: 'Ckart',
+      siteName: "Ckart",
       locale: "en_US",
-      images: '/about.png',
+      images: "/about.png",
     },
     twitter: {
       card: "summary_large_image",
       title: title,
       description: description,
-      images: '/about.png',
+      images: "/about.png",
     },
   };
-  }
-  export default function Page({params}) {
-    return (
-      <ProductDetailsPage productKey={params.id}/>
-    )
-  }
-
+}
+export default function Page({ params }) {
+  const callBackHandler = (data) => {
+    console.log("data", data);
+  };
+  return (
+    <ProductDetailsPage productKey={params.id} callBackData={callBackHandler} />
+  );
+}

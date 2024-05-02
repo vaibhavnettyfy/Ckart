@@ -77,7 +77,7 @@ const Consultation = ({ setOpen }) => {
       setLoading(true);
       const formData = new FormData();
       formData.append("type", 2);
-      formData.append("userId", userDetails?.id ? userDetails?.id : '');
+      formData.append("userId", userDetails?.id ? userDetails?.id : "");
       formData.append("fullName", formik.values.fullName);
       formData.append("phoneNo", formik.values.phoneNo);
       formData.append("email", formik.values.email);
@@ -97,11 +97,12 @@ const Consultation = ({ setOpen }) => {
       formData.append("time", formik.values.time);
       formData.append("additionalnotes", formik.values.additionalnotes);
 
-      const { count, data, message, success } =
-        await bookAppointmentApiHandler(formData);
+      const { count, data, message, success } = await bookAppointmentApiHandler(
+        formData
+      );
       if (success) {
         successNotification(message);
-        setOpen(false)
+        setOpen(false);
       } else {
         errorNotification(message);
       }
@@ -113,7 +114,6 @@ const Consultation = ({ setOpen }) => {
   };
 
   const planPictureHanlder = (event) => {
-    console.log("evevnt", event);
     const file = event;
     if (file) {
       if (file.size > 2 * 1024 * 1024) {
@@ -243,9 +243,13 @@ const Consultation = ({ setOpen }) => {
           <Label htmlFor="">
             Previous Experience with Construction Projects
           </Label>
-          <RadioGroup defaultValue="" className="flex h-9 items-center" onValueChange={(event) =>
-            formik.setFieldValue("previousExperience", event)
-          }>
+          <RadioGroup
+            defaultValue=""
+            className="flex h-9 items-center"
+            onValueChange={(event) =>
+              formik.setFieldValue("previousExperience", event)
+            }
+          >
             <div className="flex items-center space-x-2">
               <RadioGroupItem value={"None"} id="1" />
               <Label className="text-[#475156]" htmlFor="None">
@@ -396,7 +400,7 @@ const Consultation = ({ setOpen }) => {
               type="date"
               className="block"
               name="date"
-              min={new Date().toISOString().split('T')[0]}
+              min={new Date().toISOString().split("T")[0]}
               onChange={(event) => {
                 dateHandler(event.target.value);
                 // formik.setFieldValue("date", event.target.value)
@@ -404,35 +408,39 @@ const Consultation = ({ setOpen }) => {
             />
           </div>
         </div>
-        {
-          formik.values.date && (
-            <div className="md:col-span-3 sm:col-span-2 col-span-1">
-              <Label htmlFor="">Available slots</Label>
-              <div className="flex gap-1 flex-wrap">
-                {availableSlotData && availableSlotData.length > 0 ? (
-                  availableSlotData.map((item, index) => {
-                    return (
-                      <div
-                        key={index}
-                        onClick={() => {
-                          if(item.status !== 1){
-                            availableSlotHandler(item.id, item.time)
-                          }
-                        }}
-                        className={`border rounded-md px-3 py-1 w-fit cursor-pointer ${item.status === 1 &&  "text-[#666] cursor-not-allowed"} ${item.id === selectedSlotData ? 'bg-primary text-white' : ''}`}
-                      >
-                        <div className="text-sm font-semibold">{item.time}</div>
-                        {/* <div className="text-xs text-[#5D5F5F]">{item.time}</div> */}
-                      </div>
-                    );
-                  })
-                ) : (
-                  <div className="text-[#5D5F5F] text-center">No slots Found</div>
-                )}
-              </div>
+        {formik.values.date && (
+          <div className="md:col-span-3 sm:col-span-2 col-span-1">
+            <Label htmlFor="">Available slots</Label>
+            <div className="flex gap-1 flex-wrap">
+              {availableSlotData && availableSlotData.length > 0 ? (
+                availableSlotData.map((item, index) => {
+                  return (
+                    <div
+                      key={index}
+                      onClick={() => {
+                        if (item.status !== 1) {
+                          availableSlotHandler(item.id, item.time);
+                        }
+                      }}
+                      className={`border rounded-md px-3 py-1 w-fit cursor-pointer ${
+                        item.status === 1 && "text-[#666] cursor-not-allowed"
+                      } ${
+                        item.id === selectedSlotData
+                          ? "bg-primary text-white"
+                          : ""
+                      }`}
+                    >
+                      <div className="text-sm font-semibold">{item.time}</div>
+                      {/* <div className="text-xs text-[#5D5F5F]">{item.time}</div> */}
+                    </div>
+                  );
+                })
+              ) : (
+                <div className="text-[#5D5F5F] text-center">No slots Found</div>
+              )}
             </div>
-          )
-        }
+          </div>
+        )}
         <div className="md:col-span-3 sm:col-span-2 col-span-1">
           <Label htmlFor="">Additional Notes</Label>
           <Textarea

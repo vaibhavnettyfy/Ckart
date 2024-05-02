@@ -108,7 +108,7 @@ const BulkOrder = ({ setOpen }) => {
       );
       if (success) {
         successNotification(message);
-        setOpen(false)
+        setOpen(false);
       } else {
         errorNotification(message);
       }
@@ -137,7 +137,6 @@ const BulkOrder = ({ setOpen }) => {
     }
   };
 
-
   useEffect(() => {
     if (formik.values.deliveryPinCode.length === 6) {
       pinCodeResult(formik.values.deliveryPinCode);
@@ -148,7 +147,6 @@ const BulkOrder = ({ setOpen }) => {
 
   const pinCodeResult = async (pincode) => {
     const response = await getDetailsByPincode(pincode);
-    console.log("response: " + response);
     if (response.data.status == "OK") {
     } else {
       formik.setErrors({ deliveryPinCode: "pincode is not a valid" });
@@ -182,9 +180,9 @@ const BulkOrder = ({ setOpen }) => {
         </div>
         <div>
           <Label htmlFor="">Email Address</Label>
-          <Input className="block"
+          <Input
+            className="block"
             type="email"
-
             name="email"
             formik={formik}
             max={100}
@@ -192,8 +190,8 @@ const BulkOrder = ({ setOpen }) => {
         </div>
         <div>
           <Label htmlFor="">Company Name</Label>
-          <Input className="block"
-
+          <Input
+            className="block"
             name="companyName"
             formik={formik}
             max={100}
@@ -232,9 +230,9 @@ const BulkOrder = ({ setOpen }) => {
         </div>
         <div>
           <Label htmlFor="">Estimated Quantity of Materials</Label>
-          <Input className="block"
+          <Input
+            className="block"
             type="number"
-
             name="estimatedQuantity"
             formik={formik}
             max={10}
@@ -242,8 +240,8 @@ const BulkOrder = ({ setOpen }) => {
         </div>
         <div className="md:col-span-3 sm:col-span-2 col-span-1">
           <Label htmlFor="">Specific SKUs (if known)</Label>
-          <Input className="block"
-
+          <Input
+            className="block"
             name="skus"
             value={skuValue}
             onChange={(event) => skuHandler(event.target.value)}
@@ -259,7 +257,10 @@ const BulkOrder = ({ setOpen }) => {
                     className="border rounded-3xl flex items-center "
                   >
                     <div className="px-2 py-[1px]">{item}</div>
-                    <div className="pr-1 cursor-pointer" onClick={() => deleteSkuHandler(index)}>
+                    <div
+                      className="pr-1 cursor-pointer"
+                      onClick={() => deleteSkuHandler(index)}
+                    >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="1em"
@@ -309,8 +310,8 @@ const BulkOrder = ({ setOpen }) => {
         </div>
         <div>
           <Label htmlFor="">Delivery PIN Code</Label>
-          <Input className="block"
-
+          <Input
+            className="block"
             name="deliveryPinCode"
             formik={formik}
             max={250}
@@ -341,8 +342,8 @@ const BulkOrder = ({ setOpen }) => {
         </div>
         <div>
           <Label htmlFor="">Specific Brand Preference</Label>
-          <Input className="block"
-
+          <Input
+            className="block"
             name="brandPreference"
             formik={formik}
             max={100}
@@ -350,9 +351,9 @@ const BulkOrder = ({ setOpen }) => {
         </div>
         <div>
           <Label htmlFor="">Delivery Timeline</Label>
-          <Input className="block"
+          <Input
+            className="block"
             type="date"
-
             name="deliveryTimeline"
             formik={formik}
             max={100}
@@ -360,9 +361,9 @@ const BulkOrder = ({ setOpen }) => {
         </div>
         <div>
           <Label htmlFor="">Indicative Budget</Label>
-          <Input className="block"
+          <Input
+            className="block"
             type="number"
-
             name="indicativeBudget"
             formik={formik}
             max={250}
@@ -401,9 +402,10 @@ const BulkOrder = ({ setOpen }) => {
         <div className="md:col-span-3 sm:col-span-2 col-span-1 grid sm:grid-cols-3">
           <div className="col-span-1">
             <Label htmlFor="">Meeting Date</Label>
-            <Input className="block"
+            <Input
+              className="block"
               type="date"
-              min={new Date().toISOString().split('T')[0]}
+              min={new Date().toISOString().split("T")[0]}
               name="date"
               onChange={(event) => dateHandler(event.target.value)}
             />
@@ -422,15 +424,17 @@ const BulkOrder = ({ setOpen }) => {
                     <div
                       key={index}
                       onClick={() => {
-                        if(item.status !== 1){
-                          availableSlotHandler(item.id, item.time)}
+                        if (item.status !== 1) {
+                          availableSlotHandler(item.id, item.time);
                         }
-                      }
-
-                      className={`border rounded-md px-3 py-1 w-fit cursor-pointer  ${item.status === 1 && "text-[#666] cursor-not-allowed"} ${item.id === selectedSlotData
-                        ? "bg-primary text-white"
-                        : ""
-                        }`}
+                      }}
+                      className={`border rounded-md px-3 py-1 w-fit cursor-pointer  ${
+                        item.status === 1 && "text-[#666] cursor-not-allowed"
+                      } ${
+                        item.id === selectedSlotData
+                          ? "bg-primary text-white"
+                          : ""
+                      }`}
                     >
                       <div className="text-sm font-semibold">{item.time}</div>
                       {/* <div className="text-xs text-[#5D5F5F]">{item.time}</div> */}

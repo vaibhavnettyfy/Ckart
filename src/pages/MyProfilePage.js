@@ -68,16 +68,18 @@ export default function AboutPage() {
     onSubmit: basicDetailsHandler,
   });
 
-  const deleteAdressHandler = async(id) =>{
-    try{
-      const {data,message,success} = await deleteShippingAddressApiHandler(id);
-      if(success){
+  const deleteAdressHandler = async (id) => {
+    try {
+      const { data, message, success } = await deleteShippingAddressApiHandler(
+        id
+      );
+      if (success) {
         successNotification(message);
         getProfileUpdateHandler(userDetails.id);
-      }else{
+      } else {
         errorNotification(message);
       }
-    }catch(err){
+    } catch (err) {
       console.error(err);
     }
   };
@@ -86,18 +88,27 @@ export default function AboutPage() {
     const file = e.target.files[0];
     if (file) {
       if (file.size > 2 * 1024 * 1024) {
-        errorNotification("File size exceeds 2MB. Please select a smaller file.");
+        errorNotification(
+          "File size exceeds 2MB. Please select a smaller file."
+        );
       } else {
-        const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif"];
+        const allowedTypes = [
+          "image/jpeg",
+          "image/jpg",
+          "image/png",
+          "image/gif",
+        ];
         if (allowedTypes.indexOf(file.type) === -1) {
-          errorNotification("Invalid file type. Please select a valid image file.");
+          errorNotification(
+            "Invalid file type. Please select a valid image file."
+          );
         } else {
           setProfilePicture(file);
           setFile(URL.createObjectURL(e.target.files[0]));
         }
       }
     } else {
-      errorNotification("No file selected")
+      errorNotification("No file selected");
     }
   };
 
@@ -136,10 +147,6 @@ export default function AboutPage() {
       setProfileLoading(false);
     }
   };
-
-  console.log("Value", formik.values);
-
-  console.log("errr", formik.errors);
 
   return (
     <div className="lg:my-20 md:my-16 sm:my-10 my-6">
@@ -260,7 +267,12 @@ export default function AboutPage() {
 
             {shippingAddress && shippingAddress.length > 0 ? (
               shippingAddress.map((res, index) => {
-                return <UserShippingAddress addressDetails={res} deleteAddresshandler={deleteAdressHandler}/>;
+                return (
+                  <UserShippingAddress
+                    addressDetails={res}
+                    deleteAddresshandler={deleteAdressHandler}
+                  />
+                );
               })
             ) : (
               <h1> no address Found</h1>

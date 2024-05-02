@@ -5,7 +5,9 @@ import { Separator } from "@/components/ui/separator";
 import { FileText, MoveRight } from "lucide-react";
 import moment from "moment";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
+import React, { useEffect, useRef, useState } from "react";
 
 const OrderDetailsPage = ({ orderId }) => {
   const [orderDetails, setOrderDetails] = useState({});
@@ -13,6 +15,7 @@ const OrderDetailsPage = ({ orderId }) => {
   const [productDetails, setProductDetails] = useState([]);
   const [deliveryAddress, setDeliveryAddress] = useState({});
   const [orderCount, setOrderCount] = useState(0);
+  const divRef = useRef(null);
 
   useEffect(() => {
     if (orderId) {
@@ -21,9 +24,15 @@ const OrderDetailsPage = ({ orderId }) => {
   }, []);
 
   const generatePdf = () =>{
-    
+    const divToCapture = divRef.current;
+    html2canvas(divToCapture).then((canvas)=>{
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF("p", "mm", "a4");
+      pdf.addImage(imgData, "PNG", 0, 0, 210, 297); // A4 dimensions in mm
+      pdf.save("downloaded-pdf.pdf");
+    })
+  };
 
-  }
 
   const getOrderDetailsById = async (orderId) => {
     try {
@@ -56,7 +65,7 @@ const OrderDetailsPage = ({ orderId }) => {
             <div className="flex justify-between mb-2">
               <div className="text-[22px] font-bold">{`Order : ${orderDetails.orderNumber}`}</div>
               <div>
-                <Button size="sm" className="px-2 py-1 !text-sm">
+                <Button size="sm" className="px-2 py-1 !text-sm" onClick={()=>generatePdf()}>
                   <div className="flex gap-1 items-center">
                     <FileText className="w-[14px] h-[14px]" />
                     <div className="leading-none">Invoice</div>
@@ -81,6 +90,7 @@ const OrderDetailsPage = ({ orderId }) => {
               </div>
             </div>
           </div>
+          <div ref={divRef}>
           <Separator className="my-5" />
           <div>
             <div className="flex flex-wrap justify-between items-center">
@@ -283,6 +293,7 @@ const OrderDetailsPage = ({ orderId }) => {
               </div>
             </div>
           </div>
+            </div>
         </div>
       </div>
     </div>

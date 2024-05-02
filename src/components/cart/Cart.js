@@ -48,7 +48,7 @@ export default function Cart() {
   const couponApplyHandler = async () => {
     const payload = {
       couponCode: coupanText,
-      amount:cartSummary.subtotal,
+      amount: cartSummary.subtotal,
       cartId: cartId,
     };
     const { count, data, message, success } = await couponApplyApiHandler(
@@ -64,8 +64,7 @@ export default function Cart() {
 
   const checkoutHandler = async (cartId) => {
     try {
-      console.log("Details-->",userDetails);
-      if(userDetails){
+      if (userDetails) {
         setCheckoutFlag(true);
         const { data, message, success } = await checkOutApiHandler(cartId);
         if (success) {
@@ -74,7 +73,7 @@ export default function Cart() {
         } else {
           errorNotification(message);
         }
-      }else{
+      } else {
         router.push(`/login`);
       }
     } catch (err) {
@@ -221,7 +220,7 @@ export default function Cart() {
                           Apply
                         </Button>
                       </div>
-                        {coupanApplyFlag && <h3>{`Coupan applied`}</h3>}
+                      {coupanApplyFlag && <h3>{`Coupan applied`}</h3>}
                     </div>
                     <div className="py-5">
                       <Separator />

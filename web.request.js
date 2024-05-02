@@ -1,5 +1,7 @@
 import axios from "axios";
 import Cookies from "universal-cookie";
+import { useAppContext } from "@/context";
+import { logoutHandler, unAuthorizedHandler } from "@/helper";
 
 export const post = async (url, data) => {
   try {
@@ -29,11 +31,16 @@ export const post = async (url, data) => {
       };
     }
   } catch (error) {
+    if (error && error.response && error.response.status === 401) {
+      const { setUnAuthorixedPerson } = useAppContext();
+      setUnAuthorixedPerson(true);
+      logoutHandler();
+    }
     return {
       success: false,
       data: [],
       count: 0,
-      message: error?.response?.data?.message || 'Something went wrong',
+      message: error?.response?.data?.message || "Something went wrong",
     };
   }
 };
@@ -67,11 +74,16 @@ export const get = async (url) => {
       };
     }
   } catch (error) {
+    if (error && error.response && error.response.status === 401) {
+      const { setUnAuthorixedPerson } = useAppContext();
+      setUnAuthorixedPerson(true);
+      logoutHandler();
+    }
     return {
       success: false,
       count: 0,
       data: [],
-      message: error?.response?.data?.message || 'Something went wrong',
+      message: error?.response?.data?.message || "Something went wrong",
     };
   }
 };
@@ -95,12 +107,11 @@ export const POST = async (url, data) => {
       };
     }
   } catch (error) {
-    console.log(error,"Error");
     return {
       success: false,
       data: [],
       count: 0,
-      message: error?.response?.data?.message || 'Something went wrong',
+      message: error?.response?.data?.message || "Something went wrong",
     };
   }
 };
@@ -130,18 +141,23 @@ export const DELETE = async (id) => {
       };
     }
   } catch (error) {
+    if (error && error.response && error.response.status === 401) {
+      const { setUnAuthorixedPerson } = useAppContext();
+      setUnAuthorixedPerson(true);
+      logoutHandler();
+    }
     return {
       success: false,
       data: null,
-      message: error?.response?.data?.message || 'Something went wrong',
+      message: error?.response?.data?.message || "Something went wrong",
     };
   }
 };
 
-export const REMOVE = async (id) =>{
+export const REMOVE = async (id) => {
   try {
     const response = await axios.delete(id);
-    
+
     if (response.data.status) {
       return {
         success: true,
@@ -159,10 +175,10 @@ export const REMOVE = async (id) =>{
     return {
       success: false,
       data: null,
-      message: error?.response?.data?.message || 'Something went wrong',
+      message: error?.response?.data?.message || "Something went wrong",
     };
   }
-}
+};
 
 export const put = async (url, data) => {
   try {
@@ -185,19 +201,19 @@ export const put = async (url, data) => {
     return {
       success: false,
       data: null,
-      message: error?.response?.data?.message || 'Something went wrong',
+      message: error?.response?.data?.message || "Something went wrong",
     };
   }
 };
 
 export const PUT = async (url, data) => {
-  try{
+  try {
     const cookies = new Cookies();
     const TOKEN = cookies.get("token");
     const headers = {
       "x-auth-token": TOKEN,
     };
-    const response = await axios.put(url, data,{
+    const response = await axios.put(url, data, {
       headers,
     });
     if (response.data.status) {
@@ -213,12 +229,17 @@ export const PUT = async (url, data) => {
         message: response.data.message,
       };
     }
-  }catch(error){
+  } catch (error) {
+    if (error && error.response && error.response.status === 401) {
+      const { setUnAuthorixedPerson } = useAppContext();
+      setUnAuthorixedPerson(true);
+      logoutHandler();
+    }
     return {
       success: false,
       data: [],
       count: 0,
-      message: error?.response?.data?.message || 'Something went wrong',
+      message: error?.response?.data?.message || "Something went wrong",
     };
   }
 };
@@ -247,10 +268,15 @@ export const patch = async (url, data) => {
       };
     }
   } catch (error) {
+    if (error && error.response && error.response.status === 401) {
+      const { setUnAuthorixedPerson } = useAppContext();
+      setUnAuthorixedPerson(true);
+      logoutHandler();
+    }
     return {
       success: false,
       data: null,
-      message: error?.response?.data?.message || 'Something went wrong',
+      message: error?.response?.data?.message || "Something went wrong",
     };
   }
 };
@@ -260,7 +286,6 @@ export const patch = async (url, data) => {
 // With out token get api call
 export const GET = async (url) => {
   try {
-    
     const response = await axios.get(url);
     if (response.data.status) {
       return {
@@ -276,11 +301,10 @@ export const GET = async (url) => {
       };
     }
   } catch (error) {
-    
     return {
       success: false,
       data: [],
-      message: error?.response?.data?.message || 'Something went wrong',
+      message: error?.response?.data?.message || "Something went wrong",
     };
   }
 };
