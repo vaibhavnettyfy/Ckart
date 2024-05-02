@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Image from "next/image";
 import React, { useState } from "react";
+import Cookies from "universal-cookie";
 import { useFormik } from "formik";
 import { errorNotification, successNotification } from "@/helper/Notification";
 import {
@@ -23,6 +24,7 @@ import {
 
 function LoginWithOtp() {
   const router = useRouter();
+  const cookies = new Cookies();
   const [otpFlag, setOtpFlag] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -31,11 +33,9 @@ function LoginWithOtp() {
       setLoading(true);
       const payload = {
         email: formik.values.email,
-        otp: formik.values.otp
-      }
-      const { data, message, success } = await loginWithOtpApiHandler(
-        payload
-      );
+        otp: formik.values.otp,
+      };
+      const { data, message, success } = await loginWithOtpApiHandler(payload);
       if (success) {
         successNotification(message);
         router.push("/");
@@ -57,8 +57,8 @@ function LoginWithOtp() {
     try {
       setLoading(true);
       const payload = {
-        email: formik.values.email
-      }
+        email: formik.values.email,
+      };
       const { data, message, success } = await sendOtpApiHandler(payload);
       if (success) {
         successNotification(message);
@@ -111,7 +111,6 @@ function LoginWithOtp() {
           />
           <h4>{otpFlag && formik.errors.otp}</h4>
         </div>
-
       )}
       {otpFlag && (
         <div

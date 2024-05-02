@@ -38,12 +38,15 @@ export default function Cart() {
   const [coupanApplyFlag, setCoupanApplyFlag] = useState(false);
   const [coupanText, setCoupanText] = useState("");
   const [checkoutFlag, setCheckoutFlag] = useState(false);
+  const [totalAmount, setTotalAmount] = useState(0);
 
   useEffect(() => {
     if (cartId) {
       getProductListByCartId(cartId);
     }
   }, []);
+
+  const amountHandler = () => {};
 
   const couponApplyHandler = async () => {
     const payload = {
@@ -54,8 +57,11 @@ export default function Cart() {
     const { count, data, message, success } = await couponApplyApiHandler(
       payload
     );
+    console.log("data", data);
     if (success) {
       setCoupanApplyFlag(true);
+      // amountHandler();
+      setTotalAmount(data.amount);
     } else {
       errorNotification(message);
       setCoupanApplyFlag(false);
@@ -64,6 +70,7 @@ export default function Cart() {
 
   const checkoutHandler = async (cartId) => {
     try {
+      console.log("userDeta", userDetails);
       if (userDetails) {
         setCheckoutFlag(true);
         const { data, message, success } = await checkOutApiHandler(cartId);
@@ -104,6 +111,7 @@ export default function Cart() {
       setCartList(data.cartData);
       setCartLength(data.cartData.length);
       setCartSummary(data.cart);
+      setTotalAmount(data.cart.payableAmount);
     } else {
       setCartList([]);
       setCartSummary({});
@@ -231,10 +239,11 @@ export default function Cart() {
                           Total
                         </div>
                         <div className="font-semibold sm:text-xl text-lg">
-                          ₹{" "}
+                          {/* ₹{" "}
                           {cartSummary.payableAmount
                             ? cartSummary.payableAmount
-                            : 0.0}
+                            : 0.0} */}
+                          ₹ {totalAmount}
                         </div>
                       </div>
 
