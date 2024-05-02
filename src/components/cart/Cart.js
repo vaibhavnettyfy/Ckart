@@ -124,8 +124,8 @@ export default function Cart() {
       setTotalAmount(data.cart.payableAmount);
     } else {
       setCartList([]);
-      setCoupanId(data?.cart?.couponId);
-      setCoupanText(data?.cart?.couponCode);
+      setCoupanId("");
+      setCoupanText("");
       setCartSummary({});
       setCartLength(0);
     }
@@ -280,7 +280,7 @@ export default function Cart() {
                           Total
                         </div>
                         <div className="font-semibold sm:text-xl text-lg">
-                          ₹ {totalAmount}
+                          ₹ {totalAmount ? totalAmount : 0}
                         </div>
                       </div>
 
