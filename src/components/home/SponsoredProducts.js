@@ -26,14 +26,14 @@ const SponsoredProducts = () => {
   const [totalPage, setTotalPage] = useState(0);
   const [searchText, setSearchText] = useState("");
   const [category, setCategory] = useState("");
-  const [subCategory,setSubCategory] = useState("");
+  const [subCategory, setSubCategory] = useState("");
   const [sponsor, setSponsor] = useState(1);
   const cookies = new Cookies();
   const cartId = cookies.get("CARTID");
   const userId = cookies.get("token");
   const userDetails = cookies.get("USERDETAILS");
-  const {setCartLength} = useAppContext();
-  
+  const { setCartLength } = useAppContext();
+
   useEffect(() => {
     getAllSponserdProducts(
       searchText,
@@ -45,11 +45,11 @@ const SponsoredProducts = () => {
     );
   }, []);
 
-  useEffect(()=>{
-    if(cartId){
+  useEffect(() => {
+    if (cartId) {
       getProductListByCartId(cartId);
     }
-  },[]);
+  }, []);
 
   const getAllSponserdProducts = async (
     searchText,
@@ -87,21 +87,29 @@ const SponsoredProducts = () => {
     }
   };
 
-  const getProductListByCartId = async (cartId) =>{
-    const {data,message,success} = await productListByCart(cartId);
-    if(success){
+  const getProductListByCartId = async (cartId) => {
+    const { data, message, success } = await productListByCart(cartId);
+    console.log("data---->", data);
+    if (success) {
       setCartLength(data.cartData.length);
-    }else{
+    } else {
       setCartLength(0);
     }
   };
 
   const handlePageChange = (value) => {
     setCurrentPage(value);
-    getAllSponserdProducts(searchText, pageSize, category, subCategory,sponsor, value);
+    getAllSponserdProducts(
+      searchText,
+      pageSize,
+      category,
+      subCategory,
+      sponsor,
+      value
+    );
   };
 
-  const callBackHandler = () =>{
+  const callBackHandler = (id) => {
     getAllSponserdProducts(
       searchText,
       pageSize,
@@ -110,8 +118,8 @@ const SponsoredProducts = () => {
       sponsor,
       currentPage
     );
-    getProductListByCartId(cartId);
-  }
+    getProductListByCartId(id);
+  };
 
   return (
     <div className="z-20 relative lg:py-16 md:py-12 sm:py-8 py-5 md:my-10 sm:my-8 my-5">
@@ -124,7 +132,10 @@ const SponsoredProducts = () => {
             produtListData.map((item, index) => {
               return (
                 <div key={index} className="col-span-1">
-                  <ProductCard productDetails={item} callBackHandler={callBackHandler}/>
+                  <ProductCard
+                    productDetails={item}
+                    callBackHandler={callBackHandler}
+                  />
                 </div>
               );
             })

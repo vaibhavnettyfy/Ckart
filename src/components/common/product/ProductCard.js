@@ -91,7 +91,7 @@ const ProductCard = ({ productDetails, callBackHandler }) => {
         router.push("/cart");
       }
       successNotification(message);
-      callBackHandler();
+      callBackHandler(data.cartId);
     } else {
       callBackHandler();
       errorNotification(message);

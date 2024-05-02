@@ -21,13 +21,11 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import Cookies from "universal-cookie";
-import {
-  categorySubCategoryList,
-} from "@/Service/Category/Category.service";
+import { categorySubCategoryList } from "@/Service/Category/Category.service";
 import { ProductAllListApiHandler } from "@/Service/Product/Product.service";
 import { productListByCart } from "@/Service/AddTocart/AddToCart.service";
 import { useAppContext } from "@/context";
-export default function Product({categories,subCategories}) {
+export default function Product({ categories, subCategories }) {
   const cookies = new Cookies();
   const [categoryList, setCategoryList] = useState([]);
   const [categoryLoader, setCategoryLoader] = useState(false);
@@ -79,18 +77,18 @@ export default function Product({categories,subCategories}) {
       sponsor,
       currentPage
     );
-  }, [category,subCategory]);
+  }, [category, subCategory]);
 
-  useEffect(()=>{
-    if(categories){
+  useEffect(() => {
+    if (categories) {
       setCategory(categories);
       setCheckId(categories);
     }
-    if(subCategories){
+    if (subCategories) {
       setSubCategory(subCategories);
       setSubCheckId(subCategories);
     }
-  },[])
+  }, []);
 
   const getProductListByCartId = async (cartId) => {
     const { data, message, success } = await productListByCart(cartId);
@@ -102,19 +100,40 @@ export default function Product({categories,subCategories}) {
   };
 
   const searchHandler = (value) => {
-    getAllProductListHandler(value, pageSize, category, subCategory, sponsor, currentPage);
+    getAllProductListHandler(
+      value,
+      pageSize,
+      category,
+      subCategory,
+      sponsor,
+      currentPage
+    );
   };
 
   const categoryHandler = (value) => {
     setCategory(value);
     setSubCategory("");
-    getAllProductListHandler(searchText, pageSize, value, subCategory, sponsor, currentPage);
+    getAllProductListHandler(
+      searchText,
+      pageSize,
+      value,
+      subCategory,
+      sponsor,
+      currentPage
+    );
   };
 
   const subCategoryHandler = (value) => {
     setSubCategory(value);
     setCategory("");
-    getAllProductListHandler(searchText, pageSize, category, value, sponsor, currentPage);
+    getAllProductListHandler(
+      searchText,
+      pageSize,
+      category,
+      value,
+      sponsor,
+      currentPage
+    );
   };
 
   const getAllProductListHandler = async (
@@ -155,10 +174,17 @@ export default function Product({categories,subCategories}) {
 
   const handlePageChange = (value) => {
     setCurrentPage(value);
-    getAllProductListHandler(searchText, pageSize, category, subCategory, sponsor, value);
+    getAllProductListHandler(
+      searchText,
+      pageSize,
+      category,
+      subCategory,
+      sponsor,
+      value
+    );
   };
 
-  const callBackHandler = () => {
+  const callBackHandler = (id) => {
     getAllProductListHandler(
       searchText,
       pageSize,
@@ -167,7 +193,7 @@ export default function Product({categories,subCategories}) {
       sponsor,
       currentPage
     );
-    getProductListByCartId(cartId);
+    getProductListByCartId(id);
   };
 
   return (
@@ -195,7 +221,7 @@ export default function Product({categories,subCategories}) {
                                 onChange={(event) => [
                                   categoryHandler(event.target.value),
                                   setCheckId(event.target.value),
-                                  setSubCheckId("")
+                                  setSubCheckId(""),
                                 ]}
                               />
                               <label
@@ -209,7 +235,7 @@ export default function Product({categories,subCategories}) {
                           <AccordionContent>
                             <div className="px-4">
                               {response?.subCategorys &&
-                                response?.subCategorys.length > 0 ? (
+                              response?.subCategorys.length > 0 ? (
                                 response?.subCategorys.map((item, index) => {
                                   return (
                                     <div className="flex items-center space-x-2 col-span-2 mt-2">
@@ -219,9 +245,11 @@ export default function Product({categories,subCategories}) {
                                         value={item.id}
                                         checked={item.id == subCheckId}
                                         onChange={(event) => [
-                                          subCategoryHandler(event.target.value),
+                                          subCategoryHandler(
+                                            event.target.value
+                                          ),
                                           setSubCheckId(event.target.value),
-                                          setCheckId("")
+                                          setCheckId(""),
                                         ]}
                                       />
                                       <label
