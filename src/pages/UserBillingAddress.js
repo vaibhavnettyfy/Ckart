@@ -7,7 +7,10 @@ import { useFormik } from "formik";
 import { userBillingAddressIv } from "@/helper/intialValues";
 import { billingAddressValidation } from "@/helper/Validation";
 import { getDetailsByPincode } from "@/helper";
-import { basicDetailUpdateApiHandler, billingAddressUpdateApiHandler } from "@/Service/UserProfile/UserProfile.service";
+import {
+  basicDetailUpdateApiHandler,
+  billingAddressUpdateApiHandler,
+} from "@/Service/UserProfile/UserProfile.service";
 import { errorNotification, successNotification } from "@/helper/Notification";
 
 function UserBillingAddress({ addressDetails }) {
@@ -61,9 +64,9 @@ function UserBillingAddress({ addressDetails }) {
     }
   };
 
-
   const userUpdateAddressHandler = async () => {
-    const { data, message, success, count } = await billingAddressUpdateApiHandler(id, formik.values);
+    const { data, message, success, count } =
+      await billingAddressUpdateApiHandler(id, formik.values);
     if (success) {
       successNotification(message);
     } else {
@@ -94,7 +97,6 @@ function UserBillingAddress({ addressDetails }) {
     onSubmit: userUpdateAddressHandler,
   });
 
-
   useEffect(() => {
     if (formik.values.pincode !== "" && formik.values.pincode.length == 6) {
       pinCodeResults(formik.values.pincode);
@@ -105,7 +107,6 @@ function UserBillingAddress({ addressDetails }) {
       formik.setFieldValue("city", "");
     }
   }, [formik.values.pincode]);
-
 
   return (
     <div className="border rounded-lg">

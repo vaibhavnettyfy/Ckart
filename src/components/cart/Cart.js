@@ -22,7 +22,10 @@ import { useEffect, useState } from "react";
 import CartCard from "../common/Cart/CartCard";
 import { useAppContext } from "@/context";
 import EmptyCart from "./EmptyCart";
-import { couponApplyApiHandler } from "@/Service/Coupon/coupon.service";
+import {
+  couponApplyApiHandler,
+  removeCoupanApiApply,
+} from "@/Service/Coupon/coupon.service";
 import { checkOutApiHandler } from "@/Service/Checkout/Checkout.service";
 import { errorNotification, successNotification } from "@/helper/Notification";
 
@@ -39,6 +42,8 @@ export default function Cart() {
   const [coupanText, setCoupanText] = useState("");
   const [checkoutFlag, setCheckoutFlag] = useState(false);
   const [totalAmount, setTotalAmount] = useState(0);
+  const [coupanId, setCoupanId] = useState("");
+  const [coupanApplyLoader, setCoupanApplyLoader] = useState(false);
 
   useEffect(() => {
     if (cartId) {
@@ -46,31 +51,34 @@ export default function Cart() {
     }
   }, []);
 
-  const amountHandler = () => {};
-
   const couponApplyHandler = async () => {
-    const payload = {
-      couponCode: coupanText,
-      amount: cartSummary.subtotal,
-      cartId: cartId,
-    };
-    const { count, data, message, success } = await couponApplyApiHandler(
-      payload
-    );
-    console.log("data", data);
-    if (success) {
-      setCoupanApplyFlag(true);
-      // amountHandler();
-      setTotalAmount(data.amount);
-    } else {
-      errorNotification(message);
-      setCoupanApplyFlag(false);
+    try {
+      setCoupanApplyLoader(true);
+      const payload = {
+        couponCode: coupanText,
+        amount: cartSummary.subtotal,
+        cartId: cartId,
+      };
+      const { count, data, message, success } = await couponApplyApiHandler(
+        payload
+      );
+      if (success) {
+        setCoupanApplyFlag(true);
+        getProductListByCartId(cartId);
+        setTotalAmount(data.amount);
+      } else {
+        errorNotification(message);
+        setCoupanApplyFlag(false);
+      }
+    } catch (err) {
+      console.log("error: " + err);
+    } finally {
+      setCoupanApplyLoader(false);
     }
   };
 
   const checkoutHandler = async (cartId) => {
     try {
-      console.log("userDeta", userDetails);
       if (userDetails) {
         setCheckoutFlag(true);
         const { data, message, success } = await checkOutApiHandler(cartId);
@@ -111,11 +119,34 @@ export default function Cart() {
       setCartList(data.cartData);
       setCartLength(data.cartData.length);
       setCartSummary(data.cart);
+      setCoupanId(data?.cart?.couponId);
+      setCoupanText(data?.cart?.couponCode);
       setTotalAmount(data.cart.payableAmount);
     } else {
       setCartList([]);
+      setCoupanId(data?.cart?.couponId);
+      setCoupanText(data?.cart?.couponCode);
       setCartSummary({});
       setCartLength(0);
+    }
+  };
+
+  const removeCoupanApplyHandler = async (cartId) => {
+    try {
+      setCoupanApplyLoader(true);
+      const { data, message, success, count } = await removeCoupanApiApply(
+        cartId
+      );
+      if (success) {
+        successNotification(message);
+        getProductListByCartId(cartId);
+      } else {
+        errorNotification(message);
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setCoupanApplyFlag(false);
     }
   };
 
@@ -215,6 +246,7 @@ export default function Cart() {
                       <div className="flex gap-2">
                         <Input
                           placeholder="Enter coupon"
+                          value={coupanText}
                           onChange={(event) =>
                             setCoupanText(event.target.value)
                           }
@@ -222,11 +254,20 @@ export default function Cart() {
                         <Button
                           size="sm"
                           className="px-5 py-2 !text-sm h-auto"
-                          disabled={!coupanText}
+                          disabled={!coupanText || coupanApplyLoader}
                           onClick={() => couponApplyHandler()}
                         >
                           Apply
                         </Button>
+                        {coupanText && coupanId && (
+                          <Button
+                            size="sm"
+                            disabled={coupanApplyLoader}
+                            onClick={() => removeCoupanApplyHandler(cartId)}
+                          >
+                            remove
+                          </Button>
+                        )}
                       </div>
                       {coupanApplyFlag && <h3>{`Coupan applied`}</h3>}
                     </div>
@@ -239,10 +280,6 @@ export default function Cart() {
                           Total
                         </div>
                         <div className="font-semibold sm:text-xl text-lg">
-                          {/* ₹{" "}
-                          {cartSummary.payableAmount
-                            ? cartSummary.payableAmount
-                            : 0.0} */}
                           ₹ {totalAmount}
                         </div>
                       </div>

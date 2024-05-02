@@ -6,12 +6,14 @@ import { useFormik } from "formik";
 import { userShippingAddressIv } from "@/helper/intialValues";
 import { shippingAddressValidation } from "@/helper/Validation";
 import { getDetailsByPincode } from "@/helper";
-import { basicDetailUpdateApiHandler, shippingAddressUpdateApiHandler } from "@/Service/UserProfile/UserProfile.service";
+import {
+  basicDetailUpdateApiHandler,
+  shippingAddressUpdateApiHandler,
+} from "@/Service/UserProfile/UserProfile.service";
 import { errorNotification, successNotification } from "@/helper/Notification";
 import { Trash2 } from "lucide-react";
 
-
-function UserShippingAddress({ addressDetails ,deleteAddresshandler}) {
+function UserShippingAddress({ addressDetails, deleteAddresshandler }) {
   const [pincodeFlag, setPinCodeFlag] = useState(false);
   const {
     addLet,
@@ -63,15 +65,14 @@ function UserShippingAddress({ addressDetails ,deleteAddresshandler}) {
   };
 
   const userUpdateAddressHandler = async () => {
-    const { data, message, success, count } = await shippingAddressUpdateApiHandler(id, formik.values);
+    const { data, message, success, count } =
+      await shippingAddressUpdateApiHandler(id, formik.values);
     if (success) {
       successNotification(message);
     } else {
       errorNotification(message);
     }
   };
-
-
 
   const getShippingAddressHandler = () => {
     formik.setValues({
@@ -110,8 +111,11 @@ function UserShippingAddress({ addressDetails ,deleteAddresshandler}) {
   return (
     <div className="border rounded-lg">
       <div className="py-2 px-3 border-b flex justify-between items-center">
-      <div className="font-semibold ">Shipping Address</div>
-      <Trash2 className="w-5 h-5 text-red-600 cursor-pointer" onClick={()=>deleteAddresshandler(id)}/>
+        <div className="font-semibold ">Shipping Address</div>
+        <Trash2
+          className="w-5 h-5 text-red-600 cursor-pointer"
+          onClick={() => deleteAddresshandler(id)}
+        />
       </div>
       <div className="sm:p-5 p-3 grid grid-cols-2 sm:gap-5 gap-3">
         <div className="col-span-2">
@@ -209,7 +213,7 @@ function UserShippingAddress({ addressDetails ,deleteAddresshandler}) {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default UserShippingAddress
+export default UserShippingAddress;
