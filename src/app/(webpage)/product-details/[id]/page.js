@@ -25,10 +25,5 @@ export async function generateMetadata({ params }) {
   };
 }
 export default function Page({ params }) {
-  const callBackHandler = (data) => {
-    console.log("data", data);
-  };
-  return (
-    <ProductDetailsPage productKey={params.id} callBackData={callBackHandler} />
-  );
+  return <ProductDetailsPage productKey={params.id} />;
 }
