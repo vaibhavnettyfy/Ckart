@@ -40,6 +40,7 @@ const Consultation = ({ setOpen }) => {
   const availableSlotsByDate = async (date) => {
     const payload = {
       date: date,
+      type: 2,
     };
     const { count, data, message, success } =
       await availableSlotsByDateApiHandler(payload);
