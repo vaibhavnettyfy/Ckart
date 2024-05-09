@@ -148,14 +148,13 @@ const ProductCard = ({ productDetails, callBackHandler }) => {
             className="lg:w-[170px] md:w-[140px] sm:w-[100px] w-24 object-contain mix-blend-darken"
             src={imageData ? imageData : "/ProductImage.svg"}
           />
-          {/* need to keep this commented */}
-          {/* <Image
+          <Image
             alt={""}
             width={60}
             height={40}
             className="lg:w-16 md:w-12 w-8 object-contain absolute top-2 right-2"
             src={"/ProductCompany.svg"}
-          /> */}
+          />
           <Image
             alt={""}
             width={35}
@@ -209,9 +208,8 @@ const ProductCard = ({ productDetails, callBackHandler }) => {
         >
           <div className="text-[#42545E] lg:text-base md:text-sm text-xs py-2">
             Per Bundle{" "}
-            <span className="font-semibold text-black">{`₹ ${
-              price ? price : 0
-            }`}</span>
+            <span className="font-semibold text-black">{`₹ ${price ? price : 0
+              }`}</span>
           </div>
           <div className="text-[#77878F] text-[13px] font-normal line-through">
             {mrp && `₹ ${mrp}`}

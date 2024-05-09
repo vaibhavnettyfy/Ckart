@@ -124,7 +124,7 @@ const SponsoredProducts = () => {
   return (
     <div className="z-20 relative lg:py-16 md:py-12 sm:py-8 py-5 md:my-10 sm:my-8 my-5">
       <div className="container px-3 sm:px-6">
-        <Heading head={"Sponsored Products"} para={"Sponsored Products"} />
+        <Heading head={"Sponsored Products"} para={"Browse our Selection"} />
       </div>
       <div className="md:py-10 sm:py-8 py-5 container px-3 sm:px-6">
         <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-2 lg:gap-5 md:gap-3 gap-2">

@@ -26,7 +26,7 @@ const imageList = [
   },
 ];
 
-const Banner = () => {
+const Banner = ({ scrollToSection }) => {
   const router = useRouter();
   return (
     <>
@@ -71,7 +71,7 @@ const Banner = () => {
                             <Button onClick={() => router.push("/product")}>
                               All Products
                             </Button>
-                            <Button variant="outline">Sub Categories</Button>
+                            <Button variant="outline" onClick={scrollToSection}>Sub Categories</Button>
                           </div>
                         </div>
                         <Image

@@ -220,7 +220,7 @@ export default function Header() {
   return (
     <>
       <div className="z-20 relative">
-        <div
+        {/* <div
           className="bg-primary text-white sm:py-[10px] py-[5px] md:block hidden"
           style={{ boxShadow: "0px -1px 0px 0px #FFFFFF29 inset" }}
         >
@@ -290,7 +290,7 @@ export default function Header() {
               <BookAppointment />
             </div>
           </div>
-        </div>
+        </div> */}
         <div className="bg-primary text-white md:py-3 py-2 z-[99999]">
           <div className="container px-3 sm:px-6 flex justify-between items-center">
             <div className="flex gap-1">
@@ -366,15 +366,13 @@ export default function Header() {
                           <TooltipProvider>
                             <Tooltip>
                               <TooltipTrigger>
-                                {`Delivering to ${
-                                  deliveryAddress.suburb
+                                {`Delivering to ${deliveryAddress.suburb
                                     ? deliveryAddress.suburb
                                     : "-"
-                                } ${
-                                  deliveryAddress.postalCode
+                                  } ${deliveryAddress.postalCode
                                     ? deliveryAddress.postalCode
                                     : "-"
-                                }`}
+                                  }`}
                               </TooltipTrigger>
                               <TooltipContent>
                                 <p>Click to change Pincode</p>
@@ -523,15 +521,13 @@ export default function Header() {
                               <MapPin />
                             </div>
                             <div className="text-[13px] text-start">
-                              <div>{`Delivering to ${
-                                deliveryAddress.suburb
+                              <div>{`Delivering to ${deliveryAddress.suburb
                                   ? deliveryAddress.suburb
                                   : "-"
-                              } ${
-                                deliveryAddress.postalCode
+                                } ${deliveryAddress.postalCode
                                   ? deliveryAddress.postalCode
                                   : "-"
-                              }`}</div>
+                                }`}</div>
                               <div className="font-semibold">
                                 Update location
                               </div>

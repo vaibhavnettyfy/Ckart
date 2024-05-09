@@ -26,18 +26,20 @@ export default function LoginPage() {
       <div className="lg:w-2/5 w-full">
         <div className="flex flex-col items-center h-full max-w-[400px] m-auto justify-center p-5">
 
-          <Link href="/" className="flex flex-col sm:gap-5 gap-3 w-full">
-            <Image
-              src={"/logoBlack.png"}
-              alt=""
-              width={156}
-              height={48}
-              className="lg:w-[170px] md:w-[150px] sm:w-[110px] w-[100px] md:h-huto cursor-pointer"
-            />
+          <div className="flex flex-col sm:gap-5 gap-3 w-full">
+            <Link href={'/'}>
+              <Image
+                src={"/logoBlack.png"}
+                alt=""
+                width={156}
+                height={48}
+                className="lg:w-[170px] md:w-[150px] sm:w-[110px] w-[100px] md:h-huto cursor-pointer"
+              />
+            </Link>
             <div className="mb-2">
               <div className="sm:text-2xl text-xl font-bold mt-2">Welcome Back</div>
             </div>
-          </Link>
+          </div>
           <Tabs defaultValue="tab1" className="w-full mt-3">
             <TabsList className="w-full bg-transparent border-b rounded-none">
               <TabsTrigger value="tab1" className="w-full normal-case">
