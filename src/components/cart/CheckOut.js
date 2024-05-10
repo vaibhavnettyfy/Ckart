@@ -231,6 +231,19 @@ export default function CheckOut() {
                         </div>
                       </div>
                     )}
+                    {cartSummary.extraDiscount !== 0 && (
+                      <div className="flex justify-between">
+                        <div className="sm:text-base text-sm font-normal text-[#5D5F5F]">
+                          extra Discount
+                        </div>
+                        <div className="sm:text-base text-sm font-medium">
+                          ₹
+                          {cartSummary.extraDiscount
+                            ? cartSummary.extraDiscount
+                            : 0}
+                        </div>
+                      </div>
+                    )}
                     {cartSummary.taxValue !== 0 ||
                       (cartSummary.taxValue && (
                         <div className="flex justify-between">

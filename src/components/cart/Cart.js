@@ -231,7 +231,17 @@ export default function Cart() {
                             Discount amount
                           </div>
                           <div className="sm:text-base text-sm font-semibold">
-                            {cartSummary.discountAmount}
+                            ₹ {cartSummary.discountAmount}
+                          </div>
+                        </div>
+                      )}
+                      {cartSummary.extraDiscount !== 0 && (
+                        <div className="flex justify-between">
+                          <div className="sm:text-base text-sm font-normal text-[#5D5F5F]">
+                            extra Discount
+                          </div>
+                          <div className="sm:text-base text-sm font-semibold">
+                            ₹ {cartSummary.extraDiscount}
                           </div>
                         </div>
                       )}
