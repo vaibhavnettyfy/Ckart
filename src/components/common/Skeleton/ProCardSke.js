@@ -9,13 +9,13 @@ const ProCardSke = () => {
     >
       <div className='animate-pulse flex flex-col sm:gap-3 gap-2'>
         <div className="bg-bgsecondary w-full lg:h-[220px] md:h-48 sm:h-40 h-32 sm:rounded-xl rounded-lg bg-gray-200"></div>
-        <div className="bg-bgsecondary w-2/3 sm:h-8 h-6 sm:rounded-xl rounded-lg bg-gray-200"></div>
-        <div className="bg-bgsecondary w-full sm:h-10 h-7 sm:rounded-xl rounded-lg bg-gray-200"></div>
         <div className="bg-bgsecondary w-2/3 sm:h-6 h-4 sm:rounded-xl rounded-lg bg-gray-200"></div>
-        <div className="bg-bgsecondary w-full sm:h-10 h-7 sm:rounded-xl rounded-lg bg-gray-200"></div>
-        <div className="bg-bgsecondary w-2/3 sm:h-6 h-4 sm:rounded-xl rounded-lg bg-gray-200"></div>
-        <div className="bg-bgsecondary w-full sm:h-10 h-7 sm:rounded-xl rounded-lg bg-gray-200"></div>
-        <div className="bg-bgsecondary w-full sm:h-10 h-7 sm:rounded-xl rounded-lg bg-gray-200"></div>
+        <div className="bg-bgsecondary w-full sm:h-8 h-5 sm:rounded-xl rounded-lg bg-gray-200"></div>
+        <div className="bg-bgsecondary w-2/3 sm:h-4 h-2 sm:rounded-xl rounded-lg bg-gray-200"></div>
+        <div className="bg-bgsecondary w-full sm:h-8 h-5 sm:rounded-xl rounded-lg bg-gray-200"></div>
+        <div className="bg-bgsecondary w-2/3 sm:h-4 h-2 sm:rounded-xl rounded-lg bg-gray-200"></div>
+        <div className="bg-bgsecondary w-full sm:h-8 h-5 sm:rounded-xl rounded-lg bg-gray-200"></div>
+        <div className="bg-bgsecondary w-full sm:h-8 h-5 sm:rounded-xl rounded-lg bg-gray-200"></div>
       </div>
     </div>
   )

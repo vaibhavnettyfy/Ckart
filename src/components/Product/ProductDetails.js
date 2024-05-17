@@ -39,8 +39,9 @@ import { useFormik } from "formik";
 import { updateLocationIv } from "@/helper/intialValues";
 import { updateLocationValidation } from "@/helper/Validation";
 import { getDetailsByPincode } from "@/helper";
+import ProDetailSke from "../common/Skeleton/ProDetailSke";
 
-export default function ProductDetails({ detailsData, callBackHandler }) {
+export default function ProductDetails({ detailsData, callBackHandler, productDetailsLoader }) {
   const {
     brand,
     category,
@@ -80,11 +81,11 @@ export default function ProductDetails({ detailsData, callBackHandler }) {
     const data =
       image && image.length > 0
         ? image.map((res) => {
-            return {
-              original: res.image ? res.image : "",
-              thumbnail: res.image ? res.image : "",
-            };
-          })
+          return {
+            original: res.image ? res.image : "",
+            thumbnail: res.image ? res.image : "",
+          };
+        })
         : [];
     setProductImage(data);
   };
@@ -189,285 +190,290 @@ export default function ProductDetails({ detailsData, callBackHandler }) {
 
   return (
     <div className="lg:my-20 md:my-16 sm:my-10 my-5">
-      <div className="container px-3 sm:px-6">
-        <div>
-          <div className="grid lg:grid-cols-2 gap-8">
-            <div className="col-span-1">
-              <ImageGallery items={productsImage} autoPlay={true} />
-            </div>
-            <div>
+      {productDetailsLoader ?
+        <div className="container px-3 sm:px-6">
+          <ProDetailSke />
+        </div>
+        :
+        <div className="container px-3 sm:px-6">
+          <div>
+            <div className="grid lg:grid-cols-2 gap-8">
+              <div className="col-span-1">
+                <ImageGallery items={productsImage} autoPlay={true} />
+              </div>
               <div>
-                <div className="lg:text-[22px] md:text-xl text-lg font-semibold mb-2">
-                  {productName ? productName : "-"}
-                </div>
-                <div className="text-[#42545E] font-normal sm:text-base text-sm">
-                  {description ? description : "-"}
-                </div>
-                <div className="my-3">
-                  <div className="grid grid-cols-2 gap-2">
-                    <div className="flex flex-col gap-1">
-                      {/* <div className="text-sm font-semibold">
+                <div>
+                  <div className="lg:text-[22px] md:text-xl text-lg font-semibold mb-2">
+                    {productName ? productName : "-"}
+                  </div>
+                  <div className="text-[#42545E] font-normal sm:text-base text-sm">
+                    {description ? description : "-"}
+                  </div>
+                  <div className="my-3">
+                    <div className="grid grid-cols-2 gap-2">
+                      <div className="flex flex-col gap-1">
+                        {/* <div className="text-sm font-semibold">
                         <span className="text-[#5F6C72] font-normal">
                           Diameter :{" "}
                         </span>{" "}
                         8mm
                       </div> */}
-                      <div className="sm:text-sm text-xs font-semibold">
-                        <span className="text-[#5F6C72] font-normal">
-                          Pieces per Bundle :{" "}
-                        </span>{" "}
-                        {pieces ? pieces : "-"}
-                      </div>
-                      <div className="sm:text-sm text-xs font-semibold">
-                        <span className="text-[#5F6C72] font-normal">
-                          Availability :{" "}
-                        </span>{" "}
-                        {quantity ? (
-                          <span className="text-green">In Stock</span>
-                        ) : (
-                          <span className="text-[#DA3E31]">Out of stock</span>
-                        )}
-                      </div>
-                      {/* <div className="sm:text-sm text-xs font-semibold">
+                        <div className="sm:text-sm text-xs font-semibold">
+                          <span className="text-[#5F6C72] font-normal">
+                            Pieces per Bundle :{" "}
+                          </span>{" "}
+                          {pieces ? pieces : "-"}
+                        </div>
+                        <div className="sm:text-sm text-xs font-semibold">
+                          <span className="text-[#5F6C72] font-normal">
+                            Availability :{" "}
+                          </span>{" "}
+                          {quantity ? (
+                            <span className="text-green">In Stock</span>
+                          ) : (
+                            <span className="text-[#DA3E31]">Out of stock</span>
+                          )}
+                        </div>
+                        {/* <div className="sm:text-sm text-xs font-semibold">
                         <span className="text-[#5F6C72] font-normal">
                           Dimension :{" "}
                         </span>{" "}
                         178 mm x 229 mm
                       </div> */}
-                    </div>
-                    <div className="flex flex-col gap-1">
-                      {/* <div className="sm:text-sm text-xs font-semibold">
+                      </div>
+                      <div className="flex flex-col gap-1">
+                        {/* <div className="sm:text-sm text-xs font-semibold">
                         <span className="text-[#5F6C72] font-normal">
                           Availability :{" "}
                         </span>{" "}
                         In Stock
                       </div> */}
-                      <div className="sm:text-sm text-xs font-semibold">
-                        <span className="text-[#5F6C72] font-normal">
-                          Brand :{" "}
-                        </span>{" "}
-                        {brand ? brand : "-"}
-                      </div>
-                      <div className="sm:text-sm text-xs font-semibold">
-                        <span className="text-[#5F6C72] font-normal">
-                          Category :{" "}
-                        </span>{" "}
-                        {category ? category?.name : "-"}
+                        <div className="sm:text-sm text-xs font-semibold">
+                          <span className="text-[#5F6C72] font-normal">
+                            Brand :{" "}
+                          </span>{" "}
+                          {brand ? brand : "-"}
+                        </div>
+                        <div className="sm:text-sm text-xs font-semibold">
+                          <span className="text-[#5F6C72] font-normal">
+                            Category :{" "}
+                          </span>{" "}
+                          {category ? category?.name : "-"}
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div className="flex gap-1 items-center">
-                  <div className="font-semibold text-primary lg:text-2xl md:text-xl text-lg">
-                    {`₹ ${price ? price : 0}`}
-                  </div>
-                  <div className="text-[#77878F] lg:text-lg md:text-base text-sm font-normal line-through">
-                    {mrp && `₹ ${mrp}`}
-                  </div>
-                  {/* <div className="text-sm px-2 py-1 bg-[#EFD33D] font-semibold rounded-sm ml-2">
+                  <div className="flex gap-1 items-center">
+                    <div className="font-semibold text-primary lg:text-2xl md:text-xl text-lg">
+                      {`₹ ${price ? price : 0}`}
+                    </div>
+                    <div className="text-[#77878F] lg:text-lg md:text-base text-sm font-normal line-through">
+                      {mrp && `₹ ${mrp}`}
+                    </div>
+                    {/* <div className="text-sm px-2 py-1 bg-[#EFD33D] font-semibold rounded-sm ml-2">
                     21% OFF
                   </div> */}
+                  </div>
                 </div>
-              </div>
-              <div className="my-5">
-                <Separator />
-              </div>
-              <div>
+                <div className="my-5">
+                  <Separator />
+                </div>
                 <div>
-                  <QtyCard
-                    className="w-[150px]"
-                    setQuantity={setQuantityHandler}
-                    quantity={selectedQuantitys}
-                  />
-                </div>
-                <div className="flex flex-wrap sm:gap-3 gap-2 sm:my-5 my-3">
-                  <Button
-                    size={"lg"}
-                    className="shadow-none"
-                    onClick={() => addTocartHandler()}
-                  >
-                    <div className="flex gap-2 items-center">
-                      <div>Add to cart</div>
-                      <Image
-                        alt={""}
-                        width={20}
-                        height={20}
-                        className="object-contain"
-                        src={"/details/ShoppingCart.svg"}
-                      />
-                    </div>
-                  </Button>
-                  <BookAppointment
-                    button={
-                      <Button
-                        size="lg"
-                        className="shadow-none"
-                        variant="outline"
-                      >
-                        Book Appointment
-                      </Button>
-                    }
-                  />
-                  <Button
-                    size="lg"
-                    className="shadow-none"
-                    variant="outline"
-                    onClick={() => addTocartHandler(true)}
-                  >
-                    Buy now
-                  </Button>
-                </div>
-                <div className="border rounded-lg py-2 px-3 w-fit">
-                  <Dialog open={open} onOpenChange={setOpen}>
-                    <DialogTrigger>
-                      <TooltipProvider>
-                        <Tooltip>
-                          <TooltipTrigger>
-                            {" "}
-                            <div className="md:text-lg sm:text-base text-sm font-normal">
-                              Delivery Pincode:-{" "}
-                              <span className="font-semibold">
-                                {deliveryAddress?.postalCode
-                                  ? deliveryAddress?.postalCode
-                                  : "-"}
-                              </span>
-                            </div>
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p>Click to change Pincode</p>
-                          </TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
-                    </DialogTrigger>
-                    <DialogContent>
-                      <DialogHeader>
-                        <DialogTitle>Choose your location</DialogTitle>
-                        <div className="flex flex-col gap-7 !mt-5">
-                          <div>
-                            <Label htmlFor="" className="h-4 inline">
-                              Enter an Indian pincode
-                            </Label>
-                            <div className="relative">
-                              <Input
-                                placeholder=""
-                                className="w-full"
-                                name="pincode"
-                                formik={formik}
-                              />
-                              <Search className="absolute top-[10px] right-3 w-5 h-5" />
-                            </div>
-                          </div>
-                          <div className="flex justify-end gap-2">
-                            <Button
-                              size="sm"
-                              onClick={() => formik.handleSubmit()}
-                            >
-                              Update
-                            </Button>
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={() => setOpen(false)}
-                            >
-                              Cancel
-                            </Button>
-                          </div>
-                        </div>
-                      </DialogHeader>
-                    </DialogContent>
-                  </Dialog>
-                </div>
-                <div className="sm:mt-5 mt-3 sm:mb-7 mb-4">
-                  <div className="flex gap-2 justify-between items-center sm:text-base text-sm">
-                    <div className="flex gap-1 items-center">
-                      <Image
-                        alt={""}
-                        width={24}
-                        height={24}
-                        className="cursor-pointer sm:w-6 sm:h-6 w-5 h-5"
-                        src={
-                          !isWishlist
-                            ? "/details/Heart.svg"
-                            : "/details/WishList.svg"
-                        }
-                        onClick={() => wishListHanlder(id, isWishlist)}
-                      />
-                      <div>Add to Wishlist</div>
-                    </div>
-                    <div className="flex gap-2 items-center sm:mr-10">
-                      <div>Share product:</div>
+                  <div>
+                    <QtyCard
+                      className="w-[150px]"
+                      setQuantity={setQuantityHandler}
+                      quantity={selectedQuantitys}
+                    />
+                  </div>
+                  <div className="flex flex-wrap sm:gap-3 gap-2 sm:my-5 my-3">
+                    <Button
+                      size={"lg"}
+                      className="shadow-none"
+                      onClick={() => addTocartHandler()}
+                    >
                       <div className="flex gap-2 items-center">
+                        <div>Add to cart</div>
                         <Image
                           alt={""}
                           width={20}
                           height={20}
-                          className="cursor-pointer"
-                          src={"/details/Copy.svg"}
+                          className="object-contain"
+                          src={"/details/ShoppingCart.svg"}
                         />
+                      </div>
+                    </Button>
+                    <BookAppointment
+                      button={
+                        <Button
+                          size="lg"
+                          className="shadow-none"
+                          variant="outline"
+                        >
+                          Book Appointment
+                        </Button>
+                      }
+                    />
+                    <Button
+                      size="lg"
+                      className="shadow-none"
+                      variant="outline"
+                      onClick={() => addTocartHandler(true)}
+                    >
+                      Buy now
+                    </Button>
+                  </div>
+                  <div className="border rounded-lg py-2 px-3 w-fit">
+                    <Dialog open={open} onOpenChange={setOpen}>
+                      <DialogTrigger>
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger>
+                              {" "}
+                              <div className="md:text-lg sm:text-base text-sm font-normal">
+                                Delivery Pincode:-{" "}
+                                <span className="font-semibold">
+                                  {deliveryAddress?.postalCode
+                                    ? deliveryAddress?.postalCode
+                                    : "-"}
+                                </span>
+                              </div>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>Click to change Pincode</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle>Choose your location</DialogTitle>
+                          <div className="flex flex-col gap-7 !mt-5">
+                            <div>
+                              <Label htmlFor="" className="h-4 inline">
+                                Enter an Indian pincode
+                              </Label>
+                              <div className="relative">
+                                <Input
+                                  placeholder=""
+                                  className="w-full"
+                                  name="pincode"
+                                  formik={formik}
+                                />
+                                <Search className="absolute top-[10px] right-3 w-5 h-5" />
+                              </div>
+                            </div>
+                            <div className="flex justify-end gap-2">
+                              <Button
+                                size="sm"
+                                onClick={() => formik.handleSubmit()}
+                              >
+                                Update
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => setOpen(false)}
+                              >
+                                Cancel
+                              </Button>
+                            </div>
+                          </div>
+                        </DialogHeader>
+                      </DialogContent>
+                    </Dialog>
+                  </div>
+                  <div className="sm:mt-5 mt-3 sm:mb-7 mb-4">
+                    <div className="flex gap-2 justify-between items-center sm:text-base text-sm">
+                      <div className="flex gap-1 items-center">
                         <Image
                           alt={""}
-                          width={16}
-                          height={16}
-                          className="cursor-pointer"
-                          src={"/details/Facebook.svg"}
+                          width={24}
+                          height={24}
+                          className="cursor-pointer sm:w-6 sm:h-6 w-5 h-5"
+                          src={
+                            !isWishlist
+                              ? "/details/Heart.svg"
+                              : "/details/WishList.svg"
+                          }
+                          onClick={() => wishListHanlder(id, isWishlist)}
                         />
-                        <Image
-                          alt={""}
-                          width={16}
-                          height={16}
-                          className="cursor-pointer"
-                          src={"/details/Twitter.svg"}
-                        />
-                        <Image
-                          alt={""}
-                          width={16}
-                          height={16}
-                          className="cursor-pointer"
-                          src={"/details/Pinterest.svg"}
-                        />
+                        <div>Add to Wishlist</div>
+                      </div>
+                      <div className="flex gap-2 items-center sm:mr-10">
+                        <div>Share product:</div>
+                        <div className="flex gap-2 items-center">
+                          <Image
+                            alt={""}
+                            width={20}
+                            height={20}
+                            className="cursor-pointer"
+                            src={"/details/Copy.svg"}
+                          />
+                          <Image
+                            alt={""}
+                            width={16}
+                            height={16}
+                            className="cursor-pointer"
+                            src={"/details/Facebook.svg"}
+                          />
+                          <Image
+                            alt={""}
+                            width={16}
+                            height={16}
+                            className="cursor-pointer"
+                            src={"/details/Twitter.svg"}
+                          />
+                          <Image
+                            alt={""}
+                            width={16}
+                            height={16}
+                            className="cursor-pointer"
+                            src={"/details/Pinterest.svg"}
+                          />
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div className="border rounded-lg px-5 py-4">
-                  <div className="text-sm font-normal mb-2">
-                    100% Guarantee Safe Checkout
+                  <div className="border rounded-lg px-5 py-4">
+                    <div className="text-sm font-normal mb-2">
+                      100% Guarantee Safe Checkout
+                    </div>
+                    <Image
+                      alt={""}
+                      width={312}
+                      height={18}
+                      className="object-contain"
+                      src={"/PaymentMethod.svg"}
+                    />
                   </div>
-                  <Image
-                    alt={""}
-                    width={312}
-                    height={18}
-                    className="object-contain"
-                    src={"/PaymentMethod.svg"}
-                  />
                 </div>
               </div>
-            </div>
-            <div className="lg:col-span-2">
-              <Tabs defaultValue="tab1" className="border rounded-lg">
-                <TabsList className="w-full bg-transparent border-b rounded-none">
-                  <TabsTrigger value="tab1">Description</TabsTrigger>
-                  {/* <TabsTrigger value="tab2">Additional information</TabsTrigger>
+              <div className="lg:col-span-2">
+                <Tabs defaultValue="tab1" className="border rounded-lg">
+                  <TabsList className="w-full bg-transparent border-b rounded-none">
+                    <TabsTrigger value="tab1">Description</TabsTrigger>
+                    {/* <TabsTrigger value="tab2">Additional information</TabsTrigger>
                   <TabsTrigger value="tab3">Specification</TabsTrigger>
                   <TabsTrigger value="tab4">Review</TabsTrigger> */}
-                </TabsList>
-                <TabsContent value="tab1">
-                  <ProductDescription description={description} />
-                </TabsContent>
-                {/* <TabsContent value="tab2">Additional information</TabsContent>
+                  </TabsList>
+                  <TabsContent value="tab1">
+                    <ProductDescription description={description} />
+                  </TabsContent>
+                  {/* <TabsContent value="tab2">Additional information</TabsContent>
                 <TabsContent value="tab3">Specification</TabsContent>
                 <TabsContent value="tab4">Review</TabsContent> */}
-              </Tabs>
+                </Tabs>
+              </div>
             </div>
           </div>
-        </div>
-        <div className="my-10">
-          <Separator />
-        </div>
-        <div>
-          <ProductSuggestion head="Products" para="Related Products" />
-        </div>
-      </div>
+          <div className="my-10">
+            <Separator />
+          </div>
+          <div>
+            <ProductSuggestion head="Products" para="Related Products" />
+          </div>
+        </div>}
     </div>
   );
 }

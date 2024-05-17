@@ -4,6 +4,7 @@ import { siteMetadata } from "@/helper/siteMetaData";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { AppWrapper, useAppContext } from "@/context";
+import ScrollToTop from "@/helper/ScrollToTop";
 
 const urbanist = Urbanist({ subsets: ["latin"] });
 
@@ -35,6 +36,7 @@ export default function RootLayout({ children }) {
     <html lang="en" suppressHydrationWarning={true}>
       <body className={urbanist.className}>
         <AppWrapper>
+          <ScrollToTop />
           {children}
           <ToastContainer suppressHydrationWarning={true} />
         </AppWrapper>

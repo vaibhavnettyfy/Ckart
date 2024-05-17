@@ -2,6 +2,7 @@ import { Urbanist } from "next/font/google";
 import Header from "@/components/common/Header";
 import Footer from "@/components/common/Footer";
 import { siteMetadata } from "@/helper/siteMetaData";
+import ScrollToTop from "@/helper/ScrollToTop";
 
 
 // export const metadata = {
@@ -33,9 +34,10 @@ export default function Layout({ children }) {
   return (
     <>
       <Header />
+      <ScrollToTop />
+
       {children}
       <Footer />
     </>
-
   );
 }

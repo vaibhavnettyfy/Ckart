@@ -11,8 +11,8 @@ export default function ProductDetailsPage({ productKey }) {
   const cartId = cookies.get("CARTID");
   const { setCartLength } = useAppContext();
   const userDetails = cookies.get("USERDETAILS");
-  const [productDetailsLoader,setProductDetailsLoader] = useState(false);
-  const [productDetailsData,setProductDetailsData] = useState({});
+  const [productDetailsLoader, setProductDetailsLoader] = useState(false);
+  const [productDetailsData, setProductDetailsData] = useState({});
 
   useEffect(() => {
     if (productKey) {
@@ -20,40 +20,40 @@ export default function ProductDetailsPage({ productKey }) {
     }
   }, []);
 
-  const callBackHandler = () =>{
+  const callBackHandler = () => {
     getProductDetails(productKey);
     getProductListByCartId(cartId);
   };
 
-  const getProductListByCartId = async (cartId) =>{
-    const {data, message, success} = await productListByCart(cartId);
-    if(success){
+  const getProductListByCartId = async (cartId) => {
+    const { data, message, success } = await productListByCart(cartId);
+    if (success) {
       setCartLength(data.cartData.length);
-    }else{
+    } else {
       setCartLength(0);
     }
   };
 
   const getProductDetails = async (productKey) => {
-    try{
+    try {
       setProductDetailsLoader(true);
       const payload = {
         productKey: productKey,
         userId: userDetails?.id ? userDetails?.id : "",
       };
-      const {count,data,message,success} = await productDetailsByIdApiHandler(payload);
-      if(success){
+      const { count, data, message, success } = await productDetailsByIdApiHandler(payload);
+      if (success) {
         setProductDetailsData(data);
-      }else{  
+      } else {
         setProductDetailsData({});
-      } 
-    }catch(error){
-      console.log("error",error);
+      }
+    } catch (error) {
+      console.log("error", error);
       setProductDetailsData({});
-    }finally{
+    } finally {
       setProductDetailsLoader(false);
     }
-   
+
   };
-  return <ProductDetails detailsData={productDetailsData} callBackHandler={callBackHandler}/>;
+  return <ProductDetails detailsData={productDetailsData} callBackHandler={callBackHandler} productDetailsLoader={productDetailsLoader} />;
 }

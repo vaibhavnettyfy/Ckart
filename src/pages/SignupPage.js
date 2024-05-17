@@ -285,9 +285,9 @@ export default function SignupPage() {
                   max={100}
                 />
                 {formik.touched.addresses &&
-                formik.errors.addresses &&
-                formik.errors.addresses[0] &&
-                formik.errors.addresses[0].address1 ? (
+                  formik.errors.addresses &&
+                  formik.errors.addresses[0] &&
+                  formik.errors.addresses[0].address1 ? (
                   <span className="text-red-500 text-xs">
                     {formik.errors.addresses[0].address1}
                   </span>
@@ -303,9 +303,9 @@ export default function SignupPage() {
                   max={100}
                 />
                 {formik.touched.addresses &&
-                formik.errors.addresses &&
-                formik.errors.addresses[0] &&
-                formik.errors.addresses[0].address2 ? (
+                  formik.errors.addresses &&
+                  formik.errors.addresses[0] &&
+                  formik.errors.addresses[0].address2 ? (
                   <span className="text-red-500 text-xs">
                     {formik.errors.addresses[0].address2}
                   </span>
@@ -321,9 +321,9 @@ export default function SignupPage() {
                   max={50}
                 />
                 {formik.touched.addresses &&
-                formik.errors.addresses &&
-                formik.errors.addresses[0] &&
-                formik.errors.addresses[0].landmark ? (
+                  formik.errors.addresses &&
+                  formik.errors.addresses[0] &&
+                  formik.errors.addresses[0].landmark ? (
                   <span className="text-red-500 text-xs">
                     {formik.errors.addresses[0].landmark}
                   </span>
@@ -339,9 +339,9 @@ export default function SignupPage() {
                   max={30}
                 />
                 {formik.touched.addresses &&
-                formik.errors.addresses &&
-                formik.errors.addresses[0] &&
-                formik.errors.addresses[0].pincode ? (
+                  formik.errors.addresses &&
+                  formik.errors.addresses[0] &&
+                  formik.errors.addresses[0].pincode ? (
                   <span className="text-red-500 text-xs">
                     {formik.errors.addresses[0].pincode}
                   </span>
@@ -358,9 +358,9 @@ export default function SignupPage() {
                   max={50}
                 />
                 {formik.touched.addresses &&
-                formik.errors.addresses &&
-                formik.errors.addresses[0] &&
-                formik.errors.addresses[0].city ? (
+                  formik.errors.addresses &&
+                  formik.errors.addresses[0] &&
+                  formik.errors.addresses[0].city ? (
                   <span className="text-red-500 text-xs">
                     {formik.errors.addresses[0].city}
                   </span>
@@ -377,9 +377,9 @@ export default function SignupPage() {
                   max={50}
                 />
                 {formik.touched.addresses &&
-                formik.errors.addresses &&
-                formik.errors.addresses[0] &&
-                formik.errors.addresses[0].state ? (
+                  formik.errors.addresses &&
+                  formik.errors.addresses[0] &&
+                  formik.errors.addresses[0].state ? (
                   <span className="text-red-500 text-xs">
                     {formik.errors.addresses[0].state}
                   </span>
@@ -400,9 +400,9 @@ export default function SignupPage() {
                   max={100}
                 />
                 {formik.touched.addresses &&
-                formik.errors.addresses &&
-                formik.errors.addresses[1] &&
-                formik.errors.addresses[1].address1 ? (
+                  formik.errors.addresses &&
+                  formik.errors.addresses[1] &&
+                  formik.errors.addresses[1].address1 ? (
                   <span className="text-red-500 text-xs">
                     {formik.errors.addresses[1].address1}
                   </span>
@@ -418,9 +418,9 @@ export default function SignupPage() {
                   max={100}
                 />
                 {formik.touched.addresses &&
-                formik.errors.addresses &&
-                formik.errors.addresses[1] &&
-                formik.errors.addresses[1].address2 ? (
+                  formik.errors.addresses &&
+                  formik.errors.addresses[1] &&
+                  formik.errors.addresses[1].address2 ? (
                   <span className="text-red-500 text-xs">
                     {formik.errors.addresses[1].address2}
                   </span>
@@ -436,9 +436,9 @@ export default function SignupPage() {
                   max={50}
                 />
                 {formik.touched.addresses &&
-                formik.errors.addresses &&
-                formik.errors.addresses[1] &&
-                formik.errors.addresses[1].landmark ? (
+                  formik.errors.addresses &&
+                  formik.errors.addresses[1] &&
+                  formik.errors.addresses[1].landmark ? (
                   <span className="text-red-500 text-xs">
                     {formik.errors.addresses[1].landmark}
                   </span>
@@ -454,9 +454,9 @@ export default function SignupPage() {
                   max={30}
                 />
                 {formik.touched.addresses &&
-                formik.errors.addresses &&
-                formik.errors.addresses[1] &&
-                formik.errors.addresses[1].pincode ? (
+                  formik.errors.addresses &&
+                  formik.errors.addresses[1] &&
+                  formik.errors.addresses[1].pincode ? (
                   <span className="text-red-500 text-xs">
                     {formik.errors.addresses[1].pincode}
                   </span>
@@ -473,9 +473,9 @@ export default function SignupPage() {
                   max={50}
                 />
                 {formik.touched.addresses &&
-                formik.errors.addresses &&
-                formik.errors.addresses[1] &&
-                formik.errors.addresses[1].city ? (
+                  formik.errors.addresses &&
+                  formik.errors.addresses[1] &&
+                  formik.errors.addresses[1].city ? (
                   <span className="text-red-500 text-xs">
                     {formik.errors.addresses[1].city}
                   </span>
@@ -492,9 +492,9 @@ export default function SignupPage() {
                   max={50}
                 />
                 {formik.touched.addresses &&
-                formik.errors.addresses &&
-                formik.errors.addresses[1] &&
-                formik.errors.addresses[1].state ? (
+                  formik.errors.addresses &&
+                  formik.errors.addresses[1] &&
+                  formik.errors.addresses[1].state ? (
                   <span className="text-red-500 text-xs">
                     {formik.errors.addresses[1].state}
                   </span>
@@ -532,8 +532,8 @@ export default function SignupPage() {
                   termsConditionFlag
                     ? formik.handleSubmit()
                     : setTermsConditionFlagError(
-                        "You must agree to the Terms & Conditions and Privacy Policy."
-                      )
+                      "You must agree to the Terms & Conditions and Privacy Policy."
+                    )
                 }
               >
                 <div className="flex gap-2 items-center">

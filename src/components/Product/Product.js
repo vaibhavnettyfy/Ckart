@@ -25,6 +25,7 @@ import { categorySubCategoryList } from "@/Service/Category/Category.service";
 import { ProductAllListApiHandler } from "@/Service/Product/Product.service";
 import { productListByCart } from "@/Service/AddTocart/AddToCart.service";
 import { useAppContext } from "@/context";
+import ProCardSke from "../common/Skeleton/ProCardSke";
 export default function Product({ categories, subCategories }) {
   const cookies = new Cookies();
   const [categoryList, setCategoryList] = useState([]);
@@ -44,7 +45,7 @@ export default function Product({ categories, subCategories }) {
   const { setCartLength } = useAppContext();
   const [checkId, setCheckId] = useState("");
   const [subCheckId, setSubCheckId] = useState("");
-
+  console.log(productLoader, '_____________-');
   useEffect(() => {
     if (cartId) {
       getProductListByCartId(cartId);
@@ -235,7 +236,7 @@ export default function Product({ categories, subCategories }) {
                           <AccordionContent>
                             <div className="px-4">
                               {response?.subCategorys &&
-                              response?.subCategorys.length > 0 ? (
+                                response?.subCategorys.length > 0 ? (
                                 response?.subCategorys.map((item, index) => {
                                   return (
                                     <div className="flex items-center space-x-2 col-span-2 mt-2">
@@ -317,24 +318,36 @@ export default function Product({ categories, subCategories }) {
                 </div>
               </div>
             </div>
-            <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-3 grid-cols-2 lg:gap-5 sm:gap-3 gap-2">
-              {produtListData && produtListData.length > 0 ? (
-                produtListData.map((item, index) => {
+            {productLoader ?
+              <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-3 grid-cols-2 lg:gap-5 sm:gap-3 gap-2">
+                {[1, 1, 1].map((item, i) => {
                   return (
-                    <div key={index} className="col-span-1">
-                      <ProductCard
-                        productDetails={item}
-                        callBackHandler={callBackHandler}
-                      />
+                    <div key={i} className="col-span-1">
+                      <ProCardSke />
                     </div>
-                  );
-                })
-              ) : (
-                <div className="text-[#5D5F5F] text-center">
-                  No Product Found
-                </div>
-              )}
-            </div>
+                  )
+                })}
+              </div>
+              :
+              <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-3 grid-cols-2 lg:gap-5 sm:gap-3 gap-2">
+                {produtListData && produtListData.length > 0 ? (
+                  produtListData.map((item, index) => {
+                    return (
+                      <div key={index} className="col-span-1">
+                        <ProductCard
+                          productDetails={item}
+                          callBackHandler={callBackHandler}
+                        />
+                      </div>
+                    );
+                  })
+                ) : (
+                  <div className="text-[#5D5F5F] text-center">
+                    No Product Found
+                  </div>
+                )}
+              </div>
+            }
             <div className="mt-2">
               <Pagination>
                 <PaginationContent className="md:gap-2 gap-1">
