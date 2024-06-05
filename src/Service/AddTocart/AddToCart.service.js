@@ -1,3 +1,4 @@
+import useHandleUnauthorized from "@/helper/useHandleUnauthorized";
 import {
   DELETE,
   GET,
@@ -20,7 +21,8 @@ export const removeProductApiFromCart = (cartId, productId) => {
 
 export const BindCartIdToUserId = (cartId, userId) => {
   return put(
-    `${process.env.NEXT_PUBLIC_APIURL}/api/userV1/updateCart/${cartId}/${userId}`
+    `${process.env.NEXT_PUBLIC_APIURL}/api/userV1/updateCart/${cartId}/${userId}`,
+    useHandleUnauthorized
   );
 };
 

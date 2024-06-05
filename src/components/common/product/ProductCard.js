@@ -29,6 +29,7 @@ import { useAppContext } from "@/context";
 const ProductCard = ({ productDetails, callBackHandler }) => {
   const {
     imageData,
+    brandimage,
     categoryname,
     description,
     price,
@@ -153,7 +154,7 @@ const ProductCard = ({ productDetails, callBackHandler }) => {
             width={60}
             height={40}
             className="lg:w-16 md:w-12 w-8 object-contain absolute top-2 right-2"
-            src={"/ProductCompany.svg"}
+            src={brandimage ? brandimage : "/ProductCompany.svg"}
           />
           <Image
             alt={""}
@@ -208,8 +209,9 @@ const ProductCard = ({ productDetails, callBackHandler }) => {
         >
           <div className="text-[#42545E] lg:text-base md:text-sm text-xs py-2">
             Per Bundle{" "}
-            <span className="font-semibold text-black">{`₹ ${price ? price : 0
-              }`}</span>
+            <span className="font-semibold text-black">{`₹ ${
+              price ? price : 0
+            }`}</span>
           </div>
           <div className="text-[#77878F] text-[13px] font-normal line-through">
             {mrp && `₹ ${mrp}`}

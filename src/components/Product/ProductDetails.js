@@ -40,8 +40,15 @@ import { updateLocationIv } from "@/helper/intialValues";
 import { updateLocationValidation } from "@/helper/Validation";
 import { getDetailsByPincode } from "@/helper";
 import ProDetailSke from "../common/Skeleton/ProDetailSke";
+import ImageMagnifier from "./ImageMagnifier";
+import Whyus from "./Whyus";
+import { Faq } from "./Faq";
 
-export default function ProductDetails({ detailsData, callBackHandler, productDetailsLoader }) {
+export default function ProductDetails({
+  detailsData,
+  callBackHandler,
+  productDetailsLoader,
+}) {
   const {
     brand,
     category,
@@ -60,8 +67,10 @@ export default function ProductDetails({ detailsData, callBackHandler, productDe
     quantity,
     specification,
     sponsor,
+    faq,
     subCategory,
   } = detailsData || {};
+  console.log("Details", detailsData);
   const router = useRouter();
   const cookies = new Cookies();
   const [wishList, setWishList] = useState(false);
@@ -81,11 +90,11 @@ export default function ProductDetails({ detailsData, callBackHandler, productDe
     const data =
       image && image.length > 0
         ? image.map((res) => {
-          return {
-            original: res.image ? res.image : "",
-            thumbnail: res.image ? res.image : "",
-          };
-        })
+            return {
+              original: res.image ? res.image : "",
+              thumbnail: res.image ? res.image : "",
+            };
+          })
         : [];
     setProductImage(data);
   };
@@ -189,26 +198,48 @@ export default function ProductDetails({ detailsData, callBackHandler, productDe
   };
 
   return (
-    <div className="lg:my-20 md:my-16 sm:my-10 my-5">
-      {productDetailsLoader ?
+    <div className="lg:my-20 !mb-0 md:my-16 sm:my-10 my-5">
+      {productDetailsLoader ? (
         <div className="container px-3 sm:px-6">
           <ProDetailSke />
         </div>
-        :
+      ) : (
         <div className="container px-3 sm:px-6">
           <div>
             <div className="grid lg:grid-cols-2 gap-8">
               <div className="col-span-1">
-                <ImageGallery items={productsImage} autoPlay={true} />
+                {/* <ImageGallery items={productsImage} autoPlay={true} /> */}
+                <ImageMagnifier
+                  src="https://via.placeholder.com/600"
+                  zoomLevel={3}
+                />
               </div>
               <div>
                 <div>
                   <div className="lg:text-[22px] md:text-xl text-lg font-semibold mb-2">
                     {productName ? productName : "-"}
                   </div>
-                  <div className="text-[#42545E] font-normal sm:text-base text-sm">
-                    {description ? description : "-"}
+                  {specification && specification.length > 0 && (
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      {specification.map((response) => {
+                        const { id, key, productId, value } = response;
+                        return (
+                          <div className="text-lg border px-4 py-1 rounded-lg">
+                            <span>{key ? key : "-"}</span> :{" "}
+                            <span className="font-semibold">
+                              {value ? value : "-"}
+                            </span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                  <div className="my-5">
+                    <Separator />
                   </div>
+                  {/* <div className="text-[#42545E] font-normal sm:text-base text-sm">
+                    {description ? description : "-"}
+                  </div> */}
                   <div className="my-3">
                     <div className="grid grid-cols-2 gap-2">
                       <div className="flex flex-col gap-1">
@@ -470,10 +501,13 @@ export default function ProductDetails({ detailsData, callBackHandler, productDe
           <div className="my-10">
             <Separator />
           </div>
-          <div>
+          {faq && faq.length > 0 && <Faq faqDetails={faq} />}
+          <div className="mt-10">
             <ProductSuggestion head="Products" para="Related Products" />
           </div>
-        </div>}
+        </div>
+      )}
+      <Whyus />
     </div>
   );
 }

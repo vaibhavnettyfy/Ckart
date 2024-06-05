@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import Cookies from "universal-cookie";
 import { useAppContext } from "@/context";
 import { logoutHandler, unAuthorizedHandler } from "@/helper";
@@ -32,9 +33,11 @@ export const post = async (url, data) => {
     }
   } catch (error) {
     if (error && error.response && error.response.status === 401) {
-      const { setUnAuthorixedPerson } = useAppContext();
-      setUnAuthorixedPerson(true);
-      logoutHandler();
+      handleUnauthorized();
+      console.log("Hereeeee");
+      // const { setUnAuthorixedPerson } = useAppContext();
+      // setUnAuthorixedPerson(true);
+      // logoutHandler();
     }
     return {
       success: false,
@@ -287,6 +290,7 @@ export const patch = async (url, data) => {
 export const GET = async (url) => {
   try {
     const response = await axios.get(url);
+    console.log("response", response);
     if (response.data.status) {
       return {
         success: true,

@@ -28,6 +28,7 @@ import {
 } from "@/Service/Coupon/coupon.service";
 import { checkOutApiHandler } from "@/Service/Checkout/Checkout.service";
 import { errorNotification, successNotification } from "@/helper/Notification";
+import { Whyus } from "../home";
 
 export default function Cart() {
   const router = useRouter();
@@ -329,6 +330,9 @@ export default function Cart() {
       ) : (
         <EmptyCart />
       )}
+      <div>
+        <Whyus />
+      </div>
     </div>
   );
 }

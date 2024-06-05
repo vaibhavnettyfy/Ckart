@@ -366,13 +366,15 @@ export default function Header() {
                           <TooltipProvider>
                             <Tooltip>
                               <TooltipTrigger>
-                                {`Delivering to ${deliveryAddress.suburb
+                                {`Delivering to ${
+                                  deliveryAddress.suburb
                                     ? deliveryAddress.suburb
                                     : "-"
-                                  } ${deliveryAddress.postalCode
+                                } ${
+                                  deliveryAddress.postalCode
                                     ? deliveryAddress.postalCode
                                     : "-"
-                                  }`}
+                                }`}
                               </TooltipTrigger>
                               <TooltipContent>
                                 <p>Click to change Pincode</p>
@@ -521,13 +523,15 @@ export default function Header() {
                               <MapPin />
                             </div>
                             <div className="text-[13px] text-start">
-                              <div>{`Delivering to ${deliveryAddress.suburb
+                              <div>{`Delivering to ${
+                                deliveryAddress.suburb
                                   ? deliveryAddress.suburb
                                   : "-"
-                                } ${deliveryAddress.postalCode
+                              } ${
+                                deliveryAddress.postalCode
                                   ? deliveryAddress.postalCode
                                   : "-"
-                                }`}</div>
+                              }`}</div>
                               <div className="font-semibold">
                                 Update location
                               </div>

@@ -165,3 +165,36 @@ a {
 .multi_select:after {
   font-size: 20px !important;
 }
+
+
+
+/* .image-magnifier-container {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+} */
+
+.image-magnifier {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #ddd;
+}
+
+.image-magnifier img {
+  /* width: 100%;
+  height: 100%; */
+  /* display: block; */
+}
+
+.image-magnifier:hover {
+  cursor: zoom-in;
+}
+
+.image-magnifier-preview {
+  background-repeat: no-repeat;
+  border: 1px solid #ddd;
+  position: absolute;
+  width: 100%;
+  top: 0;
+  left: 100%;
+}
