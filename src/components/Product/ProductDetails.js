@@ -210,7 +210,8 @@ export default function ProductDetails({
               <div className="col-span-1">
                 {/* <ImageGallery items={productsImage} autoPlay={true} /> */}
                 <ImageMagnifier
-                  src="https://via.placeholder.com/600"
+                  // src="https://via.placeholder.com/600"
+                  src={productsImage}
                   zoomLevel={3}
                 />
               </div>

@@ -1,12 +1,24 @@
-import Image from 'next/image';
-import React, { useState } from 'react';
+import Image from "next/image";
+import React, { useEffect, useState } from "react";
 
-const images = ['/cover.png', '/dummyimage.png', '/cover.png', '/dummyimage.png'];
+const images = [
+  "/cover.png",
+  "/dummyimage.png",
+  "/cover.png",
+  "/dummyimage.png",
+];
 
-const ImageMagnifier = ({ zoomLevel = 2 }) => {
-  const [backgroundPosition, setBackgroundPosition] = useState('0% 0%');
+const ImageMagnifier = ({ zoomLevel = 2, src }) => {
+  const ImageSource = src && src.map((res) => res.original);
+  const [backgroundPosition, setBackgroundPosition] = useState("0% 0%");
   const [isHovered, setIsHovered] = useState(false);
-  const [image, setImage] = useState(images[0]);
+  const [image, setImage] = useState(ImageSource[0]);
+
+  useEffect(() => {
+    if (ImageSource && ImageSource[0]) {
+      setImage(ImageSource[0]);
+    }
+  }, [ImageSource]);
 
   const handleClick = (ele) => {
     setImage(ele);
@@ -49,16 +61,20 @@ const ImageMagnifier = ({ zoomLevel = 2 }) => {
                 backgroundImage: `url(${image})`,
                 backgroundSize: `${zoomLevel * 100}%`,
                 backgroundPosition,
-                backgroundRepeat: 'no-repeat',
+                backgroundRepeat: "no-repeat",
               }}
             />
           </div>
         )}
       </div>
       <div className="grid grid-cols-6 gap-3 mt-3">
-        {images.map((ele, i) => {
+        {ImageSource.map((ele, i) => {
           return (
-            <div key={i} onClick={() => handleClick(ele)} className="cursor-pointer">
+            <div
+              key={i}
+              onClick={() => handleClick(ele)}
+              className="cursor-pointer"
+            >
               <Image
                 src={ele}
                 width={500}
