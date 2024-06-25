@@ -40,6 +40,7 @@ const ProductCard = ({ productDetails, callBackHandler }) => {
     flag,
     pieces,
     id,
+    tax,
     specificationData,
   } = productDetails ?? {};
 
@@ -238,11 +239,13 @@ const ProductCard = ({ productDetails, callBackHandler }) => {
               <div className="grid gap-1">
                 <div className="flex justify-between">
                   <div>Product cost :</div>
-                  <div className="text-primary font-medium">₹ 90</div>
+                  <div className="text-primary font-medium">
+                    ₹{totalAmount ? totalAmount : 0}
+                  </div>
                 </div>
                 <div className="flex justify-between">
                   <div>GST :</div>
-                  <div className="text-primary font-medium">5 %</div>
+                  <div className="text-primary font-medium">{tax}</div>
                 </div>
                 <div>
                   <div className="text-primary font-semibold">

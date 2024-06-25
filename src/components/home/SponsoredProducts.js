@@ -89,7 +89,6 @@ const SponsoredProducts = () => {
 
   const getProductListByCartId = async (cartId) => {
     const { data, message, success } = await productListByCart(cartId);
-    console.log("data---->", data);
     if (success) {
       setCartLength(data.cartData.length);
     } else {

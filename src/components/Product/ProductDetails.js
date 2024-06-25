@@ -31,6 +31,13 @@ import {
   addproductApiWishlist,
   removeproductApiWishlist,
 } from "@/Service/WishList/WishList.service";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { errorNotification, successNotification } from "@/helper/Notification";
 import { useAppContext } from "@/context";
 import { addProductApiToCart } from "@/Service/AddTocart/AddToCart.service";
@@ -43,6 +50,14 @@ import ProDetailSke from "../common/Skeleton/ProDetailSke";
 import ImageMagnifier from "./ImageMagnifier";
 import Whyus from "./Whyus";
 import { Faq } from "./Faq";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
+import { Info } from "lucide-react";
+import { productVariantDropdown } from "@/Service/Product/Product.service";
+import ProductDetailsPage from "@/pages/ProductDetailsPage";
 
 export default function ProductDetails({
   detailsData,
@@ -55,7 +70,7 @@ export default function ProductDetails({
     description,
     id,
     isWishlist,
-    location,
+    parentId,
     mrp,
     maxQuantity,
     minQuantity,
@@ -69,13 +84,15 @@ export default function ProductDetails({
     sponsor,
     faq,
     subCategory,
+    features,
+    tax,
   } = detailsData || {};
-  console.log("Details", detailsData);
   const router = useRouter();
   const cookies = new Cookies();
   const [wishList, setWishList] = useState(false);
   const [selectedQuantitys, setSelectedQuantitys] = useState(1);
   const [productsImage, setProductImage] = useState([]);
+  const [variantList, setVarientList] = useState([]);
   const [open, setOpen] = useState(false);
   const userLoginFlag = cookies.get("token");
   const userDetails = cookies.get("USERDETAILS");
@@ -167,7 +184,44 @@ export default function ProductDetails({
     } finally {
     }
   };
+  useEffect(() => {
+    if (parentId) {
+      productVariantDropdownHandler(parentId);
+    }
+  }, [parentId]);
 
+  const productVariantDropdownHandler = async (parentId) => {
+    try {
+      const { count, data, message, success } = await productVariantDropdown(
+        parentId
+      );
+
+      if (success) {
+        setVarientList(data);
+      } else {
+        setVarientList([]);
+        console.error("Failed to fetch product variants:", message);
+      }
+    } catch (error) {
+      console.error("Error fetching product variants:", error);
+      setVarientList([]);
+    }
+  };
+
+  const getProductKeyById = (id) => {
+    const variant = variantList.find((variant) => variant.id === id);
+    return variant ? variant.productKey : null;
+  };
+
+  const handleVariantSelect = (event) => {
+    const selectedVariantId = event;
+    const productKey = getProductKeyById(selectedVariantId);
+
+    console.log("selectedVariantId", productKey);
+    if (productKey) {
+      router.push(`/product-details/${productKey}`);
+    }
+  };
   const wishListHanlder = async () => {
     if (userLoginFlag) {
       if (isWishlist) {
@@ -244,18 +298,6 @@ export default function ProductDetails({
                   <div className="my-3">
                     <div className="grid grid-cols-2 gap-2">
                       <div className="flex flex-col gap-1">
-                        {/* <div className="text-sm font-semibold">
-                        <span className="text-[#5F6C72] font-normal">
-                          Diameter :{" "}
-                        </span>{" "}
-                        8mm
-                      </div> */}
-                        <div className="sm:text-sm text-xs font-semibold">
-                          <span className="text-[#5F6C72] font-normal">
-                            Pieces per Bundle :{" "}
-                          </span>{" "}
-                          {pieces ? pieces : "-"}
-                        </div>
                         <div className="sm:text-sm text-xs font-semibold">
                           <span className="text-[#5F6C72] font-normal">
                             Availability :{" "}
@@ -266,20 +308,8 @@ export default function ProductDetails({
                             <span className="text-[#DA3E31]">Out of stock</span>
                           )}
                         </div>
-                        {/* <div className="sm:text-sm text-xs font-semibold">
-                        <span className="text-[#5F6C72] font-normal">
-                          Dimension :{" "}
-                        </span>{" "}
-                        178 mm x 229 mm
-                      </div> */}
                       </div>
                       <div className="flex flex-col gap-1">
-                        {/* <div className="sm:text-sm text-xs font-semibold">
-                        <span className="text-[#5F6C72] font-normal">
-                          Availability :{" "}
-                        </span>{" "}
-                        In Stock
-                      </div> */}
                         <div className="sm:text-sm text-xs font-semibold">
                           <span className="text-[#5F6C72] font-normal">
                             Brand :{" "}
@@ -296,12 +326,61 @@ export default function ProductDetails({
                     </div>
                   </div>
                   <div className="flex gap-1 items-center">
+                    <div className="flex flex-col gap-1">
+                      <Label htmlFor="">Variants</Label>
+                      <Select onValueChange={handleVariantSelect}>
+                        <SelectTrigger className="">
+                          <SelectValue placeholder={productName} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {variantList && variantList.length > 0 ? (
+                            variantList.map((item, index) => {
+                              return (
+                                <SelectItem key={index} value={item.id}>
+                                  {item.productName}
+                                </SelectItem>
+                              );
+                            })
+                          ) : (
+                            <div className="text-[#5D5F5F] text-center">
+                              No Product Found
+                            </div>
+                          )}
+                        </SelectContent>
+                      </Select>
+                    </div>
                     <div className="font-semibold text-primary lg:text-2xl md:text-xl text-lg">
                       {`₹ ${price ? price : 0}`}
                     </div>
                     <div className="text-[#77878F] lg:text-lg md:text-base text-sm font-normal line-through">
                       {mrp && `₹ ${mrp}`}
                     </div>
+                    <HoverCard>
+                      <HoverCardTrigger>
+                        <Info className="w-4 cursor-pointer text-black bg-[#ffed32] h-fit rounded-full" />
+                      </HoverCardTrigger>
+                      <HoverCardContent className="p-3 w-48">
+                        <div className="grid gap-1">
+                          <div className="flex justify-between">
+                            <div>Product cost :</div>
+                            <div className="text-primary font-medium">
+                              ₹ {price ? price : 0}
+                            </div>
+                          </div>
+                          <div className="flex justify-between">
+                            <div>GST :</div>
+                            <div className="text-primary font-medium">
+                              {tax}
+                            </div>
+                          </div>
+                          <div>
+                            <div className="text-primary font-semibold">
+                              Free Delivery
+                            </div>
+                          </div>
+                        </div>
+                      </HoverCardContent>
+                    </HoverCard>
                     {/* <div className="text-sm px-2 py-1 bg-[#EFD33D] font-semibold rounded-sm ml-2">
                     21% OFF
                   </div> */}
@@ -490,7 +569,10 @@ export default function ProductDetails({
                   <TabsTrigger value="tab4">Review</TabsTrigger> */}
                   </TabsList>
                   <TabsContent value="tab1">
-                    <ProductDescription description={description} />
+                    <ProductDescription
+                      description={description}
+                      features={features}
+                    />
                   </TabsContent>
                   {/* <TabsContent value="tab2">Additional information</TabsContent>
                 <TabsContent value="tab3">Specification</TabsContent>

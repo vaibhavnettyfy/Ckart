@@ -22,6 +22,12 @@ export const productDetailsByIdApiHandler = (payload) => {
   );
 };
 
+export const productVariantDropdown = (parentId) => {
+  return get(
+    `${process.env.NEXT_PUBLIC_APIURL}/api/userV1/productVariantDropdown/${parentId}`
+  );
+};
+
 export const getAllProdutsApiHandler = (search) => {
   return POST(
     `${process.env.NEXT_PUBLIC_APIURL}/api/userV1/productList?search=${search}&category=&sponsor=&subCategory`

@@ -45,7 +45,7 @@ export default function Product({ categories, subCategories }) {
   const { setCartLength } = useAppContext();
   const [checkId, setCheckId] = useState("");
   const [subCheckId, setSubCheckId] = useState("");
-  console.log(productLoader, '_____________-');
+  console.log(productLoader, "_____________-");
   useEffect(() => {
     if (cartId) {
       getProductListByCartId(cartId);
@@ -236,7 +236,7 @@ export default function Product({ categories, subCategories }) {
                           <AccordionContent>
                             <div className="px-4">
                               {response?.subCategorys &&
-                                response?.subCategorys.length > 0 ? (
+                              response?.subCategorys.length > 0 ? (
                                 response?.subCategorys.map((item, index) => {
                                   return (
                                     <div className="flex items-center space-x-2 col-span-2 mt-2">
@@ -318,17 +318,17 @@ export default function Product({ categories, subCategories }) {
                 </div>
               </div>
             </div>
-            {productLoader ?
+            {productLoader ? (
               <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-3 grid-cols-2 lg:gap-5 sm:gap-3 gap-2">
                 {[1, 1, 1].map((item, i) => {
                   return (
                     <div key={i} className="col-span-1">
                       <ProCardSke />
                     </div>
-                  )
+                  );
                 })}
               </div>
-              :
+            ) : (
               <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-3 grid-cols-2 lg:gap-5 sm:gap-3 gap-2">
                 {produtListData && produtListData.length > 0 ? (
                   produtListData.map((item, index) => {
@@ -347,7 +347,7 @@ export default function Product({ categories, subCategories }) {
                   </div>
                 )}
               </div>
-            }
+            )}
             <div className="mt-2">
               <Pagination>
                 <PaginationContent className="md:gap-2 gap-1">
